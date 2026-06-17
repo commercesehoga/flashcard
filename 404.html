@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 — Deck Not Found | ThunderStudy Flashcards</title>
+<meta name="description" content="This flashcard deck isn't ready yet, or the page you're looking for doesn't exist. Head back to ThunderStudy Flashcards to generate your own deck or browse other presets.">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="https://commercesehoga.github.io/favicon.svg">
+
+<style>
+:root{
+  --primary:#6699FB;--primary-active:#3D7BF5;--primary-disabled:#D6D6D6;
+  --ink:#1d1d1f;--body:#3c3c3c;--body-strong:#1a1a1a;--muted:#6b6b6b;--muted-soft:#9a9a9a;
+  --hairline:#e6e6e6;--hairline-strong:#cccccc;
+  --canvas:#ffffff;--canvas-parchment:#F5F5FF;--surface-soft:#f7f7f7;--surface-card:#fafafa;
+  --on-primary:#ffffff;--success:#22c55e;--warning:#f59e0b;--error:#dc2626;
+}
+[data-theme="dark"]{
+  --primary:#89B4FF;--primary-active:#6699FB;
+  --ink:#f5f5f7;--body:#d1d1d6;--body-strong:#ffffff;--muted:#8e8e93;--muted-soft:#636366;
+  --hairline:#2c2c2e;--hairline-strong:#3a3a3c;
+  --canvas:#0e0e10;--canvas-parchment:#161618;--surface-soft:#1a1a1c;--surface-card:#1c1c1e;
+  --on-primary:#0e0e10;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{min-height:100%;}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--canvas);color:var(--body);min-height:100vh;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased;transition:background .2s ease,color .2s ease;}
+a{color:inherit;text-decoration:none;}
+button{font-family:inherit;cursor:pointer;border:none;background:none;}
+
+/* Header */
+header{background:var(--canvas);border-bottom:1px solid var(--hairline);padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;backdrop-filter:blur(20px) saturate(180%);}
+.h-brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:16px;color:var(--ink);}
+.h-brand img{width:26px;height:26px;border-radius:7px;}
+.theme-btn{width:40px;height:40px;border-radius:9999px;display:flex;align-items:center;justify-content:center;background:var(--surface-soft);border:1px solid var(--hairline);color:var(--ink);transition:transform .15s ease;flex-shrink:0;}
+.theme-btn:active{transform:scale(0.92);}
+.theme-btn svg{width:18px;height:18px;}
+
+/* Main */
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:48px 24px;}
+.error-card{max-width:520px;width:100%;text-align:center;}
+
+.error-code{font-size:96px;font-weight:700;line-height:1;letter-spacing:-2px;color:var(--primary);margin-bottom:8px;}
+.error-illustration{width:120px;height:120px;margin:0 auto 24px;}
+
+.error-title{font-size:26px;font-weight:700;color:var(--body-strong);margin-bottom:12px;letter-spacing:-0.2px;}
+.error-lead{font-size:16px;line-height:1.5;color:var(--muted);margin-bottom:8px;}
+.error-sub{font-size:14px;line-height:1.5;color:var(--muted-soft);margin-bottom:32px;}
+
+.error-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:36px;}
+.btn-primary{background:var(--primary);color:var(--on-primary);font-size:15px;font-weight:600;padding:14px 26px;border-radius:9999px;display:inline-flex;align-items:center;gap:8px;transition:transform .15s ease;}
+.btn-primary:active{transform:scale(0.95);}
+.btn-primary svg{width:16px;height:16px;}
+.btn-secondary{background:var(--canvas);color:var(--ink);font-size:15px;font-weight:600;padding:14px 26px;border-radius:9999px;border:1px solid var(--hairline-strong);display:inline-flex;align-items:center;gap:8px;transition:transform .15s ease;}
+.btn-secondary:active{transform:scale(0.95);}
+.btn-secondary svg{width:16px;height:16px;}
+
+.help-box{background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:14px;padding:18px 20px;text-align:left;font-size:13px;line-height:1.55;color:var(--muted);}
+.help-box b{color:var(--body-strong);font-weight:600;}
+.help-box a{color:var(--primary);font-weight:600;}
+
+/* Footer */
+footer{background:var(--canvas-parchment);border-top:1px solid var(--hairline);padding:32px 24px;color:var(--muted);}
+.f-inner{max-width:800px;margin:0 auto;}
+.f-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:20px;}
+.f-col h4{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--body-strong);margin-bottom:10px;}
+.f-col a{display:block;font-size:13px;color:var(--muted);margin-bottom:8px;}
+.f-col a:hover{color:var(--primary);}
+.f-bottom{border-top:1px solid var(--hairline);padding-top:16px;font-size:11px;text-align:center;}
+
+@media(max-width:540px){
+  .f-cols{grid-template-columns:1fr;}
+  .error-code{font-size:72px;}
+  .error-title{font-size:22px;}
+  .error-actions{flex-direction:column;}
+  .btn-primary,.btn-secondary{width:100%;justify-content:center;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="https://flashcard.thunderstudy.indevs.in" class="h-brand">
+    <img src="https://commercesehoga.github.io/favicon.svg" alt="Thunder">
+    ThunderStudy Flashcards
+  </a>
+  <button class="theme-btn" id="themeBtn" aria-label="Toggle dark mode">
+    <svg id="sunIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>
+    <svg id="moonIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none" aria-hidden="true"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path></svg>
+  </button>
+</header>
+
+<main>
+  <div class="error-card">
+    <svg class="error-illustration" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+      <rect x="3" y="4" width="18" height="14" rx="2" stroke="var(--hairline-strong)"/>
+      <path d="M3 9h18" stroke="var(--hairline-strong)"/>
+      <path d="M9 14.5l2 2 4-4" stroke="var(--primary)" stroke-width="2"/>
+    </svg>
+
+    <div class="error-code">404</div>
+    <h1 class="error-title">This deck hasn't been made yet</h1>
+    <p class="error-lead">The flashcard deck you're looking for either doesn't exist yet or has been moved.</p>
+    <p class="error-sub">We're adding new preset decks regularly — check back soon, or generate this topic yourself in seconds.</p>
+
+    <div class="error-actions">
+      <a href="https://flashcard.thunderstudy.indevs.in" class="btn-primary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        Create Your Own Deck
+      </a>
+      <a href="https://flashcard.thunderstudy.indevs.in/#presets" class="btn-secondary" id="presetsLink">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><polyline points="8 21 12 17 16 21"/></svg>
+        Browse Preset Decks
+      </a>
+    </div>
+
+    <div class="help-box">
+      <b>Looking for something specific?</b> Type any topic into the Flashcard Maker and get an AI-generated deck instantly — no waiting required. <a href="https://flashcard.thunderstudy.indevs.in">flashcard.thunderstudy.indevs.in</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="f-inner">
+    <div class="f-cols">
+      <div class="f-col"><h4>Thunder</h4><a href="https://thunderstudy.indevs.in">ThunderStudy</a><a href="https://commercesehoga.github.io/dashboard">CBT Mock Platform</a><a href="https://thunderstudy.github.io">Free Study Material</a><a href="https://commercesehoga.github.io/help">Help / Donate</a></div>
+      <div class="f-col"><h4>wondermayank</h4><a href="https://wondermayank.indevs.in">Portfolio</a><a href="https://wondermayank.github.io/">wondermayank.github.io</a><a href="https://wondermayank.github.io/mail">Mail</a><a href="https://wondermayank.github.io/contact">Contact</a></div>
+      <div class="f-col"><h4>Legal</h4><a href="https://wondermayank.github.io/terms">Terms</a><a href="https://wondermayank.github.io/privacy">Privacy</a><a href="https://wondermayank.github.io/disclaimer">Disclaimer</a></div>
+    </div>
+    <div class="f-bottom">Created by ThunderStudy &middot; by wondermayank &middot; <a href="https://thunderstudy.indevs.in" style="color:var(--primary)">thunderstudy.indevs.in</a> &middot; <a href="https://wondermayank.indevs.in" style="color:var(--primary)">wondermayank.indevs.in</a></div>
+  </div>
+</footer>
+
+<script>
+"use strict";
+var htmlEl   = document.documentElement;
+var sunIcon  = document.getElementById("sunIcon");
+var moonIcon = document.getElementById("moonIcon");
+
+function applyTheme(t) {
+  htmlEl.setAttribute("data-theme", t);
+  sunIcon.style.display  = t === "dark" ? "none"  : "block";
+  moonIcon.style.display = t === "dark" ? "block" : "none";
+  try { localStorage.setItem("theme", t); } catch (e) {}
+}
+
+var saved = "light";
+try {
+  saved = localStorage.getItem("theme") || (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+} catch (e) {}
+applyTheme(saved);
+
+document.getElementById("themeBtn").addEventListener("click", function () {
+  applyTheme(htmlEl.getAttribute("data-theme") === "dark" ? "light" : "dark");
+});
+</script>
+
+</body>
+</html>
