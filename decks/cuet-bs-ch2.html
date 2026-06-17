@@ -1,0 +1,281 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flashcards — Class 12 CBSE Business Studies | ThunderStudy Flashcards</title>
+<meta name="description" content="15 flashcards on Flashcards — Class 12 CBSE Business Studies, generated with the ThunderStudy Flashcard Maker. Study offline, anywhere.">
+<link rel="icon" type="image/svg+xml" href="https://commercesehoga.github.io/favicon.svg">
+<style>
+:root{
+  --primary:#6699FB;--primary-active:#3D7BF5;
+  --ink:#1d1d1f;--body:#3c3c3c;--body-strong:#1a1a1a;--muted:#6b6b6b;--muted-soft:#9a9a9a;
+  --hairline:#e6e6e6;--hairline-strong:#cccccc;
+  --canvas:#ffffff;--canvas-parchment:#F5F5FF;--surface-soft:#f7f7f7;--surface-card:#fafafa;
+  --on-primary:#ffffff;--success:#22c55e;--error:#dc2626;
+  --got-bg:#dcfce7;--got-fg:#166534;--review-bg:#fee2e2;--review-fg:#991b1b;
+}
+[data-theme="dark"]{
+  --primary:#89B4FF;--primary-active:#6699FB;
+  --ink:#f5f5f7;--body:#d1d1d6;--body-strong:#ffffff;--muted:#8e8e93;--muted-soft:#636366;
+  --hairline:#2c2c2e;--hairline-strong:#3a3a3c;
+  --canvas:#0e0e10;--canvas-parchment:#161618;--surface-soft:#1a1a1c;--surface-card:#1c1c1e;
+  --on-primary:#0e0e10;
+  --got-bg:#14532d;--got-fg:#86efac;--review-bg:#7f1d1d;--review-fg:#fca5a5;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{font-family:Inter,system-ui,-apple-system,sans-serif;background:var(--canvas);color:var(--body);min-height:100vh;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased;transition:background .2s ease,color .2s ease;}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer}
+header{background:var(--canvas);border-bottom:1px solid var(--hairline);padding:0 20px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;backdrop-filter:blur(20px) saturate(180%);}
+.h-brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px;color:var(--ink);}
+.h-brand img{width:24px;height:24px;border-radius:6px;}
+.h-right{display:flex;align-items:center;gap:10px;}
+.h-link{font-size:13px;color:var(--primary);font-weight:600;}
+.theme-btn{width:36px;height:36px;border-radius:9999px;display:flex;align-items:center;justify-content:center;background:var(--surface-soft);border:1px solid var(--hairline);color:var(--ink);transition:transform .15s ease;flex-shrink:0;}
+.theme-btn:active{transform:scale(0.92);}
+.theme-btn svg{width:16px;height:16px;}
+main{flex:1;max-width:760px;margin:0 auto;padding:28px 20px 48px;width:100%;}
+.deck-title{font-size:23px;font-weight:700;color:var(--body-strong);margin-bottom:5px;letter-spacing:-0.2px;}
+.deck-sub{font-size:13px;color:var(--muted-soft);margin-bottom:22px;}
+.study-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:12px;padding:11px 16px;margin-bottom:18px;}
+.study-score{font-size:13px;font-weight:600;color:var(--muted);}
+.study-score b{color:var(--body-strong);font-weight:700;}
+.study-actions{display:flex;gap:8px;}
+.grade-btn{font-size:13px;font-weight:700;padding:9px 16px;border-radius:9999px;border:none;display:none;align-items:center;gap:5px;transition:transform .15s ease;}
+.grade-btn:active{transform:scale(0.95);}
+.grade-btn svg{width:13px;height:13px;}
+.grade-review{background:var(--review-bg);color:var(--review-fg);}
+.grade-got{background:var(--got-bg);color:var(--got-fg);}
+.progress-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.progress-label{font-size:13px;font-weight:600;color:var(--muted);}
+.card-stage{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:18px;}
+.nav-btn{width:44px;height:44px;border-radius:9999px;background:var(--surface-soft);border:1px solid var(--hairline);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;color:var(--ink);transition:transform .15s;}
+.nav-btn:active{transform:scale(0.9);}
+.nav-btn:disabled{opacity:.35;cursor:not-allowed;}
+.nav-btn svg{width:18px;height:18px;}
+.flip-wrap{width:100%;max-width:480px;height:300px;perspective:1200px;}
+.flip-card{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,.2,.2,1);cursor:pointer;}
+.flip-card.flipped{transform:rotateY(180deg);}
+.face{position:absolute;inset:0;border-radius:18px;backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:28px;border:1px solid var(--hairline);}
+.front{background:var(--surface-card);}.back{background:var(--canvas);transform:rotateY(180deg);}
+.status-dot{position:absolute;top:14px;right:14px;width:22px;height:22px;border-radius:9999px;display:none;align-items:center;justify-content:center;}
+.status-dot.got{background:var(--got-bg);color:var(--got-fg);display:flex;}
+.status-dot.review{background:var(--review-bg);color:var(--review-fg);display:flex;}
+.status-dot svg{width:13px;height:13px;}
+.face-label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--primary);margin-bottom:12px;}
+.face-text{font-size:18px;font-weight:600;line-height:1.45;color:var(--body-strong);max-width:400px;}
+.back .face-text{font-size:16px;font-weight:400;line-height:1.55;}
+.tap-hint{position:absolute;bottom:14px;font-size:11px;color:var(--muted-soft);display:flex;align-items:center;gap:5px;}
+.tap-hint svg{width:11px;height:11px;}
+.controls{display:flex;justify-content:center;gap:10px;margin-bottom:6px;flex-wrap:wrap;}
+.ctrl-btn{font-size:14px;font-weight:600;padding:11px 22px;border-radius:9999px;background:var(--canvas);border:1px solid var(--hairline-strong);color:var(--body-strong);transition:transform .15s;}
+.ctrl-btn:active{transform:scale(0.95);}
+.dots{display:flex;justify-content:center;gap:5px;flex-wrap:wrap;margin-top:16px;}
+.dot{width:7px;height:7px;border-radius:9999px;background:var(--hairline-strong);transition:all .15s;}
+.dot.active{background:var(--primary);width:18px;}
+.dot.got{background:var(--success);}
+.dot.review-dot{background:var(--error);}
+.progress-bar-wrap{width:100%;height:4px;background:var(--hairline);border-radius:9999px;margin-top:16px;overflow:hidden;display:none;}
+.progress-bar-fill{height:100%;background:var(--primary);border-radius:9999px;transition:width .3s ease;}
+.result-screen{display:none;text-align:center;padding:36px 22px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:18px;margin-top:22px;}
+.result-screen.active{display:block;}
+.result-score-big{font-size:42px;font-weight:700;color:var(--primary);letter-spacing:-0.5px;}
+.result-label{font-size:14px;color:var(--muted);margin-top:4px;}
+.result-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px;}
+.btn-primary{background:var(--primary);color:var(--on-primary);font-size:14px;font-weight:700;padding:12px 22px;border-radius:9999px;border:none;transition:transform .15s ease;}
+.btn-primary:active{transform:scale(0.95);}
+footer{background:var(--canvas-parchment);border-top:1px solid var(--hairline);padding:30px 20px;color:var(--muted);}
+.f-inner{max-width:760px;margin:0 auto;}
+.make-more{text-align:center;margin-bottom:18px;}
+.make-more a{font-size:14px;font-weight:700;color:var(--primary);}
+.f-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-bottom:18px;}
+.f-col h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--body-strong);margin-bottom:9px;}
+.f-col a{display:block;font-size:13px;color:var(--muted);margin-bottom:7px;}
+.f-col a:hover{color:var(--primary);}
+.f-bottom{border-top:1px solid var(--hairline);padding-top:14px;font-size:11px;text-align:center;}
+@media(max-width:540px){.f-cols{grid-template-columns:1fr;}.flip-wrap{height:270px;}.study-bar{justify-content:center;}}
+</style>
+</head>
+<body>
+<header>
+  <a href="https://thunderstudy.indevs.in" class="h-brand">
+    <img src="https://commercesehoga.github.io/favicon.svg" alt="Thunder">
+    ThunderStudy
+  </a>
+  <div class="h-right">
+    <a href="https://flashcard.thunderstudy.indevs.in" class="h-link">Create more</a>
+    <button class="theme-btn" id="themeBtn" aria-label="Toggle dark mode">
+      <svg id="sunIco" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>
+      <svg id="moonIco" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path></svg>
+    </button>
+  </div>
+</header>
+<main>
+  <div class="deck-title">Flashcards — Class 12 CBSE Business Studies</div>
+  <div class="deck-sub">15 cards &middot; Generated by ThunderStudy Flashcard Maker &middot; <a href="https://flashcard.thunderstudy.indevs.in" style="color:var(--primary)">flashcard.thunderstudy.indevs.in</a></div>
+
+  <div class="study-bar" id="studyBar">
+    <div class="study-score"><b id="scGot">0</b> Got it &nbsp;&middot;&nbsp; <b id="scRev">0</b> Review &nbsp;&middot;&nbsp; <b id="scLeft">15</b> Left</div>
+    <div class="study-actions">
+      <button class="grade-btn grade-review" id="revBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        Review again
+      </button>
+      <button class="grade-btn grade-got" id="gotBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        Got it
+      </button>
+    </div>
+  </div>
+
+  <div class="progress-row"><span class="progress-label" id="prog">1 / 15</span></div>
+  <div class="card-stage">
+    <button class="nav-btn" id="prev" disabled aria-label="Previous card">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <div class="flip-wrap">
+      <div class="flip-card" id="card">
+        <div class="face front">
+          <span class="status-dot" id="statusDot"><svg id="statusSvg" viewBox="0 0 24 24" fill="none" stroke-width="2.5"></svg></span>
+          <span class="face-label">Question</span><p class="face-text" id="ft"></p>
+          <span class="tap-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg>Tap to flip</span>
+        </div>
+        <div class="face back">
+          <span class="face-label">Answer</span><p class="face-text" id="bt"></p>
+          <span class="tap-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg>Tap to flip</span>
+        </div>
+      </div>
+    </div>
+    <button class="nav-btn" id="next" aria-label="Next card">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+  </div>
+
+  <div class="controls">
+    <button class="ctrl-btn" id="shuf">Shuffle</button>
+    <button class="ctrl-btn" id="rst">Reset Study</button>
+  </div>
+  <div class="dots" id="dots"></div>
+  <div class="progress-bar-wrap" id="barWrap"><div class="progress-bar-fill" id="barFill"></div></div>
+
+  <div class="result-screen" id="resultScreen">
+    <div class="result-score-big" id="resBig">&mdash;</div>
+    <div class="result-label">cards marked "Got it" out of <span id="resTotal">&mdash;</span></div>
+    <div class="result-actions">
+      <button class="btn-primary" id="retryBtn">Review Wrong Cards</button>
+      <button class="ctrl-btn" id="restartAllBtn">Restart All</button>
+    </div>
+  </div>
+</main>
+<footer>
+  <div class="f-inner">
+    <div class="make-more"><a href="https://flashcard.thunderstudy.indevs.in">Create more flashcards at flashcard.thunderstudy.indevs.in</a></div>
+    <div class="f-cols">
+      <div class="f-col"><h4>Thunder</h4><a href="https://thunderstudy.indevs.in">ThunderStudy</a><a href="https://commercesehoga.github.io/dashboard">CBT Mock Platform</a><a href="https://thunderstudy.github.io">Free Study Material</a><a href="https://commercesehoga.github.io/help">Help / Donate</a></div>
+      <div class="f-col"><h4>wondermayank</h4><a href="https://wondermayank.indevs.in">Portfolio</a><a href="https://wondermayank.github.io/">wondermayank.github.io</a><a href="https://wondermayank.github.io/mail">Mail</a><a href="https://wondermayank.github.io/contact">Contact</a></div>
+      <div class="f-col"><h4>Legal</h4><a href="https://wondermayank.github.io/terms">Terms</a><a href="https://wondermayank.github.io/privacy">Privacy</a><a href="https://wondermayank.github.io/disclaimer">Disclaimer</a></div>
+    </div>
+    <div class="f-bottom">Created by ThunderStudy &middot; by wondermayank &middot; <a href="https://thunderstudy.indevs.in" style="color:var(--primary)">thunderstudy.indevs.in</a> &middot; <a href="https://wondermayank.indevs.in" style="color:var(--primary)">wondermayank.indevs.in</a></div>
+  </div>
+</footer>
+<script>
+var deck=[{"front":"Who is the father of scientific management?","back":"Frederick Winslow Taylor is known as the father of scientific management."},{"front":"What are the principles of management?","back":"The 14 principles of management include division of work, authority and responsibility, discipline, unity of command, and others."},{"front":"What is the importance of management?","back":"Management is important because it helps in achieving organizational goals, increasing efficiency, and reducing costs."},{"front":"What is the concept of scalar chain?","back":"Scalar chain refers to a clear line of authority from the top to the bottom of an organization."},{"front":"What is the principle of unity of direction?","back":"Unity of direction means that each group of activities with the same objective must have one head and one plan."},{"front":"What is the difference between unity of command and unity of direction?","back":"Unity of command means one boss for each employee, while unity of direction means one plan for a group of activities."},{"front":"What is the principle of esprit de corps?","back":"Esprit de corps refers to the spirit of cooperation and teamwork among employees in an organization."},{"front":"What is the concept of management by exception?","back":"Management by exception means that managers should only interfere when an employee's performance deviates from the standard."},{"front":"What are the levels of management?","back":"The levels of management include top-level, middle-level, and lower-level management."},{"front":"What is the role of top-level management?","back":"Top-level management is responsible for making strategic decisions, setting goals, and overseeing the overall direction of the organization."},{"front":"What is the role of middle-level management?","back":"Middle-level management is responsible for implementing plans, coordinating activities, and overseeing the work of lower-level managers."},{"front":"What is the role of lower-level management?","back":"Lower-level management is responsible for supervising employees, carrying out specific tasks, and reporting to middle-level managers."},{"front":"What is the concept of delegation of authority?","back":"Delegation of authority means transferring responsibility and power to subordinates to achieve specific tasks."},{"front":"What is the importance of decentralization?","back":"Decentralization is important because it allows for faster decision-making, increased employee motivation, and more effective use of resources."},{"front":"What is the difference between centralization and decentralization?","back":"Centralization means that decision-making authority is concentrated at the top, while decentralization means that authority is distributed throughout the organization."}];
+var order=deck.map(function(_,i){return i;}),cur=0,grades={},flipped=false;
+var html=document.documentElement;
+var card=document.getElementById("card");
+var ft=document.getElementById("ft"),bt=document.getElementById("bt"),prog=document.getElementById("prog");
+var prevB=document.getElementById("prev"),nextB=document.getElementById("next");
+var dotsEl=document.getElementById("dots");
+var gotBtn=document.getElementById("gotBtn"),revBtn=document.getElementById("revBtn");
+var statusDot=document.getElementById("statusDot"),statusSvg=document.getElementById("statusSvg");
+var barWrap=document.getElementById("barWrap"),barFill=document.getElementById("barFill");
+var resultScreen=document.getElementById("resultScreen");
+
+/* theme */
+function applyTheme(t){html.setAttribute("data-theme",t);document.getElementById("sunIco").style.display=t==="dark"?"none":"block";document.getElementById("moonIco").style.display=t==="dark"?"block":"none";try{localStorage.setItem("tsFlashTheme",t);}catch(e){}}
+var savedTheme="light";try{savedTheme=localStorage.getItem("tsFlashTheme")||(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");}catch(e){}
+applyTheme(savedTheme);
+document.getElementById("themeBtn").onclick=function(){applyTheme(html.getAttribute("data-theme")==="dark"?"light":"dark");};
+
+function buildDots(){dotsEl.innerHTML="";deck.forEach(function(_,i){var d=document.createElement("span");d.className="dot"+(i===0?" active":"");d.onclick=function(){cur=i;render();};dotsEl.appendChild(d);});}
+
+function render(){
+  card.classList.remove("flipped");flipped=false;hideGrades();
+  var idx=order[cur];
+  ft.textContent=deck[idx].front;bt.textContent=deck[idx].back;
+  prog.textContent=(cur+1)+" / "+deck.length;
+  prevB.disabled=cur===0;nextB.disabled=cur===deck.length-1;
+  var g=grades[idx];
+  statusDot.className="status-dot";
+  if(g==="got"){statusDot.classList.add("got");statusSvg.innerHTML='<polyline points="20 6 9 17 4 12" stroke="currentColor"/>';}
+  else if(g==="review"){statusDot.classList.add("review");statusSvg.innerHTML='<path d="M18 6L6 18M6 6l12 12" stroke="currentColor"/>';}
+  document.querySelectorAll(".dot").forEach(function(d,i){
+    d.className="dot"+(i===cur?" active":"");
+    var gg=grades[order[i]];
+    if(gg==="got")d.classList.add("got");
+    if(gg==="review")d.classList.add("review-dot");
+  });
+  if(deck.length>15){barWrap.style.display="block";barFill.style.width=((cur+1)/deck.length*100)+"%";dotsEl.style.display="none";}
+  else{barWrap.style.display="none";dotsEl.style.display="flex";}
+  updateScore();
+}
+
+function hideGrades(){gotBtn.style.display="none";revBtn.style.display="none";}
+card.onclick=function(){card.classList.toggle("flipped");flipped=!flipped;if(flipped){gotBtn.style.display="inline-flex";revBtn.style.display="inline-flex";}else{hideGrades();}};
+prevB.onclick=function(){if(cur>0){cur--;render();}};
+nextB.onclick=function(){if(cur<deck.length-1){cur++;render();}};
+
+function updateScore(){
+  var vals=Object.keys(grades).map(function(k){return grades[k];});
+  var got=vals.filter(function(g){return g==="got";}).length;
+  var rev=vals.filter(function(g){return g==="review";}).length;
+  var left=deck.length-got-rev;
+  document.getElementById("scGot").textContent=got;
+  document.getElementById("scRev").textContent=rev;
+  document.getElementById("scLeft").textContent=left;
+  if(left===0&&deck.length>0)showResult();
+}
+function showResult(){
+  var got=Object.keys(grades).map(function(k){return grades[k];}).filter(function(g){return g==="got";}).length;
+  document.getElementById("resBig").textContent=got;
+  document.getElementById("resTotal").textContent=deck.length;
+  resultScreen.classList.add("active");
+}
+gotBtn.onclick=function(){grades[order[cur]]="got";updateScore();if(cur<deck.length-1){cur++;}render();};
+revBtn.onclick=function(){grades[order[cur]]="review";updateScore();if(cur<deck.length-1){cur++;}render();};
+
+document.getElementById("shuf").onclick=function(){
+  for(var i=order.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=order[i];order[i]=order[j];order[j]=t;}
+  cur=0;render();
+};
+document.getElementById("rst").onclick=function(){
+  grades={};order=deck.map(function(_,i){return i;});cur=0;
+  resultScreen.classList.remove("active");buildDots();render();
+};
+document.getElementById("restartAllBtn").onclick=function(){
+  grades={};order=deck.map(function(_,i){return i;});cur=0;
+  resultScreen.classList.remove("active");buildDots();render();
+};
+document.getElementById("retryBtn").onclick=function(){
+  var ri=[];for(var k in grades){if(grades[k]==="review")ri.push(parseInt(k));}
+  if(!ri.length){resultScreen.classList.remove("active");return;}
+  ri.forEach(function(i){delete grades[i];});
+  order=ri.slice();cur=0;
+  resultScreen.classList.remove("active");buildDots();render();
+};
+
+document.addEventListener("keydown",function(e){
+  if(e.key==="ArrowRight")nextB.click();
+  if(e.key==="ArrowLeft")prevB.click();
+  if(e.key===" "){e.preventDefault();card.click();}
+  if((e.key==="g"||e.key==="G")&&flipped)gotBtn.click();
+  if((e.key==="r"||e.key==="R")&&flipped)revBtn.click();
+});
+
+buildDots();render();
+</script>
+</body>
+</html>
