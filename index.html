@@ -3,278 +3,597 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Flashcard Maker — AI Flashcards for CBSE, CUET, JEE, NEET, SSC & Banking | ThunderStudy</title>
-<meta name="description" content="Generate AI-powered flashcards instantly from any topic, question, or PDF. Built for Class 12 CBSE, CUET, JEE, NEET, SSC, and Banking exam prep. Free, fast, and flips beautifully. Study smarter with ThunderStudy.">
+<title>Flashcard Maker — AI Flashcards for CBSE, JEE, NEET, SSC & Banking | ThunderStudy</title>
+<meta name="description" content="Generate AI-powered flashcards instantly from any topic, question, or PDF. Built for Class 12 CBSE, JEE, NEET, SSC, and Banking exam prep. Free, fast, and flips beautifully.">
+
 <link rel="icon" type="image/svg+xml" href="https://commercesehoga.github.io/favicon.svg">
 <meta property="og:title" content="Flashcard Maker — ThunderStudy">
-<meta property="og:description" content="Turn any topic, question, or PDF into AI-generated flip flashcards. Free exam prep tool for CBSE, CUET, JEE, NEET, SSC, Banking and more.">
+<meta property="og:description" content="Turn any topic, question, or PDF into AI-generated flip flashcards. Free exam prep tool for CBSE, JEE, NEET, SSC, Banking and more.">
 <meta property="og:url" content="https://flashcard.thunderstudy.indevs.in">
 <meta property="og:type" content="website">
-<meta property="og:image" content="https://flashcard.thunderstudy.indevs.in/og-image.png">
+<meta property="og:image" content="https://commercesehoga.github.io/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Flashcard Maker — ThunderStudy">
-<meta name="twitter:description" content="Turn any topic, question, or PDF into AI-generated flip flashcards. Free exam prep tool for CBSE, CUET, JEE, NEET, SSC, Banking and more.">
-<meta name="twitter:image" content="https://flashcard.thunderstudy.indevs.in/og-image.png">
+<meta name="twitter:description" content="Turn any topic, question, or PDF into AI-generated flip flashcards. Free exam prep tool for CBSE, JEE, NEET, SSC, Banking and more.">
+<meta name="twitter:image" content="https://commercesehoga.github.io/og-image.png">
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebApplication","name":"ThunderStudy Flashcard Maker","url":"https://flashcard.thunderstudy.indevs.in","description":"AI-powered flashcard generator for exam preparation across CBSE, CUET, JEE, NEET, SSC and Banking exams.","applicationCategory":"EducationalApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"INR"},"creator":{"@type":"Organization","name":"ThunderStudy","url":"https://thunderstudy.indevs.in"}}
+{
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  "name": "ThunderStudy Flashcard Maker",
+  "url": "https://flashcard.thunderstudy.indevs.in",
+  "description": "AI-powered flashcard generator for exam preparation across CBSE, JEE, NEET, SSC and Banking exams.",
+  "sameAs": ["https://commercesehoga.github.io/"]
+}
 </script>
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How does the AI flashcard maker work?","acceptedAnswer":{"@type":"Answer","text":"Enter a topic or upload a PDF. The AI generates flip flashcards with a question on the front and a clear answer on the back."}},{"@type":"Question","name":"Which exams are supported?","acceptedAnswer":{"@type":"Answer","text":"Class 12 CBSE, CUET, NEET, JEE, Banking, SSC, NTA/UGC NET, and a general mode for any other subject."}},{"@type":"Question","name":"Is there a daily limit?","acceptedAnswer":{"@type":"Answer","text":"Yes — 5 AI generations per day and 20 per week. Preset decks are unlimited and use no token."}},{"@type":"Question","name":"Can I download my flashcards?","acceptedAnswer":{"@type":"Answer","text":"Yes. Download a standalone HTML file of your deck that works offline with full ThunderStudy branding."}}]}
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How does the AI flashcard maker work?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Enter a topic, a question, or upload a PDF. The AI reads your input, detects the right exam context, and generates a set of flip flashcards with a question on the front and a clear answer on the back." }
+    },
+    {
+      "@type": "Question",
+      "name": "Which exams are supported?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Class 12 CBSE, NEET, JEE, Banking, SSC, and a general mode for any other subject or exam." }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I upload a PDF to make flashcards?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. PDFs are read directly in your browser, and the extracted text is sent to the AI to generate flashcards from the content." }
+    },
+    {
+      "@type": "Question",
+      "name": "Is my Groq API key stored anywhere?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No personal data is sent anywhere except directly to the Groq API to generate flashcards. Nothing is stored on a server." }
+    }
+  ]
+}
 </script>
 
 <style>
 :root{
-  --primary:#6699FB;--primary-active:#3D7BF5;--primary-disabled:#D6D6D6;
-  --ink:#1d1d1f;--body:#3c3c3c;--body-strong:#1a1a1a;--muted:#6b6b6b;--muted-soft:#9a9a9a;
-  --hairline:#e6e6e6;--hairline-strong:#cccccc;
-  --canvas:#ffffff;--canvas-parchment:#F5F5FF;--surface-soft:#f7f7f7;--surface-card:#fafafa;
-  --surface-strong:#ebebeb;--surface-dark:#1a2129;
-  --on-primary:#ffffff;--success:#22c55e;--warning:#f59e0b;--error:#dc2626;
+  --primary:#6699FB; --primary-active:#3D7BF5; --primary-focus:#89B4FF; --primary-disabled:#D6D6D6;
+  --ink:#1d1d1f; --body:#3c3c3c; --body-strong:#1a1a1a; --muted:#6b6b6b; --muted-soft:#9a9a9a;
+  --hairline:#e6e6e6; --hairline-strong:#cccccc;
+  --canvas:#ffffff; --canvas-parchment:#F5F5FF; --surface-soft:#f7f7f7; --surface-card:#fafafa;
+  --surface-strong:#ebebeb; --surface-dark:#1a2129; --surface-tile-1:#272729;
+  --on-primary:#ffffff; --on-dark:#ffffff; --on-dark-soft:#bbbbbb;
+  --success:#22c55e; --warning:#f59e0b; --error:#dc2626;
+  --light:#B7D8FB; --mid:#AECBF0;
 }
 [data-theme="dark"]{
-  --primary:#89B4FF;--primary-active:#6699FB;
-  --ink:#f5f5f7;--body:#d1d1d6;--body-strong:#ffffff;--muted:#8e8e93;--muted-soft:#636366;
-  --hairline:#2c2c2e;--hairline-strong:#3a3a3c;
-  --canvas:#0e0e10;--canvas-parchment:#161618;--surface-soft:#1a1a1c;--surface-card:#1c1c1e;
-  --surface-strong:#2c2c2e;--surface-dark:#000000;
-  --on-primary:#0e0e10;
+  --primary:#89B4FF; --primary-active:#6699FB; --primary-focus:#A9C8FF;
+  --ink:#f5f5f7; --body:#d1d1d6; --body-strong:#ffffff; --muted:#8e8e93; --muted-soft:#636366;
+  --hairline:#2c2c2e; --hairline-strong:#3a3a3c;
+  --canvas:#0e0e10; --canvas-parchment:#161618; --surface-soft:#1a1a1c; --surface-card:#1c1c1e;
+  --surface-strong:#2c2c2e; --surface-dark:#000000; --surface-tile-1:#111113;
+  --on-dark:#ffffff; --on-dark-soft:#ebebf5;
 }
 *{box-sizing:border-box;}
 html,body{margin:0;padding:0;}
-body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--canvas);color:var(--body);-webkit-font-smoothing:antialiased;}
-h1,h2,h3{margin:0;color:var(--body-strong);font-weight:700;}
+body{
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  background:var(--canvas); color:var(--body);
+  -webkit-font-smoothing:antialiased;
+  padding-bottom:calc(96px + env(safe-area-inset-bottom));
+}
+h1,h2,h3{margin:0; color:var(--body-strong); font-weight:700;}
 p{margin:0;}
-a{color:inherit;text-decoration:none;}
-button{font-family:inherit;cursor:pointer;border:none;background:none;}
+a{color:inherit; text-decoration:none;}
+button{font-family:inherit; cursor:pointer; border:none; background:none;}
 
-/* Loader */
-#loader{position:fixed;inset:0;z-index:9999;background:var(--canvas);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;transition:opacity .45s ease,visibility .45s ease;}
-#loader.hide{opacity:0;visibility:hidden;pointer-events:none;}
-.loader-arc{width:72px;height:72px;}
-.loader-arc circle{fill:none;stroke:var(--primary);stroke-width:4;stroke-linecap:round;stroke-dasharray:160;stroke-dashoffset:160;animation:arcDraw 1.4s ease-in-out infinite;transform-origin:center;}
-@keyframes arcDraw{0%{stroke-dashoffset:160;transform:rotate(0deg);}50%{stroke-dashoffset:30;transform:rotate(200deg);}100%{stroke-dashoffset:160;transform:rotate(360deg);}}
-.loader-brand{font-size:14px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--primary);opacity:.8;}
+/* Promo banner */
+.promo-banner{
+  position:relative; background:linear-gradient(135deg,#7FA3FF,#3D63F0); color:#fff;
+  text-align:center; font-size:13.5px; font-weight:700; line-height:1.4;
+  padding:11px 46px 11px 16px;
+}
+.promo-banner span{opacity:.92; font-weight:600;}
+.promo-banner.hide{display:none;}
+.promo-close{
+  position:absolute; right:12px; top:50%; transform:translateY(-50%);
+  width:26px; height:26px; border-radius:9999px; background:rgba(255,255,255,.2);
+  color:#fff; display:flex; align-items:center; justify-content:center; font-size:16px; line-height:1;
+}
+.promo-close:active{transform:translateY(-50%) scale(.9);}
+
+/* Pro toast */
+.toast{
+  position:fixed; top:18px; left:50%; z-index:500; max-width:360px;
+  background:var(--canvas); border:1px solid var(--hairline); border-radius:14px;
+  box-shadow:0 14px 34px rgba(30,41,90,.2); padding:14px 16px;
+  display:flex; align-items:flex-start; gap:12px;
+  opacity:0; pointer-events:none; transform:translate(-50%,-16px);
+  transition:opacity .3s ease, transform .3s ease;
+}
+.toast.show{opacity:1; transform:translate(-50%,0); pointer-events:auto;}
+.toast-emoji{font-size:22px; flex-shrink:0; line-height:1;}
+.toast strong{display:block; font-size:13.5px; color:var(--body-strong); margin-bottom:2px;}
+.toast p{font-size:12.5px; color:var(--muted); margin:0; line-height:1.4;}
+@media(max-width:640px){.toast{left:16px; right:16px; transform:translateY(-16px); max-width:none;} .toast.show{transform:translateY(0);}}
+
+/* Loading screen */
+#loader{
+  position:fixed; inset:0; z-index:9999; background:var(--canvas);
+  display:flex; align-items:center; justify-content:center;
+  transition:opacity .4s ease, visibility .4s ease;
+}
+#loader.hide{opacity:0; visibility:hidden; pointer-events:none;}
+.loader-ring{width:64px; height:64px;}
+.loader-ring circle{
+  fill:none; stroke:var(--primary); stroke-width:4; stroke-linecap:round;
+  stroke-dasharray:160; stroke-dashoffset:160;
+  animation:ringDraw 1.3s ease-in-out infinite;
+  transform-origin:center;
+}
+@keyframes ringDraw{
+  0%{stroke-dashoffset:160; transform:rotate(0deg);}
+  50%{stroke-dashoffset:40; transform:rotate(180deg);}
+  100%{stroke-dashoffset:160; transform:rotate(360deg);}
+}
 
 /* Nav */
-.nav{position:sticky;top:0;z-index:100;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:var(--canvas);border-bottom:1px solid var(--hairline);backdrop-filter:blur(20px) saturate(180%);}
-.nav-brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px;color:var(--ink);}
-.nav-brand img{width:28px;height:28px;border-radius:8px;}
-.nav-right{display:flex;align-items:center;gap:12px;}
-.icon-btn{width:40px;height:40px;border-radius:9999px;display:flex;align-items:center;justify-content:center;background:var(--surface-soft);border:1px solid var(--hairline);color:var(--ink);transition:transform .15s ease;position:relative;}
+.nav{
+  position:sticky; top:0; z-index:100; height:64px;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 24px; background:var(--canvas); border-bottom:1px solid var(--hairline);
+}
+.nav-brand{display:flex; align-items:center; gap:10px; font-weight:700; font-size:17px; color:var(--ink);}
+.nav-brand img{width:28px; height:28px; border-radius:8px;}
+.nav-right{display:flex; align-items:center; gap:12px;}
+.icon-btn{
+  width:40px; height:40px; border-radius:9999px; display:flex; align-items:center; justify-content:center;
+  background:var(--surface-soft); border:1px solid var(--hairline); color:var(--ink);
+  transition:transform .15s ease;
+}
 .icon-btn:active{transform:scale(0.95);}
-.icon-btn svg{width:18px;height:18px;}
-.badge{position:absolute;top:-4px;right:-4px;background:var(--primary);color:#fff;font-size:10px;font-weight:700;border-radius:9999px;padding:1px 5px;line-height:1.4;border:2px solid var(--canvas);}
-[data-theme="dark"] .badge{color:#0e0e10;}
+.icon-btn svg{width:18px; height:18px;}
 
-/* Tabs in nav */
-.nav-tabs{display:flex;gap:4px;}
-.nav-tab{font-size:14px;font-weight:600;padding:8px 16px;border-radius:9999px;color:var(--muted);transition:all .15s;}
-.nav-tab.active{background:var(--primary);color:var(--on-primary);}
+main{max-width:1100px; margin:0 auto; padding:0 24px;}
 
-main{max-width:1100px;margin:0 auto;padding:0 24px;}
+/* ============ Hero 2.0 ============ */
+.hero2{
+  background:linear-gradient(180deg,#E8EFFE 0%,#DDE8FD 55%,#EAF0FE 100%);
+  padding:64px 24px 76px; margin:0 calc(50% - 50vw);
+  width:100vw;
+}
+[data-theme="dark"] .hero2{ background:linear-gradient(180deg,#15182a 0%,#11131f 55%,#15182a 100%); }
 
-/* Usage bar */
-.usage-bar{display:flex;align-items:center;gap:16px;padding:10px 16px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:9999px;font-size:13px;font-weight:600;color:var(--muted);margin:16px 0;flex-wrap:wrap;}
-.usage-pill{display:flex;align-items:center;gap:6px;}
-.usage-track{width:80px;height:5px;background:var(--hairline-strong);border-radius:9999px;overflow:hidden;}
-.usage-fill{height:100%;background:var(--primary);border-radius:9999px;transition:width .4s ease;}
-.usage-fill.warn{background:var(--warning);}
-.usage-fill.danger{background:var(--error);}
+.hero2-inner{
+  max-width:1200px; margin:0 auto;
+  display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:start;
+}
+.hero2-left{max-width:520px; padding-top:6px;}
+.hero2-eyebrow{
+  display:inline-block; background:rgba(255,255,255,.8); color:var(--primary-active);
+  font-size:12px; font-weight:700; letter-spacing:1px; text-transform:uppercase;
+  padding:7px 16px; border-radius:9999px; margin-bottom:22px;
+}
+[data-theme="dark"] .hero2-eyebrow{ background:rgba(255,255,255,.08); color:var(--primary); }
+.hero2-left h1{
+  font-size:46px; line-height:1.08; letter-spacing:-0.5px; font-weight:800;
+  color:var(--body-strong); margin-bottom:20px;
+}
+.hero2-lead{font-size:17px; line-height:1.6; color:var(--muted); margin-bottom:28px;}
 
-/* Page tabs */
-.page-tabs{display:flex;gap:0;border-bottom:2px solid var(--hairline);margin-bottom:0;}
-.page-tab{font-size:15px;font-weight:600;padding:14px 22px;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s;}
-.page-tab.active{color:var(--primary);border-bottom-color:var(--primary);}
-.page-content{display:none;}
-.page-content.active{display:block;}
+.hero2-search{
+  display:flex; align-items:center; gap:10px; background:var(--canvas);
+  border-radius:14px; padding:16px 18px; margin-bottom:14px;
+  box-shadow:0 2px 12px rgba(20,30,60,.06);
+}
+.hero2-search svg{width:19px; height:19px; color:var(--muted-soft); flex-shrink:0;}
+.hero2-search input{ border:none; outline:none; width:100%; font-size:15px; background:transparent; color:var(--ink); padding:0; }
+.hero2-search input::placeholder{color:var(--muted-soft);}
 
-/* Hero */
-.hero{text-align:center;padding:48px 0 28px;}
-.eyebrow{font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--primary);margin-bottom:14px;display:block;}
-.hero h1{font-size:40px;line-height:1.1;letter-spacing:-0.2px;max-width:680px;margin:0 auto 14px;}
-.hero p.lead{font-size:18px;line-height:1.4;color:var(--muted);max-width:560px;margin:0 auto;}
+.hero2-generate{
+  width:100%; height:50px; border-radius:9999px; border:none;
+  background:linear-gradient(135deg,#7FA3FF,#3D63F0); color:#fff;
+  font-size:15px; font-weight:700; font-family:inherit;
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  box-shadow:0 10px 22px rgba(61,99,240,.28); transition:transform .15s ease;
+}
+.hero2-generate:active{transform:scale(.97);}
+.hero2-generate svg{width:17px; height:17px;}
+
+.hero2-divider{display:flex; align-items:center; gap:14px; margin:26px 0; color:var(--muted-soft); font-size:12px; font-weight:700;}
+.hero2-divider::before,.hero2-divider::after{content:""; flex:1; height:1px; background:var(--hairline-strong);}
+
+.hero2-options{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+.hero2-option{
+  position:relative; background:var(--canvas); border:1px solid var(--hairline);
+  border-radius:16px; padding:24px 16px 18px; text-align:center; cursor:pointer;
+  transition:transform .15s ease, border-color .15s ease; font-family:inherit;
+}
+.hero2-option:active{transform:scale(.97);}
+.hero2-option:hover{border-color:var(--hairline-strong);}
+.hero2-badge{
+  position:absolute; top:-10px; right:14px; font-size:10.5px; font-weight:700;
+  padding:4px 10px; border-radius:9999px; letter-spacing:.2px;
+}
+.badge-signup{background:var(--light); color:var(--primary-active);}
+.badge-pro{background:#1A2B6B; color:#fff;}
+.hero2-option-icon{
+  width:44px; height:44px; border-radius:12px; background:var(--canvas-parchment);
+  display:flex; align-items:center; justify-content:center; margin:0 auto 14px; color:var(--primary);
+}
+.hero2-option-icon svg{width:20px; height:20px;}
+.hero2-option h3{font-size:14.5px; font-weight:700; color:var(--body-strong); margin-bottom:8px; line-height:1.3;}
+.hero2-option p{font-size:12px; color:var(--muted); line-height:1.5; margin:0;}
+
+/* Right-side floating composition */
+.hero2-right{position:relative; min-height:600px;}
+.hero2-composition{position:relative; width:100%; max-width:580px; height:640px; margin-left:auto;}
+.hero2-composition::before{
+  content:""; position:absolute; left:230px; top:90px; width:280px; height:280px; z-index:0;
+  background:radial-gradient(circle,rgba(140,170,255,.4),transparent 70%); filter:blur(8px);
+}
+.hero2-composition::after{
+  content:""; position:absolute; left:0; top:250px; width:210px; height:170px; z-index:0;
+  background:radial-gradient(circle,rgba(253,230,138,.5),transparent 70%); filter:blur(8px);
+}
+.hc-card{
+  position:absolute; z-index:1; background:var(--canvas); border-radius:16px;
+  box-shadow:0 14px 34px rgba(30,41,90,.12); padding:16px;
+}
+[data-theme="dark"] .hc-card{box-shadow:0 14px 34px rgba(0,0,0,.45);}
+.hc-badge{display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:700; padding:4px 10px; border-radius:9999px;}
+.hc-badge svg{width:11px; height:11px;}
+.hc-badge.blue{background:var(--canvas-parchment); color:var(--primary-active);}
+.hc-badge.amber{background:rgba(245,158,11,.14); color:#B45309;}
+.hc-badge.purple{background:rgba(124,92,252,.13); color:#6D3FF0;}
+.hc-meta{font-size:11px; color:var(--muted-soft); font-weight:600;}
+
+.hc-highlight{left:0; top:0; width:300px;}
+.hc-highlight .hc-head{display:flex; align-items:center; gap:6px; color:#B45309; font-size:12.5px; font-weight:700; margin-bottom:10px;}
+.hc-highlight .hc-head svg{width:14px; height:14px;}
+.hc-highlight p{font-size:13px; line-height:1.55; color:var(--body); margin-bottom:14px;}
+.hc-mark{background:#FDE68A; border-radius:3px; padding:0 2px; color:#1a1a1a;}
+.hc-cta{display:flex; align-items:center; justify-content:space-between; gap:8px; background:var(--canvas-parchment); border-radius:9999px; padding:8px 6px 8px 14px;}
+.hc-cta span{display:flex; align-items:center; gap:6px; font-size:12px; font-weight:700; color:var(--primary-active);}
+.hc-cta span svg{width:13px; height:13px;}
+.hc-cta .hc-arrow{width:26px; height:26px; border-radius:9999px; background:var(--primary); display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+.hc-cta .hc-arrow svg{width:13px; height:13px; color:#fff;}
+
+.hc-mitosis{left:316px; top:34px; width:236px;}
+.hc-mitosis .hc-toprow{display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;}
+.hc-mitosis h4{font-size:16px; font-weight:700; color:var(--body-strong); margin-bottom:8px;}
+.hc-mitosis p{font-size:12.5px; line-height:1.5; color:var(--body); margin-bottom:14px;}
+.hc-bars{display:flex; gap:4px;}
+.hc-bars span{flex:1; height:5px; border-radius:9999px; background:var(--hairline-strong);}
+.hc-bars span.fill{background:#3FB897;}
+
+.hc-accuracy{left:432px; top:206px; width:auto; padding:9px 16px; display:flex; align-items:center; gap:7px; border-radius:9999px;}
+.hc-accuracy .dot{width:7px; height:7px; border-radius:9999px; background:var(--success); flex-shrink:0;}
+.hc-accuracy span{font-size:12px; font-weight:700; color:var(--body-strong);}
+
+.hc-geo{left:0; top:284px; width:212px;}
+.hc-geo .hc-badge{margin-bottom:10px;}
+.hc-geo h4{font-size:15.5px; font-weight:700; color:var(--body-strong); margin-bottom:6px;}
+.hc-geo p{font-size:12.5px; color:var(--muted); margin:0;}
+
+.hc-quiz{left:288px; top:248px; width:252px;}
+.hc-quiz .hc-toprow{display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;}
+.hc-quiz h4{font-size:14.5px; font-weight:700; color:var(--body-strong); margin-bottom:12px; line-height:1.3; white-space:nowrap;}
+.hc-option{display:flex; align-items:center; gap:7px; border-radius:10px; padding:10px 12px; font-size:12.5px; font-weight:600; margin-bottom:8px;}
+.hc-option:last-child{margin-bottom:0;}
+.hc-option svg{width:14px; height:14px; flex-shrink:0;}
+.hc-option.correct{background:rgba(34,197,94,.1); color:#15803D;}
+.hc-option.neutral{background:var(--canvas); border:1px solid var(--hairline-strong); color:var(--muted);}
+
+.hc-exam{left:20px; top:438px; width:226px;}
+.hc-exam .hc-toprow{display:flex; align-items:center; gap:10px; margin-bottom:14px;}
+.hc-exam .hc-icon{width:34px; height:34px; border-radius:9999px; background:rgba(245,158,11,.14); color:#B45309; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+.hc-exam .hc-icon svg{width:17px; height:17px;}
+.hc-exam .hc-titles{flex:1;}
+.hc-exam .hc-titles span{display:block; font-size:11px; color:var(--muted-soft); font-weight:600;}
+.hc-exam .hc-titles strong{font-size:14px; color:var(--body-strong); font-weight:700;}
+.hc-pill-red{background:rgba(220,38,38,.1); color:#DC2626; font-size:11px; font-weight:700; padding:4px 10px; border-radius:9999px; flex-shrink:0;}
+.hc-track{height:6px; border-radius:9999px; background:var(--hairline); margin-bottom:10px; overflow:hidden;}
+.hc-track .fill{height:100%; width:75%; border-radius:9999px; background:#F59E0B;}
+.hc-exam-foot{display:flex; justify-content:space-between; font-size:11.5px; color:var(--muted-soft); font-weight:600;}
+.hc-exam-foot span{display:flex; align-items:center; gap:4px;}
+.hc-exam-foot svg{width:12px; height:12px;}
+
+.hc-printed{left:354px; top:448px; width:178px; border:1px solid var(--hairline); box-shadow:0 10px 26px rgba(30,41,90,.08);}
+.hc-printed .hc-head{display:flex; align-items:center; gap:6px; font-size:10.5px; font-weight:700; color:var(--muted-soft); letter-spacing:.5px; text-transform:uppercase; margin-bottom:14px;}
+.hc-printed .hc-head svg{width:13px; height:13px;}
+.hc-printed .pside{margin-bottom:12px;}
+.hc-printed .pside:last-child{margin-bottom:0;}
+.hc-printed .plabel{display:block; font-size:10.5px; color:var(--muted-soft); font-weight:600; margin-bottom:3px;}
+.hc-printed .pfront{font-size:14px; font-weight:700; color:var(--body-strong);}
+.hc-printed .pback{font-size:12.5px; color:var(--muted);}
+.hc-printed hr{border:none; border-top:1px dashed var(--hairline-strong); margin:0 0 12px;}
+
+@media(max-width:1100px){
+  .hero2-inner{grid-template-columns:1fr;}
+  .hero2-right{display:none;}
+  .hero2-left{max-width:100%;}
+}
+@media(max-width:640px){
+  .hero2{padding:40px 20px 48px;}
+  .hero2-left h1{font-size:30px;}
+  .hero2-options{grid-template-columns:1fr;}
+}
 
 /* Input card */
-.input-card{background:var(--surface-card);border:1px solid var(--hairline);border-radius:18px;padding:24px;margin:28px 0;}
-.tabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
-.tab-btn{font-size:14px;font-weight:600;padding:10px 18px;border-radius:9999px;background:var(--canvas);border:1px solid var(--hairline-strong);color:var(--muted);transition:all .15s ease;}
-.tab-btn.active{background:var(--ink);color:var(--canvas);border-color:var(--ink);}
-[data-theme="dark"] .tab-btn.active{background:var(--primary);color:#0e0e10;border-color:var(--primary);}
+.input-card{
+  background:var(--surface-card); border:1px solid var(--hairline); border-radius:18px;
+  padding:24px; margin:32px 0;
+}
+.tabs{display:flex; gap:8px; margin-bottom:18px; flex-wrap:wrap;}
+.tab-btn{
+  font-size:14px; font-weight:600; padding:10px 18px; border-radius:9999px;
+  background:var(--canvas); border:1px solid var(--hairline-strong); color:var(--muted);
+  transition:all .15s ease;
+}
+.tab-btn.active{background:var(--ink); color:var(--canvas); border-color:var(--ink);}
+[data-theme="dark"] .tab-btn.active{background:var(--primary); color:#0e0e10; border-color:var(--primary);}
+
+/* Mobile dock tab switcher */
+.dock{
+  position:fixed; z-index:150; left:50%; bottom:calc(14px + env(safe-area-inset-bottom));
+  transform:translateX(-50%); width:calc(100% - 32px); max-width:380px;
+}
+.dock-bar{
+  position:relative; z-index:1; display:flex; align-items:center; justify-content:space-between;
+  background:var(--canvas); border-radius:28px; padding:16px 20px;
+  box-shadow:0 10px 26px rgba(20,30,60,.07);
+}
+[data-theme="dark"] .dock-bar{ background:var(--surface-card); box-shadow:0 10px 26px rgba(0,0,0,.35); }
+
+.tab-btn.dock-btn{
+  width:34px; height:34px; padding:0; border:none; background:none; border-radius:9999px;
+  display:flex; align-items:center; justify-content:center; color:var(--muted-soft);
+  transition:color .15s ease, background .2s ease, box-shadow .2s ease,
+             transform .35s cubic-bezier(.34,1.56,.64,1);
+}
+.tab-btn.dock-btn svg{ width:20px; height:20px; }
+.tab-btn.dock-btn:active{ transform:scale(.88); }
+.tab-btn.dock-btn.active{
+  background:radial-gradient(circle at 32% 26%, #7C8CFF, #2C46E6 72%);
+  color:#fff; border-color:transparent;
+  transform:scale(1.4) translateY(-4px);
+  box-shadow:0 8px 18px rgba(40,60,220,.4);
+}
+.tab-btn.dock-btn.active:active{ transform:scale(1.25) translateY(-4px); }
+
 .tab-panel{display:none;}
 .tab-panel.active{display:block;}
-textarea,input[type="text"]{width:100%;background:var(--canvas);color:var(--ink);font-size:16px;font-family:inherit;border:1px solid var(--hairline);border-radius:8px;padding:14px 16px;resize:vertical;transition:border .15s ease;}
+
+/* Preset Decks panel */
+.preset-deck-groups{display:flex; flex-direction:column; gap:18px;}
+.pd-subtitle{font-size:13px; color:var(--muted); line-height:1.5; margin:-2px 0 16px;}
+.pd-group-title{
+  font-size:11px; font-weight:700; letter-spacing:.6px; text-transform:uppercase;
+  color:var(--muted-soft); margin-bottom:8px;
+}
+.pd-group-items{display:flex; flex-direction:column; gap:8px;}
+.pd-item{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  width:100%; text-align:left; padding:12px 14px; border-radius:12px;
+  background:var(--canvas); border:1px solid var(--hairline);
+  transition:border-color .15s ease, background .15s ease, transform .15s ease;
+}
+.pd-item:hover{border-color:var(--primary); background:var(--canvas-parchment);}
+.pd-item:active{transform:scale(.97);}
+.pd-item-text{display:flex; flex-direction:column; gap:2px; min-width:0;}
+.pd-item-title{font-size:14px; font-weight:600; color:var(--ink);}
+.pd-item-meta{font-size:12px; color:var(--muted-soft);}
+.pd-item-arrow{width:16px; height:16px; color:var(--muted-soft); flex-shrink:0;}
+
+textarea, input[type="text"]{
+  width:100%; background:var(--canvas); color:var(--ink); font-size:16px; font-family:inherit;
+  border:1px solid var(--hairline); border-radius:8px; padding:14px 16px; resize:vertical;
+  transition:border .15s ease;
+}
 textarea{min-height:110px;}
-textarea:focus,input[type="text"]:focus{outline:none;border:2px solid var(--primary);padding:13px 15px;}
-.file-drop{border:1.5px dashed var(--hairline-strong);border-radius:11px;padding:32px 16px;text-align:center;color:var(--muted);cursor:pointer;transition:border-color .15s ease,background .15s ease;}
-.file-drop:hover,.file-drop.dragover{border-color:var(--primary);background:var(--canvas-parchment);}
-.file-drop svg{width:28px;height:28px;margin-bottom:8px;color:var(--muted-soft);}
-.file-drop .fname{color:var(--ink);font-weight:600;margin-top:6px;font-size:14px;}
-.file-drop .trunc-note{color:var(--warning);font-size:12px;margin-top:4px;display:none;}
+textarea:focus, input[type="text"]:focus{outline:none; border:2px solid var(--primary); padding:13px 15px;}
+
+.file-drop{
+  border:1.5px dashed var(--hairline-strong); border-radius:11px; padding:32px 16px; text-align:center;
+  color:var(--muted); cursor:pointer; transition:border-color .15s ease, background .15s ease;
+}
+.file-drop:hover, .file-drop.dragover{border-color:var(--primary); background:var(--canvas-parchment);}
+.file-drop svg{width:28px; height:28px; margin-bottom:8px; color:var(--muted-soft);}
+.file-drop .fname{color:var(--ink); font-weight:600; margin-top:6px;}
 #pdfInput{display:none;}
-.presets{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
-.preset-chip{font-size:14px;font-weight:600;padding:10px 16px;border-radius:9999px;background:var(--canvas);border:1px solid var(--hairline-strong);color:var(--ink);transition:all .15s ease;}
+
+.presets{display:flex; flex-wrap:wrap; gap:8px; margin-top:16px;}
+.preset-chip{
+  font-size:14px; font-weight:600; padding:10px 16px; border-radius:9999px;
+  background:var(--canvas); border:1px solid var(--hairline-strong); color:var(--ink);
+  transition:all .15s ease;
+}
 .preset-chip:active{transform:scale(0.95);}
-.preset-chip.selected{background:var(--primary);color:var(--on-primary);border-color:var(--primary);}
-.count-presets{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}
-.count-chip{font-size:13px;font-weight:700;padding:8px 14px;border-radius:9999px;background:var(--canvas);border:1px solid var(--hairline-strong);color:var(--muted);transition:all .15s ease;}
-.count-chip:active{transform:scale(0.95);}
-.count-chip.selected{background:var(--ink);color:var(--canvas);border-color:var(--ink);}
-[data-theme="dark"] .count-chip.selected{background:var(--primary);color:#0e0e10;border-color:var(--primary);}
-.row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;}
+.preset-chip.selected{background:var(--primary); color:var(--on-primary); border-color:var(--primary);}
+
+.row-2{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px;}
 @media(max-width:640px){.row-2{grid-template-columns:1fr;}}
-label.field-label{font-size:13px;font-weight:700;color:var(--muted);margin-bottom:6px;display:block;text-transform:uppercase;letter-spacing:0.5px;}
-.generate-row{display:flex;align-items:center;gap:14px;margin-top:22px;flex-wrap:wrap;}
-.btn-primary{background:var(--primary);color:var(--on-primary);font-size:15px;font-weight:600;border-radius:9999px;padding:14px 32px;height:48px;display:inline-flex;align-items:center;gap:8px;transition:transform .15s ease,background .15s ease;}
-.btn-primary:active{transform:scale(0.95);background:var(--primary-active);}
-.btn-primary:disabled{background:var(--primary-disabled);color:#888;cursor:not-allowed;}
-.btn-secondary{background:var(--canvas);color:var(--ink);font-size:15px;font-weight:600;border:1px solid var(--hairline-strong);border-radius:9999px;padding:14px 28px;height:48px;transition:transform .15s ease;}
+
+.card-count-options{display:flex; flex-wrap:wrap; gap:8px; margin-top:8px;}
+.cc-chip{
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
+  min-width:62px; padding:10px 14px; border-radius:12px;
+  background:var(--canvas); border:1.5px solid var(--hairline-strong); color:var(--ink);
+  transition:transform .15s ease, background .15s ease, border-color .15s ease, color .15s ease;
+}
+.cc-chip:active{transform:scale(.95);}
+.cc-chip .cc-num{font-size:16px; font-weight:700; line-height:1.2;}
+.cc-chip .cc-tag{font-size:10px; font-weight:700; color:var(--muted-soft); text-transform:uppercase; letter-spacing:.3px;}
+.cc-chip.selected{background:var(--ink); border-color:var(--ink); color:var(--canvas);}
+.cc-chip.selected .cc-tag{color:rgba(255,255,255,.7);}
+[data-theme="dark"] .cc-chip.selected{background:var(--primary); border-color:var(--primary); color:#0e0e10;}
+[data-theme="dark"] .cc-chip.selected .cc-tag{color:rgba(0,0,0,.6);}
+.cc-chip-premium{border-color:#f0b94f;}
+.cc-chip-premium .cc-tag{color:#b9790a;}
+[data-theme="dark"] .cc-chip-premium .cc-tag{color:#f0b94f;}
+.cc-chip-premium.selected{background:linear-gradient(135deg,#f7b955,#f59e0b); border-color:#f59e0b; color:#fff;}
+.cc-chip-premium.selected .cc-tag{color:rgba(255,255,255,.85);}
+
+label.field-label{font-size:13px; font-weight:700; color:var(--muted); margin-bottom:6px; display:block; text-transform:uppercase; letter-spacing:0.5px;}
+
+.generate-row{display:flex; align-items:center; gap:14px; margin-top:22px; flex-wrap:wrap;}
+.btn-primary{
+  background:var(--primary); color:var(--on-primary); font-size:15px; font-weight:600;
+  border-radius:9999px; padding:14px 32px; height:48px; display:inline-flex; align-items:center; gap:8px;
+  transition:transform .15s ease, background .15s ease;
+}
+.btn-primary:active{transform:scale(0.95); background:var(--primary-active);}
+.btn-primary:disabled{background:var(--primary-disabled); color:#888; cursor:not-allowed;}
+.btn-secondary{
+  background:var(--canvas); color:var(--ink); font-size:15px; font-weight:600;
+  border:1px solid var(--hairline-strong); border-radius:9999px; padding:14px 28px; height:48px;
+  transition:transform .15s ease;
+}
 .btn-secondary:active{transform:scale(0.95);}
-.btn-sm{font-size:13px;font-weight:600;padding:9px 18px;height:36px;border-radius:9999px;background:var(--surface-soft);border:1px solid var(--hairline);color:var(--ink);display:inline-flex;align-items:center;gap:6px;transition:transform .15s ease;}
-.btn-sm:active{transform:scale(0.95);}
-.btn-sm svg{width:14px;height:14px;}
-.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:none;}
+.spinner{width:16px; height:16px; border:2px solid rgba(255,255,255,.4); border-top-color:#fff; border-radius:50%; animation:spin .7s linear infinite; display:none;}
 .btn-primary.loading .spinner{display:inline-block;}
 .btn-primary.loading .btn-text{display:none;}
 @keyframes spin{to{transform:rotate(360deg);}}
-.error-msg{color:var(--error);font-size:14px;margin-top:10px;display:none;}
-.success-msg{color:var(--success);font-size:14px;margin-top:10px;display:none;}
 
-/* ── PRESETS SECTION ── */
-.presets-section{padding:8px 0 48px;}
-.presets-section h2{font-size:28px;margin-bottom:6px;}
-.presets-section .section-sub{font-size:16px;color:var(--muted);margin-bottom:32px;}
-.exam-group{margin-bottom:40px;}
-.exam-group-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--hairline);}
-.exam-group-label{font-size:18px;font-weight:700;color:var(--body-strong);}
-.exam-color-dot{width:10px;height:10px;border-radius:9999px;flex-shrink:0;}
-.topic-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;}
-.topic-card{background:var(--surface-card);border:1px solid var(--hairline);border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:6px;cursor:pointer;transition:transform .15s ease,border-color .15s ease,box-shadow .15s ease;text-decoration:none;color:inherit;}
-.topic-card:hover{transform:translateY(-2px);border-color:var(--primary);}
-.topic-card:active{transform:scale(0.97);}
-.topic-card-title{font-size:15px;font-weight:700;color:var(--body-strong);}
-.topic-card-desc{font-size:13px;color:var(--muted);line-height:1.4;}
-.topic-card-meta{font-size:12px;font-weight:700;color:var(--primary);margin-top:4px;display:flex;align-items:center;gap:4px;}
-.topic-card-meta svg{width:12px;height:12px;}
-.coming-soon-badge{font-size:10px;font-weight:700;background:var(--surface-strong);color:var(--muted-soft);border-radius:9999px;padding:2px 8px;margin-left:auto;}
+.error-msg{color:var(--error); font-size:14px; margin-top:10px; display:none;}
 
-/* Deck section */
-.deck-section{padding:24px 0 48px;display:none;}
+/* Usage limits */
+.usage-limits{
+  display:flex; flex-direction:column; gap:12px; margin-top:18px;
+  padding:14px 16px; border:1px solid var(--hairline); border-radius:14px;
+  background:var(--surface-soft);
+}
+.usage-limit-item{display:flex; flex-direction:column; gap:6px;}
+.usage-limit-head{display:flex; align-items:center; justify-content:space-between; font-size:12.5px; color:var(--muted);}
+.usage-limit-head .ul-label{font-weight:700; display:flex; align-items:center; gap:6px;}
+.usage-limit-head .ul-label svg{width:13px; height:13px; color:var(--muted-soft);}
+.usage-limit-head .ul-count{font-weight:700; color:var(--body-strong);}
+.usage-limit-track{height:6px; border-radius:9999px; background:var(--hairline); overflow:hidden;}
+.usage-limit-fill{
+  height:100%; border-radius:9999px; width:0%;
+  background:linear-gradient(90deg,#6699FB,#3D7BF5);
+  transition:width .35s ease, background .25s ease;
+}
+.usage-limit-fill.warn{background:linear-gradient(90deg,#f7b955,#f59e0b);}
+.usage-limit-fill.full{background:linear-gradient(90deg,#f0746e,#dc2626);}
+.usage-limit-note{font-size:11.5px; color:var(--muted-soft);}
+
+/* Settings modal */
+.modal-overlay{
+  position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:200;
+  display:none; align-items:center; justify-content:center; padding:20px;
+}
+.modal-overlay.open{display:flex;}
+.modal{
+  background:var(--canvas); border-radius:18px; padding:28px; max-width:420px; width:100%;
+  border:1px solid var(--hairline);
+}
+.modal h3{font-size:20px; margin-bottom:8px;}
+.modal p{font-size:14px; color:var(--muted); margin-bottom:16px; line-height:1.5;}
+.modal .modal-actions{display:flex; justify-content:flex-end; gap:10px; margin-top:18px;}
+
+/* Flashcard deck */
+.deck-section{padding:24px 0 60px; display:none;}
 .deck-section.active{display:block;}
-.deck-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+.deck-header{display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:12px;}
 .deck-header h2{font-size:24px;}
-.deck-meta{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
-.progress-text{font-size:14px;color:var(--muted);font-weight:600;}
+.progress-text{font-size:14px; color:var(--muted); font-weight:600;}
 
-/* Study bar */
-.study-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:12px;padding:12px 18px;margin-bottom:18px;}
-.study-score{font-size:14px;font-weight:600;color:var(--muted);}
-.study-score span{color:var(--body-strong);}
-.study-actions{display:flex;gap:8px;}
-.grade-btn{font-size:13px;font-weight:700;padding:9px 16px;border-radius:9999px;border:none;cursor:pointer;transition:transform .15s ease;display:none;}
-.grade-btn:active{transform:scale(0.95);}
-.grade-got{background:#dcfce7;color:#166534;}
-.grade-review{background:#fee2e2;color:#991b1b;}
-[data-theme="dark"] .grade-got{background:#14532d;color:#bbf7d0;}
-[data-theme="dark"] .grade-review{background:#7f1d1d;color:#fecaca;}
-
-/* Flip card */
-.card-stage{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:24px;}
-.nav-arrow{width:44px;height:44px;border-radius:9999px;background:var(--surface-soft);border:1px solid var(--hairline);display:flex;align-items:center;justify-content:center;color:var(--ink);flex-shrink:0;transition:transform .15s ease;}
+.card-stage{
+  display:flex; align-items:center; justify-content:center; gap:16px; margin-bottom:24px;
+}
+.nav-arrow{
+  width:44px; height:44px; border-radius:9999px; background:var(--surface-soft);
+  border:1px solid var(--hairline); display:flex; align-items:center; justify-content:center;
+  color:var(--ink); flex-shrink:0; transition:transform .15s ease;
+}
 .nav-arrow:active{transform:scale(0.9);}
-.nav-arrow:disabled{opacity:.35;cursor:not-allowed;}
-.nav-arrow svg{width:18px;height:18px;}
-.flip-card-wrap{width:100%;max-width:520px;height:320px;perspective:1400px;}
-.flip-card{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,.2,.2,1);cursor:pointer;}
+.nav-arrow:disabled{opacity:.35; cursor:not-allowed;}
+.nav-arrow svg{width:18px; height:18px;}
+
+.flip-card-wrap{
+  width:100%; max-width:520px; height:320px; perspective:1400px;
+}
+.flip-card{
+  width:100%; height:100%; position:relative; transform-style:preserve-3d;
+  transition:transform .5s cubic-bezier(.4,.2,.2,1); cursor:pointer;
+}
 .flip-card.flipped{transform:rotateY(180deg);}
-.card-face{position:absolute;inset:0;border-radius:18px;backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px;border:1px solid var(--hairline);}
+.card-face{
+  position:absolute; inset:0; border-radius:18px; backface-visibility:hidden;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; padding:32px; border:1px solid var(--hairline);
+}
 .card-front{background:var(--surface-card);}
-.card-back{background:var(--canvas-parchment);transform:rotateY(180deg);}
-.card-label{font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--primary);margin-bottom:14px;}
-.card-text{font-size:19px;font-weight:600;line-height:1.45;color:var(--body-strong);max-width:440px;}
-.card-back .card-text{font-size:17px;font-weight:400;line-height:1.55;}
-.tap-hint{position:absolute;bottom:16px;font-size:12px;color:var(--muted-soft);font-weight:400;display:flex;align-items:center;gap:4px;}
-.tap-hint svg{width:13px;height:13px;}
-.card-status-icon{position:absolute;top:14px;right:14px;width:22px;height:22px;border-radius:9999px;display:none;align-items:center;justify-content:center;}
-.card-status-icon.got{background:#dcfce7;display:flex;}
-.card-status-icon.review{background:#fee2e2;display:flex;}
-[data-theme="dark"] .card-status-icon.got{background:#14532d;}
-[data-theme="dark"] .card-status-icon.review{background:#7f1d1d;}
-.card-status-icon svg{width:13px;height:13px;}
-.deck-controls{display:flex;justify-content:center;gap:12px;margin-bottom:8px;flex-wrap:wrap;}
-.dots{display:flex;justify-content:center;gap:6px;margin-top:18px;flex-wrap:wrap;}
-.dot{width:8px;height:8px;border-radius:9999px;background:var(--hairline-strong);transition:background .15s ease,width .15s ease;}
-.dot.active{background:var(--primary);width:20px;}
-.dot.got{background:var(--success);}
-.dot.review-dot{background:var(--error);}
-.progress-bar-wrap{width:100%;height:4px;background:var(--hairline);border-radius:9999px;margin-top:16px;overflow:hidden;display:none;}
-.progress-bar-fill{height:100%;background:var(--primary);border-radius:9999px;transition:width .3s ease;}
+.card-back{background:var(--canvas-parchment); transform:rotateY(180deg);}
+.card-label{
+  font-size:12px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;
+  color:var(--primary); margin-bottom:14px;
+}
+.card-text{font-size:19px; font-weight:600; line-height:1.45; color:var(--body-strong); max-width:440px;}
+.card-back .card-text{font-size:17px; font-weight:400; line-height:1.55;}
+.tap-hint{position:absolute; bottom:16px; font-size:12px; color:var(--muted-soft); font-weight:400;}
 
-/* Result screen */
-.result-screen{display:none;text-align:center;padding:40px 24px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:18px;margin-top:24px;}
-.result-screen.active{display:block;}
-.result-score-big{font-size:56px;font-weight:700;color:var(--primary);line-height:1;}
-.result-label{font-size:16px;color:var(--muted);margin-top:8px;margin-bottom:24px;}
+.deck-controls{display:flex; justify-content:center; gap:12px; margin-bottom:8px;}
 
-/* Saved decks drawer */
-.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;display:none;align-items:flex-end;justify-content:center;}
-.drawer-overlay.open{display:flex;}
-@media(min-width:640px){.drawer-overlay{align-items:center;}.drawer{border-radius:18px;max-height:80vh;}}
-.drawer{background:var(--canvas);width:100%;max-width:520px;border-radius:18px 18px 0 0;padding:24px;max-height:90vh;overflow-y:auto;border:1px solid var(--hairline);}
-.drawer h3{font-size:20px;margin-bottom:4px;}
-.drawer-subtitle{font-size:13px;color:var(--muted);margin-bottom:18px;}
-.saved-deck-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--hairline);}
-.saved-deck-item:last-child{border-bottom:none;}
-.saved-deck-info{flex:1;min-width:0;}
-.saved-deck-title{font-size:15px;font-weight:600;color:var(--body-strong);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.saved-deck-meta{font-size:12px;color:var(--muted);margin-top:2px;}
-.saved-deck-actions{display:flex;gap:8px;flex-shrink:0;}
-.empty-state{text-align:center;padding:32px 0;color:var(--muted);font-size:15px;}
+.dots{display:flex; justify-content:center; gap:6px; margin-top:18px; flex-wrap:wrap;}
+.dot{width:8px; height:8px; border-radius:9999px; background:var(--hairline-strong); transition:background .15s ease, width .15s ease;}
+.dot.active{background:var(--primary); width:20px;}
 
 /* FAQ */
-.faq-section{background:var(--canvas-parchment);padding:64px 24px;margin-top:40px;}
-.faq-inner{max-width:760px;margin:0 auto;}
-.faq-section h2{font-size:28px;text-align:center;margin-bottom:32px;}
-.faq-item{border-bottom:1px solid var(--hairline);padding:18px 0;}
-.faq-item h3{font-size:17px;margin-bottom:8px;}
-.faq-item p{font-size:15px;color:var(--muted);line-height:1.5;}
+.faq-section{background:var(--canvas-parchment); padding:64px 24px; margin-top:40px;}
+.faq-inner{max-width:760px; margin:0 auto;}
+.faq-section h2{font-size:28px; text-align:center; margin-bottom:32px;}
+.faq-item{border-bottom:1px solid var(--hairline); padding:18px 0;}
+.faq-item h3{font-size:17px; margin-bottom:8px;}
+.faq-item p{font-size:15px; color:var(--muted); line-height:1.5;}
 
 /* Footer */
-footer{background:var(--canvas-parchment);padding:56px 24px 32px;color:var(--muted);}
-.footer-inner{max-width:1100px;margin:0 auto;}
-.footer-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-bottom:32px;}
+footer{background:var(--canvas-parchment); padding:56px 24px 32px; color:var(--muted);}
+.footer-inner{max-width:1100px; margin:0 auto;}
+.footer-cols{display:grid; grid-template-columns:repeat(3,1fr); gap:32px; margin-bottom:32px;}
 @media(max-width:640px){.footer-cols{grid-template-columns:1fr;}}
-.footer-col h4{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--ink);margin-bottom:14px;}
-.footer-col a{display:block;font-size:14px;color:var(--muted);margin-bottom:10px;}
+.footer-col h4{font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--ink); margin-bottom:14px;}
+.footer-col a{display:block; font-size:14px; color:var(--muted); margin-bottom:10px;}
 .footer-col a:hover{color:var(--primary);}
-.footer-bottom{border-top:1px solid var(--hairline);padding-top:20px;font-size:12px;text-align:center;}
+.footer-bottom{border-top:1px solid var(--hairline); padding-top:20px; font-size:12px; text-align:center;}
 
 @media(max-width:640px){
-  .hero h1{font-size:32px;}
+  .hero h1{font-size:28px;}
   .card-stage{gap:8px;}
   .flip-card-wrap{height:280px;}
-  .page-tab{padding:12px 14px;font-size:14px;}
 }
 </style>
 </head>
 <body>
 
-<!-- Loader -->
 <div id="loader">
-  <svg class="loader-arc" viewBox="0 0 60 60"><circle cx="30" cy="30" r="24"></circle></svg>
-  <span class="loader-brand">ThunderStudy</span>
+  <svg class="loader-ring" viewBox="0 0 60 60"><circle cx="30" cy="30" r="24"></circle></svg>
 </div>
 
-<!-- Nav -->
+<div class="promo-banner" id="promoBanner">
+  🎉 <span>Celebrating 8 Years of Wondermayank —</span> Pro tools, including OCR, are free for everyone now!
+  <button class="promo-close" id="promoClose" aria-label="Dismiss banner">&times;</button>
+</div>
+
+<div class="toast" id="appToast" role="status" aria-live="polite">
+  <span class="toast-emoji" id="toastEmoji">🎉</span>
+  <div>
+    <strong id="toastTitle">8 Years of Wondermayank!</strong>
+    <p id="toastBody">OCR &amp; all Pro tools are free for everyone now.</p>
+  </div>
+</div>
+
 <nav class="nav">
   <div class="nav-brand">
     <img src="https://commercesehoga.github.io/favicon.svg" alt="Thunder">
     <span>ThunderStudy Flashcards</span>
   </div>
   <div class="nav-right">
-    <button class="icon-btn" id="savedBtn" aria-label="Saved decks">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-      <span class="badge" id="savedCount" style="display:none">0</span>
+    <button class="icon-btn" id="saveBtn" aria-label="Save current deck" title="Save deck">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
     </button>
     <button class="icon-btn" id="themeToggle" aria-label="Toggle dark mode">
       <svg id="sunIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>
@@ -284,201 +603,357 @@ footer{background:var(--canvas-parchment);padding:56px 24px 32px;color:var(--mut
 </nav>
 
 <main>
-  <!-- Usage bar -->
-  <div class="usage-bar" id="usageBar">
-    <div class="usage-pill">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-      Daily
-      <div class="usage-track"><div class="usage-fill" id="dayFill" style="width:0%"></div></div>
-      <span id="dayText">5 left</span>
-    </div>
-    <div class="usage-pill">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      Weekly
-      <div class="usage-track"><div class="usage-fill" id="weekFill" style="width:0%"></div></div>
-      <span id="weekText">20 left</span>
-    </div>
-    <span style="font-size:12px;color:var(--muted-soft);">Token refunded if generation fails &middot; Preset decks are unlimited</span>
-  </div>
+  <section class="hero2">
+    <div class="hero2-inner">
+      <div class="hero2-left">
+        <span class="hero2-eyebrow">AI-Powered Study Tool</span>
+        <h1>Flashcards Generator using AI</h1>
+        <p class="hero2-lead">Generate flashcards from any source: notes, PDFs, books, or AI. Highlight exactly what to study, test yourself with quizzes, measure what you know, and print ready-to-study cards in seconds.</p>
 
-  <!-- Page tabs -->
-  <div class="page-tabs">
-    <button class="page-tab active" data-page="create">Create</button>
-    <button class="page-tab" data-page="presets">Preset Decks</button>
-  </div>
-
-  <!-- ── CREATE PAGE ── -->
-  <div class="page-content active" id="page-create">
-    <section class="hero">
-      <span class="eyebrow">AI Flashcard Generator</span>
-      <h1>Turn any topic into flashcards that actually stick</h1>
-      <p class="lead">Type a topic, paste a question, or upload a PDF. Pick your exam. Get a beautiful flip-card deck in seconds.</p>
-    </section>
-
-    <div class="input-card">
-      <div class="tabs">
-        <button class="tab-btn active" data-tab="topic">Topic or Question</button>
-        <button class="tab-btn" data-tab="pdf">Upload PDF</button>
-      </div>
-
-      <div class="tab-panel active" id="panel-topic">
-        <label class="field-label" for="topicInput">What do you want flashcards on?</label>
-        <textarea id="topicInput" placeholder="e.g. Newton's Laws of Motion, or paste a full question/paragraph..."></textarea>
-      </div>
-
-      <div class="tab-panel" id="panel-pdf">
-        <label class="field-label">Upload a PDF</label>
-        <div class="file-drop" id="fileDrop">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          <div>Click to choose a PDF, or drag it here</div>
-          <div class="fname" id="fileName"></div>
-          <div class="trunc-note" id="truncNote">Large PDF — only the first ~18,000 characters were used.</div>
+        <div class="hero2-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="heroTopicInput" placeholder="Enter a topic, e.g. Cell Biology, French Revolution...">
         </div>
-        <input type="file" id="pdfInput" accept="application/pdf">
+
+        <button class="hero2-generate" id="heroGenerateBtn">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"></path></svg>
+          Generate Flashcards
+        </button>
+
+        <div class="hero2-divider"><span>OR</span></div>
+
+        <div class="hero2-options">
+          <button class="hero2-option" id="heroOptionPaste" type="button">
+            <span class="hero2-badge badge-signup">Popular</span>
+            <span class="hero2-option-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 4h7a4 4 0 014 4v12a3 3 0 00-3-3H2V4z"></path><path d="M22 4h-7a4 4 0 00-4 4v12a3 3 0 013-3h8V4z"></path></svg>
+            </span>
+            <h3>Paste notes, URL, or book title</h3>
+            <p>Paste your notes, link a webpage, or name a book. AI finds it and generates cards.</p>
+          </button>
+          <button class="hero2-option" id="heroOptionUpload" type="button">
+            <span class="hero2-badge badge-pro">Pro</span>
+            <span class="hero2-option-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5"></path><path d="M4 16v3a2 2 0 002 2h12a2 2 0 002-2v-3"></path></svg>
+            </span>
+            <h3>Upload files & notes (OCR)</h3>
+            <p>PDFs, images, Word docs, text files. OCR reads typed text, handwriting and scans.</p>
+          </button>
+        </div>
       </div>
 
+      <div class="hero2-right" aria-hidden="true">
+        <div class="hero2-composition">
+
+          <div class="hc-card hc-highlight">
+            <div class="hc-head">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z"></path><path d="M14.06 6.19l3.75 3.75 2.34-2.34a1.5 1.5 0 000-2.12l-1.63-1.63a1.5 1.5 0 00-2.12 0l-2.34 2.34z"></path></svg>
+              Highlight to Generate
+            </div>
+            <p>The mitochondria is the powerhouse of the cell. It generates <span class="hc-mark">ATP through oxidative phosphorylation using a proton gradient</span> across the inner membrane. It also regulates apoptosis and calcium signalling.</p>
+            <div class="hc-cta">
+              <span>
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"></path></svg>
+                Generate flashcards from selection
+              </span>
+              <span class="hc-arrow">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </span>
+            </div>
+          </div>
+
+          <div class="hc-card hc-mitosis">
+            <div class="hc-toprow">
+              <span class="hc-badge blue">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 2h12a1 1 0 011 1v19l-7-4-7 4V3a1 1 0 011-1z"></path></svg>
+                Biology
+              </span>
+              <span class="hc-meta">Card 3 / 20</span>
+            </div>
+            <h4>Mitosis Phases</h4>
+            <p>Prophase → Metaphase →<br>Anaphase → Telophase</p>
+            <div class="hc-bars">
+              <span class="fill"></span><span class="fill"></span><span class="fill"></span><span></span><span></span>
+            </div>
+          </div>
+
+          <div class="hc-card hc-accuracy">
+            <span class="dot"></span>
+            <span>92% accuracy</span>
+          </div>
+
+          <div class="hc-card hc-geo">
+            <span class="hc-badge amber">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"></path></svg>
+              Geography
+            </span>
+            <h4>Capital of Spain?</h4>
+            <p>Madrid — capital since 1561</p>
+          </div>
+
+          <div class="hc-card hc-quiz">
+            <div class="hc-toprow">
+              <span class="hc-badge purple">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"></path></svg>
+                Quiz Mode
+              </span>
+              <span class="hc-meta">Q 2 / 12</span>
+            </div>
+            <h4>Primary function of DNA?</h4>
+            <div class="hc-option correct">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              Store genetic information
+            </div>
+            <div class="hc-option neutral">Break down cell waste</div>
+          </div>
+
+          <div class="hc-card hc-exam">
+            <div class="hc-toprow">
+              <span class="hc-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10L12 5 2 10l10 5 10-5z"></path><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"></path></svg>
+              </span>
+              <span class="hc-titles">
+                <span>Exam Mode</span>
+                <strong>Biology Final</strong>
+              </span>
+              <span class="hc-pill-red">5d left</span>
+            </div>
+            <div class="hc-track"><div class="fill"></div></div>
+            <div class="hc-exam-foot">
+              <span>75% last score</span>
+              <span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><polyline points="12 7 12 12 16 14"></polyline></svg>
+                15 min timer
+              </span>
+            </div>
+          </div>
+
+          <div class="hc-card hc-printed">
+            <div class="hc-head">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 22 8.5 12 15 2 8.5 12 2"></polygon><polyline points="2 13.5 12 20 22 13.5"></polyline></svg>
+              As Printed
+            </div>
+            <div class="pside">
+              <span class="plabel">Front</span>
+              <span class="pfront">Capital of Japan?</span>
+            </div>
+            <hr>
+            <div class="pside">
+              <span class="plabel">Back</span>
+              <span class="pback">Tokyo — since 1868</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="input-card">
+    <div class="tab-panel active" id="panel-topic">
+      <label class="field-label" for="topicInput">What do you want flashcards on?</label>
+      <textarea id="topicInput" placeholder="e.g. Newton's Laws of Motion, or paste a full question/paragraph..."></textarea>
+    </div>
+
+    <div class="tab-panel" id="panel-pdf">
+      <label class="field-label">Upload a PDF</label>
+      <div class="file-drop" id="fileDrop">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+        <div>Click to choose a PDF, or drag it here</div>
+        <div class="fname" id="fileName"></div>
+      </div>
+      <input type="file" id="pdfInput" accept="application/pdf">
+    </div>
+
+    <div class="tab-panel" id="panel-youtube">
+      <label class="field-label" for="youtubeInput">Paste a YouTube video link</label>
+      <input type="text" id="youtubeInput" placeholder="https://www.youtube.com/watch?v=...">
+    </div>
+
+    <div class="tab-panel" id="panel-ocr">
+      <label class="field-label">Upload an image (typed, handwritten, or scanned)</label>
+      <div class="file-drop" id="imageDrop">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+        <div>Click to choose an image, or drag it here</div>
+        <div class="fname" id="imageName"></div>
+      </div>
+      <input type="file" id="imageInput" accept="image/*">
+    </div>
+
+    <div class="tab-panel" id="panel-presets">
+      <label class="field-label">Preset Flashcard Decks</label>
+      <p class="pd-subtitle">Ready-made decks — no AI token needed. Click any topic to open it instantly.</p>
+      <div class="preset-deck-groups">
+        <div class="pd-group">
+          <div class="pd-group-title">Class 12 CBSE</div>
+          <div class="pd-group-items">
+            <button class="pd-item" data-preset="newtons-laws">
+              <span class="pd-item-text"><span class="pd-item-title">Newton's Laws of Motion</span><span class="pd-item-meta">Physics</span></span>
+              <svg class="pd-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+            <button class="pd-item" data-preset="chemical-bonding">
+              <span class="pd-item-text"><span class="pd-item-title">Chemical Bonding</span><span class="pd-item-meta">Chemistry</span></span>
+              <svg class="pd-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+          </div>
+        </div>
+        <div class="pd-group">
+          <div class="pd-group-title">NEET</div>
+          <div class="pd-group-items">
+            <button class="pd-item" data-preset="digestive-system">
+              <span class="pd-item-text"><span class="pd-item-title">Human Digestive System</span><span class="pd-item-meta">Biology</span></span>
+              <svg class="pd-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+            <button class="pd-item" data-preset="genetics-heredity">
+              <span class="pd-item-text"><span class="pd-item-title">Genetics and Heredity</span><span class="pd-item-meta">Biology</span></span>
+              <svg class="pd-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+          </div>
+        </div>
+        <div class="pd-group">
+          <div class="pd-group-title">JEE</div>
+          <div class="pd-group-items">
+            <button class="pd-item" data-preset="thermodynamics">
+              <span class="pd-item-text"><span class="pd-item-title">Laws of Thermodynamics</span><span class="pd-item-meta">Physics</span></span>
+              <svg class="pd-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+            <button class="pd-item" data-preset="organic-reactions">
+              <span class="pd-item-text"><span class="pd-item-title">Organic Reaction Mechanisms</span><span class="pd-item-meta">Chemistry</span></span>
+              <svg class="pd-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+          </div>
+        </div>
+        <div class="pd-group">
+          <div class="pd-group-title">Banking & SSC</div>
+          <div class="pd-group-items">
+            <button class="pd-item" data-preset="banking-awareness">
+              <span class="pd-item-text"><span class="pd-item-title">Banking Awareness Basics</span><span class="pd-item-meta">Banking</span></span>
+              <svg class="pd-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+            <button class="pd-item" data-preset="indian-polity">
+              <span class="pd-item-text"><span class="pd-item-title">Indian Polity Basics</span><span class="pd-item-meta">SSC</span></span>
+              <svg class="pd-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <label class="field-label" style="margin-top:18px;">Exam / Context</label>
+      <div class="presets" id="presetChips">
+        <button class="preset-chip selected" data-exam="Auto-detect">Auto-detect</button>
+        <button class="preset-chip" data-exam="Class 12 CBSE">Class 12 CBSE</button>
+        <button class="preset-chip" data-exam="NEET">NEET</button>
+        <button class="preset-chip" data-exam="JEE">JEE</button>
+        <button class="preset-chip" data-exam="Banking">Banking</button>
+        <button class="preset-chip" data-exam="SSC">SSC</button>
+        <button class="preset-chip" data-exam="Other">Other</button>
+      </div>
+    </div>
+
+    <div class="row-2">
       <div>
-        <label class="field-label" style="margin-top:18px;">Exam / Context</label>
-        <div class="presets" id="presetChips">
-          <button class="preset-chip selected" data-exam="Auto-detect">Auto-detect</button>
-          <button class="preset-chip" data-exam="Class 12 CBSE">Class 12 CBSE</button>
-          <button class="preset-chip" data-exam="CUET">CUET</button>
-          <button class="preset-chip" data-exam="NEET">NEET</button>
-          <button class="preset-chip" data-exam="JEE">JEE</button>
-          <button class="preset-chip" data-exam="Banking">Banking</button>
-          <button class="preset-chip" data-exam="SSC">SSC</button>
-          <button class="preset-chip" data-exam="NTA / UGC NET">NTA</button>
-          <button class="preset-chip" data-exam="Other">Other</button>
-        </div>
+        <label class="field-label" for="customExam">Custom exam name (optional)</label>
+        <input type="text" id="customExam" placeholder="e.g. UPSC Prelims, Class 10 ICSE...">
       </div>
-
-      <div class="row-2">
-        <div>
-          <label class="field-label" for="customExam">Custom exam name (optional)</label>
-          <input type="text" id="customExam" placeholder="e.g. UPSC Prelims, Class 10 ICSE...">
-        </div>
-        <div>
-          <label class="field-label">Number of cards</label>
-          <div class="count-presets">
-            <button class="count-chip" data-count="5">5</button>
-            <button class="count-chip selected" data-count="10">10</button>
-            <button class="count-chip" data-count="15">15</button>
-            <button class="count-chip" data-count="20">20</button>
-            <button class="count-chip" data-count="25">25</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="generate-row">
-        <button class="btn-primary" id="generateBtn">
-          <span class="spinner"></span>
-          <span class="btn-text">Generate Flashcards</span>
-        </button>
-        <span style="font-size:13px;color:var(--muted-soft);" id="statusText"></span>
-      </div>
-      <div class="error-msg" id="errorMsg"></div>
-      <div class="success-msg" id="successMsg"></div>
     </div>
 
-    <!-- Deck section (shows after generation) -->
-    <section class="deck-section" id="deckSection">
-      <div class="deck-header">
-        <h2 id="deckTitle">Your Flashcards</h2>
-        <div class="deck-meta">
-          <span class="progress-text" id="progressText">1 / 10</span>
-          <button class="btn-sm" id="saveDeckBtn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-            Save
-          </button>
-          <button class="btn-sm" id="downloadBtn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Download
-          </button>
-        </div>
-      </div>
-
-      <div class="study-bar" id="studyBar">
-        <div class="study-score">
-          Got it: <span id="scoreGot">0</span> &nbsp;|&nbsp; Review: <span id="scoreReview">0</span> &nbsp;|&nbsp; Left: <span id="scoreLeft">10</span>
-        </div>
-        <div class="study-actions">
-          <button class="grade-btn grade-review" id="reviewBtn" aria-label="Mark for review">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
-            Review again
-          </button>
-          <button class="grade-btn grade-got" id="gotBtn" aria-label="Mark as got it">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-            Got it
-          </button>
-        </div>
-      </div>
-
-      <div class="card-stage">
-        <button class="nav-arrow" id="prevBtn" aria-label="Previous card">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+    <div style="margin-top:16px;">
+      <label class="field-label">Number of cards</label>
+      <div class="card-count-options" id="cardCountOptions">
+        <button type="button" class="cc-chip" data-count="5" data-tokens="1">
+          <span class="cc-num">5</span><span class="cc-tag">1 token</span>
         </button>
-        <div class="flip-card-wrap">
-          <div class="flip-card" id="flipCard">
-            <div class="card-face card-front">
-              <div class="card-status-icon" id="cardStatusIcon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" id="statusIconSvg" aria-hidden="true"></svg>
-              </div>
-              <span class="card-label">Question</span>
-              <p class="card-text" id="frontText">—</p>
-              <span class="tap-hint">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg>
-                Tap to flip
-              </span>
-            </div>
-            <div class="card-face card-back">
-              <span class="card-label">Answer</span>
-              <p class="card-text" id="backText">—</p>
-              <span class="tap-hint">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg>
-                Tap to flip
-              </span>
-            </div>
+        <button type="button" class="cc-chip selected" data-count="10" data-tokens="1">
+          <span class="cc-num">10</span><span class="cc-tag">1 token</span>
+        </button>
+        <button type="button" class="cc-chip" data-count="15" data-tokens="1">
+          <span class="cc-num">15</span><span class="cc-tag">1 token</span>
+        </button>
+        <button type="button" class="cc-chip" data-count="20" data-tokens="1">
+          <span class="cc-num">20</span><span class="cc-tag">1 token</span>
+        </button>
+        <button type="button" class="cc-chip cc-chip-premium" data-count="25" data-tokens="2">
+          <span class="cc-num">25</span><span class="cc-tag">2 tokens</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="generate-row">
+      <button class="btn-primary" id="generateBtn">
+        <span class="spinner"></span>
+        <span class="btn-text">Generate Flashcards</span>
+      </button>
+      <span style="font-size:13px; color:var(--muted-soft);" id="statusText"></span>
+    </div>
+
+    <div class="usage-limits" id="usageLimits">
+      <div class="usage-limit-item">
+        <div class="usage-limit-head">
+          <span class="ul-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><polyline points="12 7 12 12 15 15"></polyline></svg>
+            Daily tokens
+          </span>
+          <span class="ul-count" id="dailyUsageText">0 / 5 left</span>
+        </div>
+        <div class="usage-limit-track"><div class="usage-limit-fill" id="dailyUsageFill"></div></div>
+      </div>
+      <div class="usage-limit-item">
+        <div class="usage-limit-head">
+          <span class="ul-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="16" y1="2" x2="16" y2="6"></line></svg>
+            Weekly tokens
+          </span>
+          <span class="ul-count" id="weeklyUsageText">0 / 20 left</span>
+        </div>
+        <div class="usage-limit-track"><div class="usage-limit-fill" id="weeklyUsageFill"></div></div>
+      </div>
+      <div class="usage-limit-note">Daily resets at midnight · weekly resets every Monday</div>
+    </div>
+
+    <div class="error-msg" id="errorMsg"></div>
+  </div>
+
+  <section class="deck-section" id="deckSection">
+    <div class="deck-header">
+      <h2 id="deckTitle">Your Flashcards</h2>
+      <span class="progress-text" id="progressText">1 / 10</span>
+    </div>
+
+    <div class="card-stage">
+      <button class="nav-arrow" id="prevBtn" aria-label="Previous card">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+
+      <div class="flip-card-wrap">
+        <div class="flip-card" id="flipCard">
+          <div class="card-face card-front">
+            <span class="card-label">Question</span>
+            <p class="card-text" id="frontText">—</p>
+            <span class="tap-hint">Tap card to flip</span>
+          </div>
+          <div class="card-face card-back">
+            <span class="card-label">Answer</span>
+            <p class="card-text" id="backText">—</p>
+            <span class="tap-hint">Tap card to flip</span>
           </div>
         </div>
-        <button class="nav-arrow" id="nextBtn" aria-label="Next card">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
-        </button>
       </div>
 
-      <div class="deck-controls">
-        <button class="btn-secondary" id="shuffleBtn">Shuffle</button>
-        <button class="btn-secondary" id="resetStudyBtn">Reset Study</button>
-        <button class="btn-secondary" id="newDeckBtn">New Deck</button>
-      </div>
+      <button class="nav-arrow" id="nextBtn" aria-label="Next card">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+    </div>
 
-      <div class="dots" id="dots"></div>
-      <div class="progress-bar-wrap" id="progressBarWrap">
-        <div class="progress-bar-fill" id="progressBarFill"></div>
-      </div>
+    <div class="deck-controls">
+      <button class="btn-secondary" id="shuffleBtn">Shuffle</button>
+      <button class="btn-secondary" id="newDeckBtn">New Deck</button>
+    </div>
 
-      <div class="result-screen" id="resultScreen">
-        <div class="result-score-big" id="resultScoreBig">—</div>
-        <div class="result-label">cards marked "Got it" out of <span id="resultTotal">—</span></div>
-        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:12px;">
-          <button class="btn-primary" id="retryReviewBtn">Review Wrong Cards</button>
-          <button class="btn-secondary" id="restartBtn">Restart All</button>
-        </div>
-      </div>
-    </section>
-  </div>
+    <div class="dots" id="dots"></div>
+  </section>
 
-  <!-- ── PRESETS PAGE ── -->
-  <div class="page-content" id="page-presets">
-    <section class="presets-section">
-      <h2 style="margin-top:32px;">Preset Flashcard Decks</h2>
-      <p class="section-sub">Ready-made decks — no AI token needed. Click any topic to open it instantly.</p>
-      <div id="presetsContainer">
-        <!-- Rendered by JS from dp.js -->
-      </div>
-    </section>
-  </div>
-
-  <!-- FAQ -->
   <section class="faq-section">
     <div class="faq-inner">
       <h2>Frequently Asked Questions</h2>
@@ -487,36 +962,27 @@ footer{background:var(--canvas-parchment);padding:56px 24px 32px;color:var(--mut
         <p>Enter a topic, a question, or upload a PDF. The AI reads your input, detects the right exam context, and generates a set of flip flashcards with a clear question on the front and a concise answer on the back.</p>
       </div>
       <div class="faq-item">
-        <h3>What are Preset Decks?</h3>
-        <p>Preset decks are pre-made flashcard sets for popular exam topics — no AI generation needed and no token used. Click any topic card in the Preset Decks tab to open it immediately.</p>
-      </div>
-      <div class="faq-item">
         <h3>Which exams are supported?</h3>
-        <p>Class 12 CBSE, CUET, NEET, JEE, Banking, SSC, NTA / UGC NET, and a general "Other" mode for any other subject or certification.</p>
+        <p>Class 12 CBSE, NEET, JEE, Banking, SSC, and a general "Other" mode for any other subject, exam, or certification.</p>
       </div>
       <div class="faq-item">
-        <h3>Is there a daily limit?</h3>
-        <p>Yes — 5 AI generations per day and 20 per week. Preset decks are unlimited. If an AI generation fails for any reason, your token is automatically refunded.</p>
+        <h3>Can I upload a PDF to make flashcards?</h3>
+        <p>Yes. PDFs are read directly in your browser using PDF.js, and the extracted text is sent to the AI to generate flashcards from the actual content of your document.</p>
       </div>
       <div class="faq-item">
-        <h3>Can I download my flashcards?</h3>
-        <p>Yes. After generating a deck, click "Download" to save a standalone HTML file that works completely offline with ThunderStudy branding and links included.</p>
-      </div>
-      <div class="faq-item">
-        <h3>Can I save decks for later?</h3>
-        <p>Yes. Click "Save" after generating to store up to 5 decks in your browser. Saved decks can be reloaded any time without using a token.</p>
+        <h3>Is my data stored anywhere?</h3>
+        <p>No. Everything runs in your browser. Your topic, PDF text, and generated cards are sent only to the Groq API to produce the flashcards and are not stored on any server.</p>
       </div>
     </div>
   </section>
 </main>
 
-<!-- Footer -->
 <footer>
   <div class="footer-inner">
     <div class="footer-cols">
       <div class="footer-col">
         <h4>Thunder</h4>
-        <a href="https://thunderstudy.indevs.in">ThunderStudy</a>
+        <a href="https://commercesehoga.github.io/">ThunderStudy</a>
         <a href="https://commercesehoga.github.io/dashboard">CBT Mock Platform</a>
         <a href="https://thunderstudy.github.io">Free Study Material</a>
         <a href="https://commercesehoga.github.io/help">Help / Donate</a>
@@ -535,914 +1001,687 @@ footer{background:var(--canvas-parchment);padding:56px 24px 32px;color:var(--mut
         <a href="https://wondermayank.github.io/disclaimer">Disclaimer</a>
       </div>
     </div>
-    <div class="footer-bottom">
-      &copy; 2025 Thunder &middot; by wondermayank &middot;
-      <a href="https://flashcard.thunderstudy.indevs.in" style="color:var(--primary)">flashcard.thunderstudy.indevs.in</a>
-    </div>
+    <div class="footer-bottom">© 2025 Thunder · by wondermayank · flashcard.thunderstudy.indevs.in</div>
   </div>
 </footer>
 
-<!-- Saved Decks Drawer -->
-<div class="drawer-overlay" id="drawerOverlay">
-  <div class="drawer">
-    <button class="icon-btn" id="drawerClose" aria-label="Close" style="float:right;margin-top:-4px;">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
+<div class="dock" role="tablist" aria-label="Choose input method">
+  <div class="dock-bar">
+    <button class="tab-btn dock-btn" data-tab="pdf" type="button" aria-label="Upload PDF" title="Upload PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
     </button>
-    <h3>Saved Decks</h3>
-    <p class="drawer-subtitle">Up to 5 decks stored in your browser. Loading a deck uses no token.</p>
-    <div id="savedDecksList"></div>
+    <button class="tab-btn dock-btn" data-tab="youtube" type="button" aria-label="YouTube Link" title="YouTube Link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="4"></rect><polygon points="10 9 16 12 10 15" fill="currentColor" stroke="none"></polygon></svg>
+    </button>
+    <button class="tab-btn dock-btn active" data-tab="topic" type="button" aria-label="Topic or Question" title="Topic or Question">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5L12 3l9 7.5"></path><path d="M5 9.5V20a1 1 0 001 1h4v-6h4v6h4a1 1 0 001-1V9.5"></path></svg>
+    </button>
+    <button class="tab-btn dock-btn" data-tab="ocr" type="button" aria-label="Image (OCR)" title="Image (OCR)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+    </button>
+    <button class="tab-btn dock-btn" data-tab="presets" type="button" aria-label="Preset Decks" title="Preset Decks">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+    </button>
   </div>
 </div>
 
-<!-- Load database before main script -->
-<script src="dp.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
-"use strict";
-// ════════════════════════════════════════
-//  CONFIG
-// ════════════════════════════════════════
-var DAILY_MAX  = 5;
-var WEEKLY_MAX = 20;
-var MAX_SAVED  = 5;
+// ---------- CONFIG ----------
+// The Groq API key lives ONLY in Vercel's Environment Variables (Project Settings -> Environment
+// Variables -> add GROQ_API_KEY). It is read server-side inside /api/generate.js and is never
+// present in this file or sent to the browser.
 
 if (window["pdfjsLib"]) {
   pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 }
 
-// ════════════════════════════════════════
-//  LOADER
-// ════════════════════════════════════════
-window.addEventListener("DOMContentLoaded", function() {
+// ---------- Loading screen ----------
+window.addEventListener("DOMContentLoaded", () => {
   document.getElementById("loader").classList.add("hide");
-  initUsageBar();
-  initSavedBadge();
-  renderPresets();
 });
-setTimeout(function() {
-  document.getElementById("loader").classList.add("hide");
-}, 1500);
+setTimeout(() => document.getElementById("loader").classList.add("hide"), 1500);
 
-// ════════════════════════════════════════
-//  THEME
-// ════════════════════════════════════════
-var htmlEl   = document.documentElement;
-var sunIcon  = document.getElementById("sunIcon");
-var moonIcon = document.getElementById("moonIcon");
-
-function applyTheme(t) {
-  htmlEl.setAttribute("data-theme", t);
-  sunIcon.style.display  = t === "dark" ? "none"  : "block";
-  moonIcon.style.display = t === "dark" ? "block" : "none";
+// ---------- Theme ----------
+const htmlEl = document.documentElement;
+const sunIcon = document.getElementById("sunIcon");
+const moonIcon = document.getElementById("moonIcon");
+function applyTheme(theme){
+  htmlEl.setAttribute("data-theme", theme);
+  sunIcon.style.display = theme === "dark" ? "none" : "block";
+  moonIcon.style.display = theme === "dark" ? "block" : "none";
 }
 applyTheme(localStorage.getItem("theme") || "light");
-document.getElementById("themeToggle").addEventListener("click", function() {
-  var next = htmlEl.getAttribute("data-theme") === "dark" ? "light" : "dark";
+document.getElementById("themeToggle").addEventListener("click", () => {
+  const next = htmlEl.getAttribute("data-theme") === "dark" ? "light" : "dark";
   localStorage.setItem("theme", next);
   applyTheme(next);
 });
 
-// ════════════════════════════════════════
-//  PAGE TABS
-// ════════════════════════════════════════
-document.querySelectorAll(".page-tab").forEach(function(btn) {
-  btn.addEventListener("click", function() {
-    document.querySelectorAll(".page-tab").forEach(function(b) { b.classList.remove("active"); });
-    document.querySelectorAll(".page-content").forEach(function(p) { p.classList.remove("active"); });
-    btn.classList.add("active");
-    document.getElementById("page-" + btn.dataset.page).classList.add("active");
-  });
-});
+// ---------- Usage limits (daily / weekly) ----------
+const DAILY_LIMIT = 5;
+const WEEKLY_LIMIT = 20;
 
-// ════════════════════════════════════════
-//  USAGE
-// ════════════════════════════════════════
-function getUsage() {
-  var now = Date.now();
-  var u = JSON.parse(localStorage.getItem("fc_usage") || "null");
-  if (!u || now > u.dayReset)  { u = { day: 0, week: u ? u.week : 0, dayReset: now + 86400000, weekReset: u ? u.weekReset : now + 604800000 }; }
-  if (!u || now > u.weekReset) { u.week = 0; u.weekReset = now + 604800000; }
-  return u;
+function getTodayStr(){
+  return new Date().toISOString().slice(0, 10);
 }
-function saveUsage(u) { localStorage.setItem("fc_usage", JSON.stringify(u)); }
-function consumeLocal() { var u = getUsage(); u.day++; u.week++; saveUsage(u); }
-function refundLocal()  { var u = getUsage(); if (u.day > 0) u.day--; if (u.week > 0) u.week--; saveUsage(u); }
-
-function initUsageBar() {
-  var u = getUsage();
-  var dayUsed  = u.day;
-  var weekUsed = u.week;
-  var dayLeft  = Math.max(0, DAILY_MAX  - dayUsed);
-  var weekLeft = Math.max(0, WEEKLY_MAX - weekUsed);
-  var dayPct   = (dayUsed  / DAILY_MAX)  * 100;
-  var weekPct  = (weekUsed / WEEKLY_MAX) * 100;
-
-  var df = document.getElementById("dayFill");
-  var wf = document.getElementById("weekFill");
-  df.style.width = dayPct  + "%";
-  wf.style.width = weekPct + "%";
-  df.className = "usage-fill" + (dayPct > 80 ? " danger" : dayPct > 60 ? " warn" : "");
-  wf.className = "usage-fill" + (weekPct > 80 ? " danger" : weekPct > 60 ? " warn" : "");
-  document.getElementById("dayText").textContent  = dayLeft  + " left";
-  document.getElementById("weekText").textContent = weekLeft + " left";
+function getWeekStartStr(){
+  const d = new Date();
+  const dayIdx = d.getDay(); // 0 = Sun ... 6 = Sat
+  const diffToMonday = dayIdx === 0 ? 6 : dayIdx - 1;
+  const monday = new Date(d);
+  monday.setHours(0, 0, 0, 0);
+  monday.setDate(d.getDate() - diffToMonday);
+  return monday.toISOString().slice(0, 10);
 }
+function getUsage(){
+  let daily;
+  try { daily = JSON.parse(localStorage.getItem("ts_usage_daily")); } catch (e) { daily = null; }
+  const today = getTodayStr();
+  if (!daily || daily.date !== today) daily = { date: today, count: 0 };
 
-// ════════════════════════════════════════
-//  INPUT TABS
-// ════════════════════════════════════════
-document.querySelectorAll(".tab-btn").forEach(function(btn) {
-  btn.addEventListener("click", function() {
-    document.querySelectorAll(".tab-btn").forEach(function(b) { b.classList.remove("active"); });
-    document.querySelectorAll(".tab-panel").forEach(function(p) { p.classList.remove("active"); });
+  let weekly;
+  try { weekly = JSON.parse(localStorage.getItem("ts_usage_weekly")); } catch (e) { weekly = null; }
+  const weekStart = getWeekStartStr();
+  if (!weekly || weekly.weekStart !== weekStart) weekly = { weekStart, count: 0 };
+
+  return { daily, weekly };
+}
+function saveUsage(daily, weekly){
+  try {
+    localStorage.setItem("ts_usage_daily", JSON.stringify(daily));
+    localStorage.setItem("ts_usage_weekly", JSON.stringify(weekly));
+  } catch (e) { /* storage unavailable, ignore */ }
+}
+function wouldExceedUsage(tokenCost){
+  const { daily, weekly } = getUsage();
+  return (daily.count + tokenCost > DAILY_LIMIT) || (weekly.count + tokenCost > WEEKLY_LIMIT);
+}
+function incrementUsage(tokenCost){
+  const { daily, weekly } = getUsage();
+  daily.count += tokenCost;
+  weekly.count += tokenCost;
+  saveUsage(daily, weekly);
+  renderUsageLimits();
+}
+function renderUsageLimits(){
+  const { daily, weekly } = getUsage();
+  const dailyLeft = Math.max(DAILY_LIMIT - daily.count, 0);
+  const weeklyLeft = Math.max(WEEKLY_LIMIT - weekly.count, 0);
+  const dPct = Math.min(100, (daily.count / DAILY_LIMIT) * 100);
+  const wPct = Math.min(100, (weekly.count / WEEKLY_LIMIT) * 100);
+
+  document.getElementById("dailyUsageText").textContent = dailyLeft + " / " + DAILY_LIMIT + " left";
+  document.getElementById("weeklyUsageText").textContent = weeklyLeft + " / " + WEEKLY_LIMIT + " left";
+
+  const dFill = document.getElementById("dailyUsageFill");
+  const wFill = document.getElementById("weeklyUsageFill");
+  dFill.style.width = dPct + "%";
+  wFill.style.width = wPct + "%";
+
+  dFill.classList.toggle("full", daily.count >= DAILY_LIMIT);
+  dFill.classList.toggle("warn", !dFill.classList.contains("full") && daily.count >= DAILY_LIMIT - 1);
+  wFill.classList.toggle("full", weekly.count >= WEEKLY_LIMIT);
+  wFill.classList.toggle("warn", !wFill.classList.contains("full") && weekly.count >= WEEKLY_LIMIT - 2);
+}
+renderUsageLimits();
+
+// ---------- Tabs ----------
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
     btn.classList.add("active");
     document.getElementById("panel-" + btn.dataset.tab).classList.add("active");
+    document.querySelector(".input-card").scrollIntoView({ behavior: "smooth", block: "center" });
   });
 });
 
-// ════════════════════════════════════════
-//  EXAM CHIPS
-// ════════════════════════════════════════
-var selectedExam = "Auto-detect";
-document.querySelectorAll(".preset-chip").forEach(function(chip) {
-  chip.addEventListener("click", function() {
-    document.querySelectorAll(".preset-chip").forEach(function(c) { c.classList.remove("selected"); });
+// ---------- Exam preset chips ----------
+let selectedExam = "Auto-detect";
+document.querySelectorAll(".preset-chip").forEach(chip => {
+  chip.addEventListener("click", () => {
+    document.querySelectorAll(".preset-chip").forEach(c => c.classList.remove("selected"));
     chip.classList.add("selected");
     selectedExam = chip.dataset.exam;
   });
 });
 
-// ════════════════════════════════════════
-//  COUNT CHIPS
-// ════════════════════════════════════════
-var selectedCount = 10;
-document.querySelectorAll(".count-chip").forEach(function(chip) {
-  chip.addEventListener("click", function() {
-    document.querySelectorAll(".count-chip").forEach(function(c) { c.classList.remove("selected"); });
+// ---------- Card count chips (token-priced) ----------
+let selectedCardCount = 10;
+let selectedTokenCost = 1;
+document.querySelectorAll(".cc-chip").forEach(chip => {
+  chip.addEventListener("click", () => {
+    document.querySelectorAll(".cc-chip").forEach(c => c.classList.remove("selected"));
     chip.classList.add("selected");
-    selectedCount = parseInt(chip.dataset.count, 10);
+    selectedCardCount = parseInt(chip.dataset.count, 10);
+    selectedTokenCost = parseInt(chip.dataset.tokens, 10);
   });
 });
 
-// ════════════════════════════════════════
-//  PDF UPLOAD
-// ════════════════════════════════════════
-var fileDrop   = document.getElementById("fileDrop");
-var pdfInput   = document.getElementById("pdfInput");
-var fileNameEl = document.getElementById("fileName");
-var truncNote  = document.getElementById("truncNote");
-var extractedPdfText = "";
+// ---------- Preset Decks (ready-made, no AI token needed) ----------
+const PRESET_DECKS = {
+  "newtons-laws": {
+    title: "Newton's Laws of Motion",
+    exam: "Class 12 CBSE",
+    cards: [
+      { front: "What is Newton's First Law of Motion?", back: "An object remains at rest or in uniform motion in a straight line unless acted upon by an external force. Also called the law of inertia." },
+      { front: "What is Newton's Second Law of Motion?", back: "The rate of change of momentum of an object is directly proportional to the applied force: F = ma." },
+      { front: "What is Newton's Third Law of Motion?", back: "For every action, there is an equal and opposite reaction." },
+      { front: "What is inertia?", back: "The natural tendency of an object to resist any change in its state of rest or motion." },
+      { front: "What is the SI unit of force?", back: "The newton (N), equal to 1 kg·m/s²." },
+      { front: "What is momentum?", back: "The product of an object's mass and velocity: p = mv." },
+      { front: "State the law of conservation of momentum.", back: "In the absence of an external force, the total momentum of a system remains constant." },
+      { front: "Why does a standing passenger jerk forward when a moving bus suddenly stops?", back: "Due to inertia of motion — the passenger's body continues moving forward even as the bus stops." }
+    ]
+  },
+  "chemical-bonding": {
+    title: "Chemical Bonding",
+    exam: "Class 12 CBSE",
+    cards: [
+      { front: "What is an ionic bond?", back: "A bond formed by the transfer of electrons between atoms, creating oppositely charged ions that attract each other." },
+      { front: "What is a covalent bond?", back: "A bond formed when atoms share one or more pairs of electrons." },
+      { front: "What is electronegativity?", back: "The tendency of an atom to attract a shared pair of electrons towards itself." },
+      { front: "What is a coordinate (dative) bond?", back: "A covalent bond in which both shared electrons are contributed by the same atom." },
+      { front: "What does VSEPR theory predict?", back: "The geometry of molecules, based on minimizing repulsion between electron pairs around a central atom." },
+      { front: "What is hybridization?", back: "The mixing of atomic orbitals to form new, equivalent hybrid orbitals suited for bonding." },
+      { front: "Give an example of a polar covalent bond.", back: "The O–H bond in water, due to the electronegativity difference between oxygen and hydrogen." },
+      { front: "What is a hydrogen bond?", back: "A weak attractive force between a hydrogen atom bonded to a highly electronegative atom and another nearby electronegative atom." }
+    ]
+  },
+  "digestive-system": {
+    title: "Human Digestive System",
+    exam: "NEET",
+    cards: [
+      { front: "What is the main function of the stomach?", back: "To churn food and secrete gastric juice — including HCl and pepsin — to begin protein digestion." },
+      { front: "Which enzyme breaks down starch in the mouth?", back: "Salivary amylase (ptyalin)." },
+      { front: "Where does most digestion and absorption of nutrients occur?", back: "The small intestine." },
+      { front: "What is the role of bile in digestion?", back: "It emulsifies fats, breaking them into smaller droplets to aid digestion and absorption. It's produced by the liver and stored in the gallbladder." },
+      { front: "What does the pancreas contribute to digestion?", back: "It secretes pancreatic juice containing enzymes such as trypsin, amylase, and lipase into the small intestine." },
+      { front: "What is the main function of the large intestine?", back: "Absorption of water and electrolytes, and formation of feces." },
+      { front: "What is peristalsis?", back: "Wave-like muscular contractions that push food along the digestive tract." },
+      { front: "What is the function of villi in the small intestine?", back: "They increase the surface area available for nutrient absorption." }
+    ]
+  },
+  "genetics-heredity": {
+    title: "Genetics and Heredity",
+    exam: "NEET",
+    cards: [
+      { front: "Who is known as the father of genetics?", back: "Gregor Mendel." },
+      { front: "What is a gene?", back: "A segment of DNA that codes for a specific protein or trait." },
+      { front: "State Mendel's Law of Segregation.", back: "Each organism carries two alleles for a trait, and these separate during the formation of gametes." },
+      { front: "What is a dominant allele?", back: "An allele that expresses its trait even when only one copy is present." },
+      { front: "What is a phenotype?", back: "The observable physical or biochemical characteristics of an organism." },
+      { front: "What is a genotype?", back: "The genetic makeup of an organism for a given trait." },
+      { front: "What is a test cross used for?", back: "Crossing an organism with a homozygous recessive individual to determine its unknown genotype." },
+      { front: "What is incomplete dominance?", back: "A condition where neither allele is fully dominant, producing a blended phenotype in the offspring." }
+    ]
+  },
+  "thermodynamics": {
+    title: "Laws of Thermodynamics",
+    exam: "JEE",
+    cards: [
+      { front: "State the Zeroth Law of Thermodynamics.", back: "If two systems are each in thermal equilibrium with a third system, they are in thermal equilibrium with each other." },
+      { front: "State the First Law of Thermodynamics.", back: "Energy can neither be created nor destroyed: ΔU = Q − W." },
+      { front: "State the Second Law of Thermodynamics.", back: "The entropy of an isolated system never decreases over time." },
+      { front: "What is an isothermal process?", back: "A process that occurs at constant temperature." },
+      { front: "What is an adiabatic process?", back: "A process in which no heat is exchanged between the system and its surroundings." },
+      { front: "What is entropy?", back: "A measure of the disorder or randomness of a system." },
+      { front: "What is a reversible process?", back: "A process that can be reversed, returning both the system and surroundings to their original states." },
+      { front: "What is the efficiency of a Carnot engine?", back: "η = 1 − (T_cold / T_hot), the maximum possible efficiency between two temperatures." }
+    ]
+  },
+  "organic-reactions": {
+    title: "Organic Reaction Mechanisms",
+    exam: "JEE",
+    cards: [
+      { front: "What is an SN1 reaction?", back: "A nucleophilic substitution that proceeds through a carbocation intermediate; it follows first-order kinetics." },
+      { front: "What is an SN2 reaction?", back: "A nucleophilic substitution that occurs in a single concerted step via backside attack; it follows second-order kinetics." },
+      { front: "What is a nucleophile?", back: "An electron-rich species that donates an electron pair to form a new bond." },
+      { front: "What is an electrophile?", back: "An electron-deficient species that accepts an electron pair." },
+      { front: "State Markovnikov's rule.", back: "When HX adds to an alkene, the hydrogen attaches to the carbon that already has more hydrogen atoms." },
+      { front: "What is a carbocation?", back: "A positively charged carbon atom that has only three bonds." },
+      { front: "What is an elimination reaction?", back: "A reaction in which atoms or groups are removed from a molecule, forming a double or triple bond." },
+      { front: "How does an E1 reaction differ from an E2 reaction?", back: "E1 proceeds through a carbocation intermediate in two steps; E2 is a concerted, single-step elimination." }
+    ]
+  },
+  "banking-awareness": {
+    title: "Banking Awareness Basics",
+    exam: "Banking",
+    cards: [
+      { front: "What is the central bank of India?", back: "The Reserve Bank of India (RBI)." },
+      { front: "What is the repo rate?", back: "The rate at which the RBI lends money to commercial banks against government securities." },
+      { front: "What is NEFT?", back: "National Electronic Funds Transfer — an electronic system for transferring funds between bank accounts." },
+      { front: "What is CRR?", back: "Cash Reserve Ratio — the percentage of total deposits banks must hold as reserves with the RBI." },
+      { front: "What does NPA stand for?", back: "Non-Performing Asset — a loan or advance whose interest or principal payment is overdue." },
+      { front: "What is SLR?", back: "Statutory Liquidity Ratio — the minimum percentage of deposits a bank must maintain in liquid assets like cash, gold, or government securities." },
+      { front: "What does IFSC stand for?", back: "Indian Financial System Code — used to identify bank branches in electronic fund transfers." },
+      { front: "What is a fixed deposit?", back: "A financial instrument where a lump sum is deposited for a fixed period at a fixed interest rate." }
+    ]
+  },
+  "indian-polity": {
+    title: "Indian Polity Basics",
+    exam: "SSC",
+    cards: [
+      { front: "When did the Indian Constitution come into effect?", back: "26 January 1950." },
+      { front: "Who is known as the chief architect of the Indian Constitution?", back: "Dr. B. R. Ambedkar." },
+      { front: "How many fundamental rights does the Indian Constitution guarantee?", back: "Six fundamental rights." },
+      { front: "What is the minimum age to become Prime Minister of India?", back: "25 years, along with being a member of either house of Parliament." },
+      { front: "Who appoints the Chief Justice of India?", back: "The President of India." },
+      { front: "What is the term of office of the President of India?", back: "Five years." },
+      { front: "Which article of the Constitution guarantees the Right to Equality?", back: "Article 14." },
+      { front: "What are the Directive Principles of State Policy?", back: "Guidelines in Part IV of the Constitution directing the government to ensure social and economic welfare." }
+    ]
+  }
+};
 
-fileDrop.addEventListener("click", function() { pdfInput.click(); });
-fileDrop.addEventListener("dragover", function(e) { e.preventDefault(); fileDrop.classList.add("dragover"); });
-fileDrop.addEventListener("dragleave", function() { fileDrop.classList.remove("dragover"); });
-fileDrop.addEventListener("drop", function(e) {
-  e.preventDefault(); fileDrop.classList.remove("dragover");
+document.querySelectorAll(".pd-item").forEach(item => {
+  item.addEventListener("click", () => {
+    const presetKey = item.dataset.preset;
+    const presetDeck = PRESET_DECKS[presetKey];
+    if (!presetDeck) return;
+
+    deck = presetDeck.cards;
+    order = deck.map((_, i) => i);
+    currentIndex = 0;
+
+    document.getElementById("deckTitle").textContent = presetDeck.title + " — " + presetDeck.exam;
+
+    buildDots();
+    renderCard();
+    document.getElementById("deckSection").classList.add("active");
+    document.getElementById("deckSection").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+});
+
+// ---------- PDF upload ----------
+const fileDrop = document.getElementById("fileDrop");
+const pdfInput = document.getElementById("pdfInput");
+const fileNameEl = document.getElementById("fileName");
+let extractedPdfText = "";
+
+fileDrop.addEventListener("click", () => pdfInput.click());
+fileDrop.addEventListener("dragover", e => { e.preventDefault(); fileDrop.classList.add("dragover"); });
+fileDrop.addEventListener("dragleave", () => fileDrop.classList.remove("dragover"));
+fileDrop.addEventListener("drop", e => {
+  e.preventDefault();
+  fileDrop.classList.remove("dragover");
   if (e.dataTransfer.files.length) handlePdfFile(e.dataTransfer.files[0]);
 });
-pdfInput.addEventListener("change", function() {
+pdfInput.addEventListener("change", () => {
   if (pdfInput.files.length) handlePdfFile(pdfInput.files[0]);
 });
 
-function handlePdfFile(file) {
-  if (file.type !== "application/pdf") { showError("Please upload a valid PDF file."); return; }
+async function handlePdfFile(file){
+  if (file.type !== "application/pdf") {
+    showError("Please upload a valid PDF file.");
+    return;
+  }
   fileNameEl.textContent = "Reading " + file.name + "...";
-  truncNote.style.display = "none";
-  var reader = new FileReader();
-  reader.onload = function(ev) {
-    var buf = ev.target.result;
-    pdfjsLib.getDocument({ data: buf }).promise.then(function(pdf) {
-      var text = "";
-      var maxPages = Math.min(pdf.numPages, 30);
-      var chain = Promise.resolve();
-      for (var i = 1; i <= maxPages; i++) {
-        (function(pageNum) {
-          chain = chain.then(function() {
-            return pdf.getPage(pageNum).then(function(page) {
-              return page.getTextContent().then(function(content) {
-                text += content.items.map(function(it) { return it.str; }).join(" ") + "\n";
-              });
-            });
-          });
-        })(i);
-      }
-      chain.then(function() {
-        var raw = text.trim();
-        if (raw.length > 18000) { truncNote.style.display = "block"; }
-        extractedPdfText = raw.slice(0, 18000);
-        fileNameEl.textContent = file.name + " — " + pdf.numPages + " page(s) read";
-      });
-    }).catch(function(err) {
-      console.error(err);
-      showError("Could not read that PDF. Try a different file.");
-      fileNameEl.textContent = "";
-    });
-  };
-  reader.readAsArrayBuffer(file);
+  try {
+    const buf = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+    let text = "";
+    const maxPages = Math.min(pdf.numPages, 30);
+    for (let i = 1; i <= maxPages; i++) {
+      const page = await pdf.getPage(i);
+      const content = await page.getTextContent();
+      text += content.items.map(it => it.str).join(" ") + "\n";
+    }
+    extractedPdfText = text.trim().slice(0, 18000);
+    fileNameEl.textContent = file.name + " — " + pdf.numPages + " page(s) read";
+  } catch (err) {
+    console.error(err);
+    showError("Could not read that PDF. Try a different file.");
+    fileNameEl.textContent = "";
+  }
 }
 
-// ════════════════════════════════════════
-//  MESSAGES
-// ════════════════════════════════════════
-function showError(msg)   { var e=document.getElementById("errorMsg"); e.textContent=msg; e.style.display="block"; document.getElementById("successMsg").style.display="none"; }
-function showSuccess(msg) { var e=document.getElementById("successMsg"); e.textContent=msg; e.style.display="block"; document.getElementById("errorMsg").style.display="none"; }
-function clearMessages()  { document.getElementById("errorMsg").style.display="none"; document.getElementById("successMsg").style.display="none"; }
+// ---------- Image upload (OCR via /api/ocr, server-side only) ----------
+const imageDrop = document.getElementById("imageDrop");
+const imageInput = document.getElementById("imageInput");
+const imageNameEl = document.getElementById("imageName");
+let extractedOcrText = "";
 
-// ════════════════════════════════════════
-//  GENERATE
-// ════════════════════════════════════════
-var generateBtn = document.getElementById("generateBtn");
-var statusText  = document.getElementById("statusText");
-var deck        = [];
-var order       = [];
-var currentIndex = 0;
-var cardGrades   = {};
-var cardFlipped  = false;
+imageDrop.addEventListener("click", () => imageInput.click());
+imageDrop.addEventListener("dragover", e => { e.preventDefault(); imageDrop.classList.add("dragover"); });
+imageDrop.addEventListener("dragleave", () => imageDrop.classList.remove("dragover"));
+imageDrop.addEventListener("drop", e => {
+  e.preventDefault();
+  imageDrop.classList.remove("dragover");
+  if (e.dataTransfer.files.length) handleImageFile(e.dataTransfer.files[0]);
+});
+imageInput.addEventListener("change", () => {
+  if (imageInput.files.length) handleImageFile(imageInput.files[0]);
+});
+
+function fileToBase64(file){
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+async function handleImageFile(file){
+  if (!file.type.startsWith("image/")) {
+    showError("Please upload a valid image file (jpg, png, etc).");
+    return;
+  }
+  extractedOcrText = "";
+  imageNameEl.textContent = "Reading " + file.name + " (OCR)...";
+  try {
+    const base64 = await fileToBase64(file);
+    const res = await fetch("/api/ocr", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ image: base64 })
+    });
+    const data = await res.json();
+    if (!res.ok || !data.text) {
+      showError(data.error || "Could not read text from that image.");
+      imageNameEl.textContent = "";
+      return;
+    }
+    extractedOcrText = data.text.trim();
+    imageNameEl.textContent = file.name + " — text extracted";
+  } catch (err) {
+    console.error(err);
+    showError("Could not read that image. Try a different file.");
+    imageNameEl.textContent = "";
+  }
+}
+
+// ---------- Error / status ----------
+function showError(msg){
+  const el = document.getElementById("errorMsg");
+  el.textContent = msg;
+  el.style.display = "block";
+}
+function clearError(){
+  document.getElementById("errorMsg").style.display = "none";
+}
+
+// ---------- Generate flashcards ----------
+const generateBtn = document.getElementById("generateBtn");
+const statusText = document.getElementById("statusText");
+let deck = [];
+let order = [];
+let currentIndex = 0;
 
 generateBtn.addEventListener("click", generateFlashcards);
 
-function generateFlashcards() {
-  clearMessages();
-  var activeTab    = document.querySelector(".tab-btn.active").dataset.tab;
-  var topic        = document.getElementById("topicInput").value.trim();
-  var customExam   = document.getElementById("customExam").value.trim();
-  var count        = selectedCount;
-  var sourceContent = "";
+async function generateFlashcards(){
+  clearError();
+
+  const tokenCost = selectedTokenCost;
+
+  if (wouldExceedUsage(tokenCost)) {
+    const { daily, weekly } = getUsage();
+    if (daily.count + tokenCost > DAILY_LIMIT) {
+      showError("Not enough daily tokens left for this deck (needs " + tokenCost + "). Resets at midnight.");
+    } else {
+      showError("Not enough weekly tokens left for this deck (needs " + tokenCost + "). Resets Monday.");
+    }
+    return;
+  }
+
+  const activeTab = document.querySelector(".tab-btn.active").dataset.tab;
+  const topic = document.getElementById("topicInput").value.trim();
+  const customExam = document.getElementById("customExam").value.trim();
+  const count = selectedCardCount;
+
+  let sourceContent = "";
 
   if (activeTab === "pdf") {
     if (!extractedPdfText) { showError("Please upload a PDF first."); return; }
     sourceContent = extractedPdfText;
+
+  } else if (activeTab === "ocr") {
+    if (!extractedOcrText) { showError("Please upload an image first."); return; }
+    sourceContent = extractedOcrText;
+
+  } else if (activeTab === "youtube") {
+    const ytUrl = document.getElementById("youtubeInput").value.trim();
+    if (!ytUrl) { showError("Please paste a YouTube link first."); return; }
+
+    generateBtn.disabled = true;
+    generateBtn.classList.add("loading");
+    statusText.textContent = "Fetching transcript...";
+    try {
+      const ytRes = await fetch("/api/youtube-transcript", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: ytUrl })
+      });
+      const ytData = await ytRes.json();
+      if (!ytRes.ok || !ytData.transcript) {
+        showError(ytData.error || "Could not fetch a transcript for that video.");
+        generateBtn.disabled = false;
+        generateBtn.classList.remove("loading");
+        statusText.textContent = "";
+        return;
+      }
+      sourceContent = ytData.transcript;
+    } catch (err) {
+      console.error(err);
+      showError("Network error fetching the transcript. Check the link and try again.");
+      generateBtn.disabled = false;
+      generateBtn.classList.remove("loading");
+      statusText.textContent = "";
+      return;
+    }
+
   } else {
     if (!topic) { showError("Please enter a topic or question first."); return; }
     sourceContent = topic;
   }
 
-  var examLabel = customExam || (selectedExam === "Auto-detect" ? "" : selectedExam);
-  var u = getUsage();
-  if (u.day >= DAILY_MAX)  { showError("You have reached your daily limit (5 generations). Try again tomorrow."); return; }
-  if (u.week >= WEEKLY_MAX){ showError("You have reached your weekly limit (20 generations). Try again next week."); return; }
+  const examLabel = customExam || (selectedExam === "Auto-detect" ? "" : selectedExam);
 
   generateBtn.disabled = true;
   generateBtn.classList.add("loading");
-  statusText.textContent = "Generating...";
-  consumeLocal();
-  initUsageBar();
+  statusText.textContent = "Thinking...";
 
-  fetch("/api/generate", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ sourceContent: sourceContent, examLabel: examLabel, count: count })
-  })
-  .then(function(res) {
-    return res.json().then(function(parsed) { return { ok: res.ok, parsed: parsed }; });
-  })
-  .then(function(result) {
-    var parsed = result.parsed;
-    if (!result.ok) {
-      if (parsed.refunded) { refundLocal(); initUsageBar(); }
-      showError(parsed.error || "Generation failed. Please try again.");
+  try {
+    const res = await fetch("/api/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ sourceContent, examLabel, count })
+    });
+
+    const parsed = await res.json();
+
+    if (!res.ok) {
+      console.error(parsed);
+      showError(parsed.error || ("Generation failed (status " + res.status + "). Please try again."));
       return;
     }
+
     if (!parsed.cards || !Array.isArray(parsed.cards) || parsed.cards.length === 0) {
-      refundLocal(); initUsageBar();
       showError("No flashcards were generated. Try rephrasing your topic.");
       return;
     }
-    deck         = parsed.cards.filter(function(c) { return c.front && c.back; });
-    order        = deck.map(function(_, i) { return i; });
-    cardGrades   = {};
-    currentIndex = 0;
-    cardFlipped  = false;
 
-    if (parsed.usage) {
-      var u2 = getUsage();
-      u2.day  = DAILY_MAX  - parsed.usage.dailyRemaining;
-      u2.week = WEEKLY_MAX - parsed.usage.weeklyRemaining;
-      saveUsage(u2);
-      initUsageBar();
-    }
+    deck = parsed.cards.filter(c => c.front && c.back);
+    order = deck.map((_, i) => i);
+    currentIndex = 0;
+
+    incrementUsage(tokenCost);
 
     document.getElementById("deckTitle").textContent =
       parsed.exam_detected ? "Flashcards — " + parsed.exam_detected : "Your Flashcards";
 
-    buildDots(); renderCard(); resetStudyUI();
+    buildDots();
+    renderCard();
     document.getElementById("deckSection").classList.add("active");
-    document.getElementById("resultScreen").classList.remove("active");
     document.getElementById("deckSection").scrollIntoView({ behavior: "smooth", block: "start" });
-  })
-  .catch(function(err) {
+
+  } catch (err) {
     console.error(err);
-    refundLocal(); initUsageBar();
-    showError("Network error. Your token has been refunded — check your connection and try again.");
-  })
-  .finally(function() {
+    showError("Network error reaching the server. Check your connection and try again.");
+  } finally {
     generateBtn.disabled = false;
     generateBtn.classList.remove("loading");
     statusText.textContent = "";
-  });
+  }
 }
 
-// ════════════════════════════════════════
-//  CARD RENDER
-// ════════════════════════════════════════
-var flipCard     = document.getElementById("flipCard");
-var frontText    = document.getElementById("frontText");
-var backText     = document.getElementById("backText");
-var progressText = document.getElementById("progressText");
-var dotsEl       = document.getElementById("dots");
+// ---------- Deck rendering ----------
+const flipCard = document.getElementById("flipCard");
+const frontText = document.getElementById("frontText");
+const backText = document.getElementById("backText");
+const progressText = document.getElementById("progressText");
+const dotsEl = document.getElementById("dots");
 
-function renderCard() {
+function renderCard(){
   flipCard.classList.remove("flipped");
-  cardFlipped = false;
-  hideGradeButtons();
-
-  var idx  = order[currentIndex];
-  var card = deck[idx];
+  const idx = order[currentIndex];
+  const card = deck[idx];
   frontText.textContent = card.front;
-  backText.textContent  = card.back;
+  backText.textContent = card.back;
   progressText.textContent = (currentIndex + 1) + " / " + deck.length;
   document.getElementById("prevBtn").disabled = currentIndex === 0;
   document.getElementById("nextBtn").disabled = currentIndex === deck.length - 1;
-
-  // Status icon
-  var si    = document.getElementById("cardStatusIcon");
-  var svgEl = document.getElementById("statusIconSvg");
-  var grade = cardGrades[idx];
-  si.className = "card-status-icon";
-  if (grade === "got") {
-    si.classList.add("got");
-    svgEl.innerHTML = '<polyline points="20 6 9 17 4 12" stroke="#166534" stroke-width="2.5" fill="none"/>';
-  } else if (grade === "review") {
-    si.classList.add("review");
-    svgEl.innerHTML = '<path d="M18 6L6 18M6 6l12 12" stroke="#991b1b" stroke-width="2.5" fill="none"/>';
-  }
-
-  // Dots
-  document.querySelectorAll(".dot").forEach(function(d, i) {
-    d.className = "dot";
-    if (i === currentIndex) d.classList.add("active");
-    var g = cardGrades[order[i]];
-    if (g === "got")    d.classList.add("got");
-    if (g === "review") d.classList.add("review-dot");
-  });
-
-  // Progress bar vs dots
-  if (deck.length > 15) {
-    document.getElementById("progressBarWrap").style.display = "block";
-    document.getElementById("progressBarFill").style.width = ((currentIndex + 1) / deck.length * 100) + "%";
-    dotsEl.style.display = "none";
-  } else {
-    document.getElementById("progressBarWrap").style.display = "none";
-    dotsEl.style.display = "flex";
-  }
-  updateStudyScore();
+  document.querySelectorAll(".dot").forEach((d, i) => d.classList.toggle("active", i === currentIndex));
 }
 
-function buildDots() {
+function buildDots(){
   dotsEl.innerHTML = "";
-  deck.forEach(function(_, i) {
-    var dot = document.createElement("span");
+  deck.forEach((_, i) => {
+    const dot = document.createElement("span");
     dot.className = "dot" + (i === 0 ? " active" : "");
-    dot.addEventListener("click", function() { currentIndex = i; renderCard(); });
+    dot.addEventListener("click", () => { currentIndex = i; renderCard(); });
     dotsEl.appendChild(dot);
   });
 }
 
-flipCard.addEventListener("click", function() {
-  flipCard.classList.toggle("flipped");
-  cardFlipped = !cardFlipped;
-  if (cardFlipped) {
-    document.getElementById("gotBtn").style.display    = "inline-flex";
-    document.getElementById("reviewBtn").style.display = "inline-flex";
-  } else {
-    hideGradeButtons();
-  }
-});
+flipCard.addEventListener("click", () => flipCard.classList.toggle("flipped"));
 
-function hideGradeButtons() {
-  document.getElementById("gotBtn").style.display    = "none";
-  document.getElementById("reviewBtn").style.display = "none";
-}
-
-document.getElementById("prevBtn").addEventListener("click", function() {
+document.getElementById("prevBtn").addEventListener("click", () => {
   if (currentIndex > 0) { currentIndex--; renderCard(); }
 });
-document.getElementById("nextBtn").addEventListener("click", function() {
+document.getElementById("nextBtn").addEventListener("click", () => {
   if (currentIndex < deck.length - 1) { currentIndex++; renderCard(); }
 });
-document.getElementById("shuffleBtn").addEventListener("click", function() {
-  for (var i = order.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1));
-    var tmp = order[i]; order[i] = order[j]; order[j] = tmp;
+
+document.getElementById("shuffleBtn").addEventListener("click", () => {
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
   }
-  currentIndex = 0; renderCard();
+  currentIndex = 0;
+  renderCard();
 });
-document.getElementById("newDeckBtn").addEventListener("click", function() {
+
+document.getElementById("newDeckBtn").addEventListener("click", () => {
   document.getElementById("deckSection").classList.remove("active");
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
-document.getElementById("resetStudyBtn").addEventListener("click", function() {
-  cardGrades = {}; order = deck.map(function(_, i) { return i; }); currentIndex = 0;
-  resetStudyUI(); renderCard();
-});
 
-// ════════════════════════════════════════
-//  STUDY MODE
-// ════════════════════════════════════════
-function updateStudyScore() {
-  var vals  = Object.values(cardGrades);
-  var got    = vals.filter(function(g) { return g === "got"; }).length;
-  var review = vals.filter(function(g) { return g === "review"; }).length;
-  var left   = deck.length - got - review;
-  document.getElementById("scoreGot").textContent    = got;
-  document.getElementById("scoreReview").textContent = review;
-  document.getElementById("scoreLeft").textContent   = left;
-  if (left === 0 && deck.length > 0) showResult();
-}
-
-function resetStudyUI() {
-  cardGrades = {};
-  updateStudyScore();
-  document.getElementById("resultScreen").classList.remove("active");
-}
-
-function showResult() {
-  var got = Object.values(cardGrades).filter(function(g) { return g === "got"; }).length;
-  document.getElementById("resultScoreBig").textContent = got;
-  document.getElementById("resultTotal").textContent    = deck.length;
-  document.getElementById("resultScreen").classList.add("active");
-}
-
-document.getElementById("gotBtn").addEventListener("click", function() {
-  cardGrades[order[currentIndex]] = "got";
-  updateStudyScore();
-  if (currentIndex < deck.length - 1) { currentIndex++; renderCard(); } else { renderCard(); }
-});
-document.getElementById("reviewBtn").addEventListener("click", function() {
-  cardGrades[order[currentIndex]] = "review";
-  updateStudyScore();
-  if (currentIndex < deck.length - 1) { currentIndex++; renderCard(); } else { renderCard(); }
-});
-document.getElementById("retryReviewBtn").addEventListener("click", function() {
-  var ri = Object.entries(cardGrades).filter(function(e) { return e[1] === "review"; }).map(function(e) { return parseInt(e[0]); });
-  if (!ri.length) { showSuccess("All cards correct! Generate a new deck to keep going."); return; }
-  ri.forEach(function(i) { delete cardGrades[i]; });
-  order = ri.slice(); currentIndex = 0;
-  document.getElementById("resultScreen").classList.remove("active");
-  buildDots(); renderCard();
-});
-document.getElementById("restartBtn").addEventListener("click", function() {
-  cardGrades = {}; order = deck.map(function(_, i) { return i; }); currentIndex = 0;
-  document.getElementById("resultScreen").classList.remove("active");
-  buildDots(); renderCard();
-});
-
-// Keyboard
-document.addEventListener("keydown", function(e) {
+// Keyboard navigation
+document.addEventListener("keydown", e => {
   if (!document.getElementById("deckSection").classList.contains("active")) return;
   if (e.key === "ArrowRight") document.getElementById("nextBtn").click();
-  if (e.key === "ArrowLeft")  document.getElementById("prevBtn").click();
-  if (e.key === " ")  { e.preventDefault(); flipCard.click(); }
-  if ((e.key === "g" || e.key === "G") && cardFlipped) document.getElementById("gotBtn").click();
-  if ((e.key === "r" || e.key === "R") && cardFlipped) document.getElementById("reviewBtn").click();
+  if (e.key === "ArrowLeft") document.getElementById("prevBtn").click();
+  if (e.key === " ") { e.preventDefault(); flipCard.classList.toggle("flipped"); }
 });
 
-// ════════════════════════════════════════
-//  SAVE DECK
-// ════════════════════════════════════════
-function getSavedDecks() { return JSON.parse(localStorage.getItem("fc_saved") || "[]"); }
-function putSavedDecks(arr) { localStorage.setItem("fc_saved", JSON.stringify(arr)); }
-
-document.getElementById("saveDeckBtn").addEventListener("click", function() {
-  if (!deck.length) return;
-  var title = document.getElementById("deckTitle").textContent || "Untitled Deck";
-  var saved = getSavedDecks();
-  if (saved.length >= MAX_SAVED) {
-    showError("You can save up to 5 decks. Delete one from Saved Decks first.");
-    return;
-  }
-  saved.push({ id: Date.now(), title: title, cards: deck, savedAt: new Date().toLocaleDateString() });
-  putSavedDecks(saved);
-  initSavedBadge();
-  showSuccess("Deck saved. Access it from the bookmark icon in the nav.");
+// ---------- Hero 2.0 quick actions ----------
+function scrollToGenerator(){
+  document.querySelector(".input-card").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+function activateTab(name){
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.toggle("active", b.dataset.tab === name));
+  document.querySelectorAll(".tab-panel").forEach(p => p.classList.toggle("active", p.id === "panel-" + name));
+}
+const heroTopicInput = document.getElementById("heroTopicInput");
+const heroGenerateBtn = document.getElementById("heroGenerateBtn");
+heroGenerateBtn.addEventListener("click", () => {
+  const val = heroTopicInput.value.trim();
+  activateTab("topic");
+  if (val) document.getElementById("topicInput").value = val;
+  scrollToGenerator();
+  generateFlashcards();
+});
+heroTopicInput.addEventListener("keydown", e => {
+  if (e.key === "Enter") { e.preventDefault(); heroGenerateBtn.click(); }
+});
+document.getElementById("heroOptionPaste").addEventListener("click", () => {
+  activateTab("topic");
+  scrollToGenerator();
+  setTimeout(() => document.getElementById("topicInput").focus(), 400);
 });
 
-function initSavedBadge() {
-  var count = getSavedDecks().length;
-  var badge = document.getElementById("savedCount");
-  badge.textContent = count;
-  badge.style.display = count > 0 ? "block" : "none";
+// ---------- App toast (generic) ----------
+const appToast = document.getElementById("appToast");
+const toastEmojiEl = document.getElementById("toastEmoji");
+const toastTitleEl = document.getElementById("toastTitle");
+const toastBodyEl = document.getElementById("toastBody");
+let appToastTimer = null;
+function showToast(emoji, title, body){
+  toastEmojiEl.textContent = emoji;
+  toastTitleEl.textContent = title;
+  toastBodyEl.textContent = body;
+  appToast.classList.add("show");
+  clearTimeout(appToastTimer);
+  appToastTimer = setTimeout(() => appToast.classList.remove("show"), 4200);
 }
-
-document.getElementById("savedBtn").addEventListener("click", openDrawer);
-document.getElementById("drawerClose").addEventListener("click", closeDrawer);
-document.getElementById("drawerOverlay").addEventListener("click", function(e) {
-  if (e.target === document.getElementById("drawerOverlay")) closeDrawer();
+document.getElementById("heroOptionUpload").addEventListener("click", () => {
+  showToast("🎉", "8 Years of Wondermayank!", "OCR & all Pro tools are free for everyone now.");
+  activateTab("pdf");
+  scrollToGenerator();
 });
 
-function openDrawer()  { renderSavedList(); document.getElementById("drawerOverlay").classList.add("open"); }
-function closeDrawer() { document.getElementById("drawerOverlay").classList.remove("open"); }
-
-function renderSavedList() {
-  var list  = document.getElementById("savedDecksList");
-  var saved = getSavedDecks();
-  if (!saved.length) {
-    list.innerHTML = '<div class="empty-state">No saved decks yet. Generate a deck and click Save.</div>';
+// ---------- Save deck ----------
+document.getElementById("saveBtn").addEventListener("click", () => {
+  if (!deck || deck.length === 0) {
+    showToast("📌", "Nothing to save yet", "Generate a deck first, then tap save.");
     return;
   }
-  list.innerHTML = saved.map(function(s, i) {
-    return '<div class="saved-deck-item">' +
-      '<div class="saved-deck-info">' +
-        '<div class="saved-deck-title">' + s.title + '</div>' +
-        '<div class="saved-deck-meta">' + s.cards.length + ' cards &middot; saved ' + s.savedAt + '</div>' +
-      '</div>' +
-      '<div class="saved-deck-actions">' +
-        '<button class="btn-sm" onclick="loadSavedDeck(' + i + ')">Load</button>' +
-        '<button class="btn-sm" onclick="deleteSavedDeck(' + i + ')" style="color:var(--error)">' +
-          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>' +
-        '</button>' +
-      '</div>' +
-    '</div>';
-  }).join("");
-}
-
-window.loadSavedDeck = function(i) {
-  var saved = getSavedDecks();
-  if (!saved[i]) return;
-  deck = saved[i].cards; order = deck.map(function(_, j) { return j; });
-  cardGrades = {}; currentIndex = 0; cardFlipped = false;
-  document.getElementById("deckTitle").textContent = saved[i].title;
-  buildDots(); renderCard(); resetStudyUI();
-  document.getElementById("deckSection").classList.add("active");
-  document.getElementById("resultScreen").classList.remove("active");
-  closeDrawer();
-  // switch to create tab to show deck
-  document.querySelectorAll(".page-tab").forEach(function(b) { b.classList.remove("active"); });
-  document.querySelectorAll(".page-content").forEach(function(p) { p.classList.remove("active"); });
-  document.querySelector('[data-page="create"]').classList.add("active");
-  document.getElementById("page-create").classList.add("active");
-  document.getElementById("deckSection").scrollIntoView({ behavior: "smooth", block: "start" });
-};
-
-window.deleteSavedDeck = function(i) {
-  var saved = getSavedDecks(); saved.splice(i, 1); putSavedDecks(saved);
-  initSavedBadge(); renderSavedList();
-};
-
-// ════════════════════════════════════════
-//  DOWNLOAD DECK AS HTML
-//  NOTE: Uses string concat NOT template literals
-//  to avoid nested backtick syntax error
-// ════════════════════════════════════════
-document.getElementById("downloadBtn").addEventListener("click", downloadDeck);
-
-function downloadDeck() {
-  if (!deck.length) return;
-  var title     = document.getElementById("deckTitle").textContent || "Flashcards";
-  var cardsJson = JSON.stringify(deck);
-  var slug      = title.replace(/[^a-z0-9]+/gi, "-").toLowerCase().slice(0, 40);
-  var count     = deck.length;
-
-  var html = '<!DOCTYPE html>\n'
-    + '<html lang="en">\n'
-    + '<head>\n'
-    + '<meta charset="UTF-8">\n'
-    + '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
-    + '<title>' + title + ' | ThunderStudy Flashcards</title>\n'
-    + '<meta name="description" content="' + count + ' flashcards on ' + title + ', generated with the ThunderStudy Flashcard Maker. Study offline, anywhere.">\n'
-    + '<link rel="icon" type="image/svg+xml" href="https://commercesehoga.github.io/favicon.svg">\n'
-    + '<style>\n'
-    + ':root{\n'
-    + '  --primary:#6699FB;--primary-active:#3D7BF5;\n'
-    + '  --ink:#1d1d1f;--body:#3c3c3c;--body-strong:#1a1a1a;--muted:#6b6b6b;--muted-soft:#9a9a9a;\n'
-    + '  --hairline:#e6e6e6;--hairline-strong:#cccccc;\n'
-    + '  --canvas:#ffffff;--canvas-parchment:#F5F5FF;--surface-soft:#f7f7f7;--surface-card:#fafafa;\n'
-    + '  --on-primary:#ffffff;--success:#22c55e;--error:#dc2626;\n'
-    + '  --got-bg:#dcfce7;--got-fg:#166534;--review-bg:#fee2e2;--review-fg:#991b1b;\n'
-    + '}\n'
-    + '[data-theme="dark"]{\n'
-    + '  --primary:#89B4FF;--primary-active:#6699FB;\n'
-    + '  --ink:#f5f5f7;--body:#d1d1d6;--body-strong:#ffffff;--muted:#8e8e93;--muted-soft:#636366;\n'
-    + '  --hairline:#2c2c2e;--hairline-strong:#3a3a3c;\n'
-    + '  --canvas:#0e0e10;--canvas-parchment:#161618;--surface-soft:#1a1a1c;--surface-card:#1c1c1e;\n'
-    + '  --on-primary:#0e0e10;\n'
-    + '  --got-bg:#14532d;--got-fg:#86efac;--review-bg:#7f1d1d;--review-fg:#fca5a5;\n'
-    + '}\n'
-    + '*{box-sizing:border-box;margin:0;padding:0}\n'
-    + 'html,body{min-height:100%}\n'
-    + 'body{font-family:Inter,system-ui,-apple-system,sans-serif;background:var(--canvas);color:var(--body);min-height:100vh;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased;transition:background .2s ease,color .2s ease;}\n'
-    + 'a{color:inherit;text-decoration:none}\n'
-    + 'button{font-family:inherit;cursor:pointer}\n'
-    + 'header{background:var(--canvas);border-bottom:1px solid var(--hairline);padding:0 20px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;backdrop-filter:blur(20px) saturate(180%);}\n'
-    + '.h-brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px;color:var(--ink);}\n'
-    + '.h-brand img{width:24px;height:24px;border-radius:6px;}\n'
-    + '.h-right{display:flex;align-items:center;gap:10px;}\n'
-    + '.h-link{font-size:13px;color:var(--primary);font-weight:600;}\n'
-    + '.theme-btn{width:36px;height:36px;border-radius:9999px;display:flex;align-items:center;justify-content:center;background:var(--surface-soft);border:1px solid var(--hairline);color:var(--ink);transition:transform .15s ease;flex-shrink:0;}\n'
-    + '.theme-btn:active{transform:scale(0.92);}\n'
-    + '.theme-btn svg{width:16px;height:16px;}\n'
-    + 'main{flex:1;max-width:760px;margin:0 auto;padding:28px 20px 48px;width:100%;}\n'
-    + '.deck-title{font-size:23px;font-weight:700;color:var(--body-strong);margin-bottom:5px;letter-spacing:-0.2px;}\n'
-    + '.deck-sub{font-size:13px;color:var(--muted-soft);margin-bottom:22px;}\n'
-    + '.study-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:12px;padding:11px 16px;margin-bottom:18px;}\n'
-    + '.study-score{font-size:13px;font-weight:600;color:var(--muted);}\n'
-    + '.study-score b{color:var(--body-strong);font-weight:700;}\n'
-    + '.study-actions{display:flex;gap:8px;}\n'
-    + '.grade-btn{font-size:13px;font-weight:700;padding:9px 16px;border-radius:9999px;border:none;display:none;align-items:center;gap:5px;transition:transform .15s ease;}\n'
-    + '.grade-btn:active{transform:scale(0.95);}\n'
-    + '.grade-btn svg{width:13px;height:13px;}\n'
-    + '.grade-review{background:var(--review-bg);color:var(--review-fg);}\n'
-    + '.grade-got{background:var(--got-bg);color:var(--got-fg);}\n'
-    + '.progress-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}\n'
-    + '.progress-label{font-size:13px;font-weight:600;color:var(--muted);}\n'
-    + '.card-stage{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:18px;}\n'
-    + '.nav-btn{width:44px;height:44px;border-radius:9999px;background:var(--surface-soft);border:1px solid var(--hairline);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;color:var(--ink);transition:transform .15s;}\n'
-    + '.nav-btn:active{transform:scale(0.9);}\n'
-    + '.nav-btn:disabled{opacity:.35;cursor:not-allowed;}\n'
-    + '.nav-btn svg{width:18px;height:18px;}\n'
-    + '.flip-wrap{width:100%;max-width:480px;height:300px;perspective:1200px;}\n'
-    + '.flip-card{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,.2,.2,1);cursor:pointer;}\n'
-    + '.flip-card.flipped{transform:rotateY(180deg);}\n'
-    + '.face{position:absolute;inset:0;border-radius:18px;backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:28px;border:1px solid var(--hairline);}\n'
-    + '.front{background:var(--surface-card);}.back{background:var(--canvas);transform:rotateY(180deg);}\n'
-    + '.status-dot{position:absolute;top:14px;right:14px;width:22px;height:22px;border-radius:9999px;display:none;align-items:center;justify-content:center;}\n'
-    + '.status-dot.got{background:var(--got-bg);color:var(--got-fg);display:flex;}\n'
-    + '.status-dot.review{background:var(--review-bg);color:var(--review-fg);display:flex;}\n'
-    + '.status-dot svg{width:13px;height:13px;}\n'
-    + '.face-label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--primary);margin-bottom:12px;}\n'
-    + '.face-text{font-size:18px;font-weight:600;line-height:1.45;color:var(--body-strong);max-width:400px;}\n'
-    + '.back .face-text{font-size:16px;font-weight:400;line-height:1.55;}\n'
-    + '.tap-hint{position:absolute;bottom:14px;font-size:11px;color:var(--muted-soft);display:flex;align-items:center;gap:5px;}\n'
-    + '.tap-hint svg{width:11px;height:11px;}\n'
-    + '.controls{display:flex;justify-content:center;gap:10px;margin-bottom:6px;flex-wrap:wrap;}\n'
-    + '.ctrl-btn{font-size:14px;font-weight:600;padding:11px 22px;border-radius:9999px;background:var(--canvas);border:1px solid var(--hairline-strong);color:var(--body-strong);transition:transform .15s;}\n'
-    + '.ctrl-btn:active{transform:scale(0.95);}\n'
-    + '.dots{display:flex;justify-content:center;gap:5px;flex-wrap:wrap;margin-top:16px;}\n'
-    + '.dot{width:7px;height:7px;border-radius:9999px;background:var(--hairline-strong);transition:all .15s;}\n'
-    + '.dot.active{background:var(--primary);width:18px;}\n'
-    + '.dot.got{background:var(--success);}\n'
-    + '.dot.review-dot{background:var(--error);}\n'
-    + '.progress-bar-wrap{width:100%;height:4px;background:var(--hairline);border-radius:9999px;margin-top:16px;overflow:hidden;display:none;}\n'
-    + '.progress-bar-fill{height:100%;background:var(--primary);border-radius:9999px;transition:width .3s ease;}\n'
-    + '.result-screen{display:none;text-align:center;padding:36px 22px;background:var(--canvas-parchment);border:1px solid var(--hairline);border-radius:18px;margin-top:22px;}\n'
-    + '.result-screen.active{display:block;}\n'
-    + '.result-score-big{font-size:42px;font-weight:700;color:var(--primary);letter-spacing:-0.5px;}\n'
-    + '.result-label{font-size:14px;color:var(--muted);margin-top:4px;}\n'
-    + '.result-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px;}\n'
-    + '.btn-primary{background:var(--primary);color:var(--on-primary);font-size:14px;font-weight:700;padding:12px 22px;border-radius:9999px;border:none;transition:transform .15s ease;}\n'
-    + '.btn-primary:active{transform:scale(0.95);}\n'
-    + 'footer{background:var(--canvas-parchment);border-top:1px solid var(--hairline);padding:30px 20px;color:var(--muted);}\n'
-    + '.f-inner{max-width:760px;margin:0 auto;}\n'
-    + '.make-more{text-align:center;margin-bottom:18px;}\n'
-    + '.make-more a{font-size:14px;font-weight:700;color:var(--primary);}\n'
-    + '.f-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-bottom:18px;}\n'
-    + '.f-col h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--body-strong);margin-bottom:9px;}\n'
-    + '.f-col a{display:block;font-size:13px;color:var(--muted);margin-bottom:7px;}\n'
-    + '.f-col a:hover{color:var(--primary);}\n'
-    + '.f-bottom{border-top:1px solid var(--hairline);padding-top:14px;font-size:11px;text-align:center;}\n'
-    + '@media(max-width:540px){.f-cols{grid-template-columns:1fr;}.flip-wrap{height:270px;}.study-bar{justify-content:center;}}\n'
-    + '</style>\n'
-    + '</head>\n'
-    + '<body>\n'
-    + '<header>\n'
-    + '  <a href="https://thunderstudy.indevs.in" class="h-brand">\n'
-    + '    <img src="https://commercesehoga.github.io/favicon.svg" alt="Thunder">\n'
-    + '    ThunderStudy\n'
-    + '  </a>\n'
-    + '  <div class="h-right">\n'
-    + '    <a href="https://flashcard.thunderstudy.indevs.in" class="h-link">Create more</a>\n'
-    + '    <button class="theme-btn" id="themeBtn" aria-label="Toggle dark mode">\n'
-    + '      <svg id="sunIco" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>\n'
-    + '      <svg id="moonIco" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path></svg>\n'
-    + '    </button>\n'
-    + '  </div>\n'
-    + '</header>\n'
-    + '<main>\n'
-    + '  <div class="deck-title">' + title + '</div>\n'
-    + '  <div class="deck-sub">' + count + ' cards &middot; Generated by ThunderStudy Flashcard Maker &middot; <a href="https://flashcard.thunderstudy.indevs.in" style="color:var(--primary)">flashcard.thunderstudy.indevs.in</a></div>\n'
-    + '\n'
-    + '  <div class="study-bar" id="studyBar">\n'
-    + '    <div class="study-score"><b id="scGot">0</b> Got it &nbsp;&middot;&nbsp; <b id="scRev">0</b> Review &nbsp;&middot;&nbsp; <b id="scLeft">' + count + '</b> Left</div>\n'
-    + '    <div class="study-actions">\n'
-    + '      <button class="grade-btn grade-review" id="revBtn">\n'
-    + '        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>\n'
-    + '        Review again\n'
-    + '      </button>\n'
-    + '      <button class="grade-btn grade-got" id="gotBtn">\n'
-    + '        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>\n'
-    + '        Got it\n'
-    + '      </button>\n'
-    + '    </div>\n'
-    + '  </div>\n'
-    + '\n'
-    + '  <div class="progress-row"><span class="progress-label" id="prog">1 / ' + count + '</span></div>\n'
-    + '  <div class="card-stage">\n'
-    + '    <button class="nav-btn" id="prev" disabled aria-label="Previous card">\n'
-    + '      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>\n'
-    + '    </button>\n'
-    + '    <div class="flip-wrap">\n'
-    + '      <div class="flip-card" id="card">\n'
-    + '        <div class="face front">\n'
-    + '          <span class="status-dot" id="statusDot"><svg id="statusSvg" viewBox="0 0 24 24" fill="none" stroke-width="2.5"></svg></span>\n'
-    + '          <span class="face-label">Question</span><p class="face-text" id="ft"></p>\n'
-    + '          <span class="tap-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg>Tap to flip</span>\n'
-    + '        </div>\n'
-    + '        <div class="face back">\n'
-    + '          <span class="face-label">Answer</span><p class="face-text" id="bt"></p>\n'
-    + '          <span class="tap-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg>Tap to flip</span>\n'
-    + '        </div>\n'
-    + '      </div>\n'
-    + '    </div>\n'
-    + '    <button class="nav-btn" id="next" aria-label="Next card">\n'
-    + '      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>\n'
-    + '    </button>\n'
-    + '  </div>\n'
-    + '\n'
-    + '  <div class="controls">\n'
-    + '    <button class="ctrl-btn" id="shuf">Shuffle</button>\n'
-    + '    <button class="ctrl-btn" id="rst">Reset Study</button>\n'
-    + '  </div>\n'
-    + '  <div class="dots" id="dots"></div>\n'
-    + '  <div class="progress-bar-wrap" id="barWrap"><div class="progress-bar-fill" id="barFill"></div></div>\n'
-    + '\n'
-    + '  <div class="result-screen" id="resultScreen">\n'
-    + '    <div class="result-score-big" id="resBig">&mdash;</div>\n'
-    + '    <div class="result-label">cards marked "Got it" out of <span id="resTotal">&mdash;</span></div>\n'
-    + '    <div class="result-actions">\n'
-    + '      <button class="btn-primary" id="retryBtn">Review Wrong Cards</button>\n'
-    + '      <button class="ctrl-btn" id="restartAllBtn">Restart All</button>\n'
-    + '    </div>\n'
-    + '  </div>\n'
-    + '</main>\n'
-    + '<footer>\n'
-    + '  <div class="f-inner">\n'
-    + '    <div class="make-more"><a href="https://flashcard.thunderstudy.indevs.in">Create more flashcards at flashcard.thunderstudy.indevs.in</a></div>\n'
-    + '    <div class="f-cols">\n'
-    + '      <div class="f-col"><h4>Thunder</h4><a href="https://thunderstudy.indevs.in">ThunderStudy</a><a href="https://commercesehoga.github.io/dashboard">CBT Mock Platform</a><a href="https://thunderstudy.github.io">Free Study Material</a><a href="https://commercesehoga.github.io/help">Help / Donate</a></div>\n'
-    + '      <div class="f-col"><h4>wondermayank</h4><a href="https://wondermayank.indevs.in">Portfolio</a><a href="https://wondermayank.github.io/">wondermayank.github.io</a><a href="https://wondermayank.github.io/mail">Mail</a><a href="https://wondermayank.github.io/contact">Contact</a></div>\n'
-    + '      <div class="f-col"><h4>Legal</h4><a href="https://wondermayank.github.io/terms">Terms</a><a href="https://wondermayank.github.io/privacy">Privacy</a><a href="https://wondermayank.github.io/disclaimer">Disclaimer</a></div>\n'
-    + '    </div>\n'
-    + '    <div class="f-bottom">Created by ThunderStudy &middot; by wondermayank &middot; <a href="https://thunderstudy.indevs.in" style="color:var(--primary)">thunderstudy.indevs.in</a> &middot; <a href="https://wondermayank.indevs.in" style="color:var(--primary)">wondermayank.indevs.in</a></div>\n'
-    + '  </div>\n'
-    + '</footer>\n'
-    + '<script>\n'
-    + 'var deck=' + cardsJson + ';\n'
-    + 'var order=deck.map(function(_,i){return i;}),cur=0,grades={},flipped=false;\n'
-    + 'var html=document.documentElement;\n'
-    + 'var card=document.getElementById("card");\n'
-    + 'var ft=document.getElementById("ft"),bt=document.getElementById("bt"),prog=document.getElementById("prog");\n'
-    + 'var prevB=document.getElementById("prev"),nextB=document.getElementById("next");\n'
-    + 'var dotsEl=document.getElementById("dots");\n'
-    + 'var gotBtn=document.getElementById("gotBtn"),revBtn=document.getElementById("revBtn");\n'
-    + 'var statusDot=document.getElementById("statusDot"),statusSvg=document.getElementById("statusSvg");\n'
-    + 'var barWrap=document.getElementById("barWrap"),barFill=document.getElementById("barFill");\n'
-    + 'var resultScreen=document.getElementById("resultScreen");\n'
-    + '\n'
-    + '/* theme */\n'
-    + 'function applyTheme(t){html.setAttribute("data-theme",t);document.getElementById("sunIco").style.display=t==="dark"?"none":"block";document.getElementById("moonIco").style.display=t==="dark"?"block":"none";try{localStorage.setItem("tsFlashTheme",t);}catch(e){}}\n'
-    + 'var savedTheme="light";try{savedTheme=localStorage.getItem("tsFlashTheme")||(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");}catch(e){}\n'
-    + 'applyTheme(savedTheme);\n'
-    + 'document.getElementById("themeBtn").onclick=function(){applyTheme(html.getAttribute("data-theme")==="dark"?"light":"dark");};\n'
-    + '\n'
-    + 'function buildDots(){dotsEl.innerHTML="";deck.forEach(function(_,i){var d=document.createElement("span");d.className="dot"+(i===0?" active":"");d.onclick=function(){cur=i;render();};dotsEl.appendChild(d);});}\n'
-    + '\n'
-    + 'function render(){\n'
-    + '  card.classList.remove("flipped");flipped=false;hideGrades();\n'
-    + '  var idx=order[cur];\n'
-    + '  ft.textContent=deck[idx].front;bt.textContent=deck[idx].back;\n'
-    + '  prog.textContent=(cur+1)+" / "+deck.length;\n'
-    + '  prevB.disabled=cur===0;nextB.disabled=cur===deck.length-1;\n'
-    + '  var g=grades[idx];\n'
-    + '  statusDot.className="status-dot";\n'
-    + '  if(g==="got"){statusDot.classList.add("got");statusSvg.innerHTML=\'<polyline points="20 6 9 17 4 12" stroke="currentColor"/>\';}\n'
-    + '  else if(g==="review"){statusDot.classList.add("review");statusSvg.innerHTML=\'<path d="M18 6L6 18M6 6l12 12" stroke="currentColor"/>\';}\n'
-    + '  document.querySelectorAll(".dot").forEach(function(d,i){\n'
-    + '    d.className="dot"+(i===cur?" active":"");\n'
-    + '    var gg=grades[order[i]];\n'
-    + '    if(gg==="got")d.classList.add("got");\n'
-    + '    if(gg==="review")d.classList.add("review-dot");\n'
-    + '  });\n'
-    + '  if(deck.length>15){barWrap.style.display="block";barFill.style.width=((cur+1)/deck.length*100)+"%";dotsEl.style.display="none";}\n'
-    + '  else{barWrap.style.display="none";dotsEl.style.display="flex";}\n'
-    + '  updateScore();\n'
-    + '}\n'
-    + '\n'
-    + 'function hideGrades(){gotBtn.style.display="none";revBtn.style.display="none";}\n'
-    + 'card.onclick=function(){card.classList.toggle("flipped");flipped=!flipped;if(flipped){gotBtn.style.display="inline-flex";revBtn.style.display="inline-flex";}else{hideGrades();}};\n'
-    + 'prevB.onclick=function(){if(cur>0){cur--;render();}};\n'
-    + 'nextB.onclick=function(){if(cur<deck.length-1){cur++;render();}};\n'
-    + '\n'
-    + 'function updateScore(){\n'
-    + '  var vals=Object.keys(grades).map(function(k){return grades[k];});\n'
-    + '  var got=vals.filter(function(g){return g==="got";}).length;\n'
-    + '  var rev=vals.filter(function(g){return g==="review";}).length;\n'
-    + '  var left=deck.length-got-rev;\n'
-    + '  document.getElementById("scGot").textContent=got;\n'
-    + '  document.getElementById("scRev").textContent=rev;\n'
-    + '  document.getElementById("scLeft").textContent=left;\n'
-    + '  if(left===0&&deck.length>0)showResult();\n'
-    + '}\n'
-    + 'function showResult(){\n'
-    + '  var got=Object.keys(grades).map(function(k){return grades[k];}).filter(function(g){return g==="got";}).length;\n'
-    + '  document.getElementById("resBig").textContent=got;\n'
-    + '  document.getElementById("resTotal").textContent=deck.length;\n'
-    + '  resultScreen.classList.add("active");\n'
-    + '}\n'
-    + 'gotBtn.onclick=function(){grades[order[cur]]="got";updateScore();if(cur<deck.length-1){cur++;}render();};\n'
-    + 'revBtn.onclick=function(){grades[order[cur]]="review";updateScore();if(cur<deck.length-1){cur++;}render();};\n'
-    + '\n'
-    + 'document.getElementById("shuf").onclick=function(){\n'
-    + '  for(var i=order.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=order[i];order[i]=order[j];order[j]=t;}\n'
-    + '  cur=0;render();\n'
-    + '};\n'
-    + 'document.getElementById("rst").onclick=function(){\n'
-    + '  grades={};order=deck.map(function(_,i){return i;});cur=0;\n'
-    + '  resultScreen.classList.remove("active");buildDots();render();\n'
-    + '};\n'
-    + 'document.getElementById("restartAllBtn").onclick=function(){\n'
-    + '  grades={};order=deck.map(function(_,i){return i;});cur=0;\n'
-    + '  resultScreen.classList.remove("active");buildDots();render();\n'
-    + '};\n'
-    + 'document.getElementById("retryBtn").onclick=function(){\n'
-    + '  var ri=[];for(var k in grades){if(grades[k]==="review")ri.push(parseInt(k));}\n'
-    + '  if(!ri.length){resultScreen.classList.remove("active");return;}\n'
-    + '  ri.forEach(function(i){delete grades[i];});\n'
-    + '  order=ri.slice();cur=0;\n'
-    + '  resultScreen.classList.remove("active");buildDots();render();\n'
-    + '};\n'
-    + '\n'
-    + 'document.addEventListener("keydown",function(e){\n'
-    + '  if(e.key==="ArrowRight")nextB.click();\n'
-    + '  if(e.key==="ArrowLeft")prevB.click();\n'
-    + '  if(e.key===" "){e.preventDefault();card.click();}\n'
-    + '  if((e.key==="g"||e.key==="G")&&flipped)gotBtn.click();\n'
-    + '  if((e.key==="r"||e.key==="R")&&flipped)revBtn.click();\n'
-    + '});\n'
-    + '\n'
-    + 'buildDots();render();\n'
-    + '<\/script>\n'
-    + '</body>\n'
-    + '</html>';
-
-  var blob = new Blob([html], { type: "text/html" });
-  var url  = URL.createObjectURL(blob);
-  var a    = document.createElement("a");
-  a.href     = url;
-  a.download = "thunderstudy-flashcards-" + slug + ".html";
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-  showSuccess("HTML file downloaded — with Got it/Review tracking, dark mode, and offline support.");
-}
-
-// ════════════════════════════════════════
-//  RENDER PRESETS FROM DB
-// ════════════════════════════════════════
-function renderPresets() {
-  var container = document.getElementById("presetsContainer");
-  if (typeof PRESET_DB === "undefined" || !PRESET_DB.length) {
-    container.innerHTML = '<p style="color:var(--muted);padding:32px 0;">No preset decks yet. Check back soon.</p>';
-    return;
-  }
-
-  var html = "";
-  PRESET_DB.forEach(function(group) {
-    html += '<div class="exam-group">';
-    html += '<div class="exam-group-header">';
-    html += '<div class="exam-color-dot" style="background:' + group.color + '"></div>';
-    html += group.icon;
-    html += '<span class="exam-group-label">' + group.label + '</span>';
-    html += '</div>';
-    html += '<div class="topic-grid">';
-
-    group.topics.forEach(function(topic) {
-      var hasFile = topic.file && topic.file.length > 0;
-      if (hasFile) {
-        html += '<a class="topic-card" href="' + topic.file + '" target="_blank" rel="noopener">';
-      } else {
-        html += '<div class="topic-card">';
-      }
-      html += '<div class="topic-card-title">' + topic.title + '</div>';
-      html += '<div class="topic-card-desc">' + topic.desc + '</div>';
-      html += '<div class="topic-card-meta">';
-      html += '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><polyline points="8 21 12 17 16 21"/></svg>';
-      html += topic.cards + ' cards';
-      if (!hasFile) {
-        html += '<span class="coming-soon-badge">Coming soon</span>';
-      }
-      html += '</div>';
-      if (hasFile) {
-        html += '</a>';
-      } else {
-        html += '</div>';
-      }
+  try {
+    const key = "ts_flashcard_saved_decks";
+    const saved = JSON.parse(localStorage.getItem(key) || "[]");
+    saved.unshift({
+      title: document.getElementById("deckTitle").textContent || "Flashcard Deck",
+      cards: deck,
+      savedAt: new Date().toISOString()
     });
+    localStorage.setItem(key, JSON.stringify(saved.slice(0, 50)));
+    showToast("💾", "Deck saved", "Stored locally on this device for next time.");
+  } catch (err) {
+    console.error(err);
+    showToast("⚠️", "Could not save", "Local storage might be full or disabled.");
+  }
+});
 
-    html += '</div></div>';
-  });
-
-  container.innerHTML = html;
+// ---------- Promo banner ----------
+const promoBanner = document.getElementById("promoBanner");
+const promoClose = document.getElementById("promoClose");
+if (localStorage.getItem("wm8yrBannerClosed")) {
+  promoBanner.classList.add("hide");
 }
+promoClose.addEventListener("click", () => {
+  promoBanner.classList.add("hide");
+  localStorage.setItem("wm8yrBannerClosed", "1");
+});
+
+// ---------- Hero type box <-> body type box sync ----------
+const topicInputEl = document.getElementById("topicInput");
+let syncingTopic = false;
+heroTopicInput.addEventListener("input", () => {
+  if (syncingTopic) return;
+  syncingTopic = true;
+  topicInputEl.value = heroTopicInput.value;
+  syncingTopic = false;
+});
+topicInputEl.addEventListener("input", () => {
+  if (syncingTopic) return;
+  syncingTopic = true;
+  heroTopicInput.value = topicInputEl.value;
+  syncingTopic = false;
+});
 </script>
 </body>
 </html>
