@@ -123,9 +123,7 @@ ${String(sourceContent).slice(0, 18000)}
         // burning the completion-token budget on hidden reasoning steps that
         // a straightforward flashcard-extraction task doesn't need.
         model: "openai/gpt-oss-120b",
-        // Groq reasoning models REQUIRE temperature=1; any other value is rejected.
-        // max_completion_tokens must cover reasoning tokens + output tokens (8192 is safe).
-        temperature: 1,
+        temperature: 0.4,
         max_completion_tokens: 8192,
         reasoning_effort: "low",
         messages: [
@@ -150,29 +148,57 @@ ${String(sourceContent).slice(0, 18000)}
       if (groqRes.status === 429) friendlyError = "AI service is busy right now. Please wait a moment and try again.";
       if (groqRes.status === 401) friendlyError = "API key is invalid or expired. Contact support.";
       if (groqRes.status === 503) friendlyError = "AI service is temporarily unavailable. Try again in a minute.";
-      if (groqRes.status === 413) friendlyError = "Request too large for the AI service. Try fewer cards or a shorter source text.";
       if (groqRes.status === 400) {
-        // Surface the real reason (e.g. bad params, model decommissioned)
+        // Surface the real reason (e.g. model decommissioned, bad request shape)
+        // instead of a generic message, so this is debuggable without digging
+        // through Vercel function logs.
         let detail = "";
         try { detail = JSON.parse(errText)?.error?.message || ""; } catch (e) { /* not JSON */ }
         friendlyError = detail ? `Generation failed: ${detail}` : "Generation failed — the request was rejected by the AI service. Please try again.";
       }
 
-      // Always return 502 to the browser so the client never sees a leaked Groq status.
-      // (e.g. Groq 413 forwarded as-is caused the browser to misinterpret a Groq-side
-      // payload error as a client request error and broke res.json() in the frontend.)
-      res.status(502).json({ error: friendlyError, refunded: true });
+      res.status(groqRes.status).json({ error: friendlyError, refunded: true });
       return;
     }
 
     const data = await groqRes.json();
-    let raw = data.choices?.[0]?.message?.content || "";
-    raw = raw.trim().replace(/^```json/i, "").replace(/^```/, "").replace(/```$/, "").trim();
+    const msg = data.choices?.[0]?.message || {};
+    // Some gpt-oss-120b responses put the actual answer in a reasoning
+    // field instead of content when content comes back empty. Fall back
+    // to that so we don't treat a usable response as a hard failure.
+    let raw = msg.content || msg.reasoning_content || msg.reasoning || "";
+
+    // gpt-oss-120b occasionally leaks Harmony-format control tokens
+    // (e.g. <|channel|>, <|message|>, <|return|>) or stray reasoning text
+    // around the JSON instead of returning pure JSON, despite json_object
+    // mode. Strip those out before attempting to parse.
+    raw = raw
+      .replace(/<\|[^|]*\|>/g, "")
+      .trim()
+      .replace(/^```json/i, "")
+      .replace(/^```/, "")
+      .replace(/```$/, "")
+      .trim();
 
     let parsed;
     try {
       parsed = JSON.parse(raw);
     } catch (e) {
+      // Fallback: pull out the outermost {...} block in case the model
+      // wrapped the JSON in extra prose/reasoning despite instructions.
+      const first = raw.indexOf("{");
+      const last = raw.lastIndexOf("}");
+      if (first !== -1 && last !== -1 && last > first) {
+        try {
+          parsed = JSON.parse(raw.slice(first, last + 1));
+        } catch (e2) {
+          parsed = null;
+        }
+      }
+    }
+
+    if (!parsed) {
+      console.error("Could not parse AI output. Raw content was:", raw.slice(0, 2000));
       // Refund on parse failure
       refundToken(ip);
       res.status(502).json({ error: "AI returned malformed output. Your token has been refunded — please try again.", refunded: true });
