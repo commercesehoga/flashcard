@@ -123,8 +123,10 @@ ${String(sourceContent).slice(0, 18000)}
         // burning the completion-token budget on hidden reasoning steps that
         // a straightforward flashcard-extraction task doesn't need.
         model: "openai/gpt-oss-120b",
-        temperature: 0.4,
-        max_completion_tokens: 4096,
+        // Groq reasoning models REQUIRE temperature=1; any other value is rejected.
+        // max_completion_tokens must cover reasoning tokens + output tokens (8192 is safe).
+        temperature: 1,
+        max_completion_tokens: 8192,
         reasoning_effort: "low",
         messages: [
           { role: "system", content: systemPrompt },
@@ -148,16 +150,18 @@ ${String(sourceContent).slice(0, 18000)}
       if (groqRes.status === 429) friendlyError = "AI service is busy right now. Please wait a moment and try again.";
       if (groqRes.status === 401) friendlyError = "API key is invalid or expired. Contact support.";
       if (groqRes.status === 503) friendlyError = "AI service is temporarily unavailable. Try again in a minute.";
+      if (groqRes.status === 413) friendlyError = "Request too large for the AI service. Try fewer cards or a shorter source text.";
       if (groqRes.status === 400) {
-        // Surface the real reason (e.g. model decommissioned, bad request shape)
-        // instead of a generic message, so this is debuggable without digging
-        // through Vercel function logs.
+        // Surface the real reason (e.g. bad params, model decommissioned)
         let detail = "";
         try { detail = JSON.parse(errText)?.error?.message || ""; } catch (e) { /* not JSON */ }
         friendlyError = detail ? `Generation failed: ${detail}` : "Generation failed — the request was rejected by the AI service. Please try again.";
       }
 
-      res.status(groqRes.status).json({ error: friendlyError, refunded: true });
+      // Always return 502 to the browser so the client never sees a leaked Groq status.
+      // (e.g. Groq 413 forwarded as-is caused the browser to misinterpret a Groq-side
+      // payload error as a client request error and broke res.json() in the frontend.)
+      res.status(502).json({ error: friendlyError, refunded: true });
       return;
     }
 
