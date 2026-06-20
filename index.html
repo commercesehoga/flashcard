@@ -1260,7 +1260,7 @@ async function handlePdfFile(file){
       const content = await page.getTextContent();
       text += content.items.map(it => it.str).join(" ") + "\n";
     }
-    extractedPdfText = text.trim().slice(0, 18000);
+    extractedPdfText = text.trim().slice(0, 4000);
     fileNameEl.textContent = file.name + " — " + pdf.numPages + " page(s) read";
   } catch (err) {
     console.error(err);
@@ -1316,7 +1316,7 @@ async function handleImageFile(file){
       imageNameEl.textContent = "";
       return;
     }
-    extractedOcrText = data.text.trim();
+    extractedOcrText = data.text.trim().slice(0, 4000);
     imageNameEl.textContent = file.name + " — text extracted";
   } catch (err) {
     console.error(err);
@@ -1380,7 +1380,7 @@ ytFetchBtn.addEventListener("click", async () => {
       return;
     }
 
-    const text = data.transcript.slice(0, 18000);
+    const text = data.transcript.slice(0, 4000);
     ytPreviewText.value = text;
     ytPreviewWrap.style.display = "block";
     ytStatus.textContent = `Transcript fetched (${text.length} characters). Review below, then tap Generate.`;
