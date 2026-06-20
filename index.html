@@ -1512,7 +1512,18 @@ async function generateFlashcards(){
       body: JSON.stringify({ sourceContent, examLabel, count })
     });
 
-    const parsed = await res.json();
+    // 413 from a proxy/CDN means the request body was blocked before reaching
+    // the server — res.json() would throw in this case, so handle it first.
+    if (res.status === 413) {
+      showError("Your content was too large for the server. Try a shorter topic or fewer pages.");
+      return;
+    }
+
+    let parsed;
+    try { parsed = await res.json(); } catch (e) {
+      showError("Generation failed. Please try again.");
+      return;
+    }
 
     if (!res.ok) {
       console.error(parsed);
