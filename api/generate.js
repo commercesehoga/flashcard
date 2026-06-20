@@ -116,16 +116,9 @@ ${String(sourceContent).slice(0, 18000)}
         "Authorization": "Bearer " + apiKey
       },
       body: JSON.stringify({
-        // llama-3.3-70b-versatile was deprecated by Groq (announced 2026-06-17).
-        // openai/gpt-oss-120b is Groq's recommended replacement: 131K context,
-        // JSON mode support, similar quality/speed for this kind of structured
-        // extraction task. reasoning_effort "low" keeps it fast and avoids
-        // burning the completion-token budget on hidden reasoning steps that
-        // a straightforward flashcard-extraction task doesn't need.
-        model: "openai/gpt-oss-120b",
+        model: "llama-3.3-70b-versatile",
         temperature: 0.4,
-        max_completion_tokens: 8192,
-        reasoning_effort: "low",
+        max_tokens: 4096,
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user",   content: userPrompt   }
@@ -163,15 +156,10 @@ ${String(sourceContent).slice(0, 18000)}
 
     const data = await groqRes.json();
     const msg = data.choices?.[0]?.message || {};
-    // Some gpt-oss-120b responses put the actual answer in a reasoning
-    // field instead of content when content comes back empty. Fall back
-    // to that so we don't treat a usable response as a hard failure.
     let raw = msg.content || msg.reasoning_content || msg.reasoning || "";
 
-    // gpt-oss-120b occasionally leaks Harmony-format control tokens
-    // (e.g. <|channel|>, <|message|>, <|return|>) or stray reasoning text
-    // around the JSON instead of returning pure JSON, despite json_object
-    // mode. Strip those out before attempting to parse.
+    // Defensive cleanup in case the model wraps the JSON in code fences
+    // or stray tokens despite response_format/system prompt instructions.
     raw = raw
       .replace(/<\|[^|]*\|>/g, "")
       .trim()
