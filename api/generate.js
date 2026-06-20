@@ -107,7 +107,8 @@ Rules:
 - "back" is a correct, concise, exam-ready answer (max ~60 words), accurate and specific — no vague filler.
 - If an exam context is given, tailor difficulty, terminology and depth to that exam. If not given, infer the most likely exam/subject from the content.
 - Do not repeat the same fact twice across cards.
-- Never include markdown formatting, asterisks, or numbering inside front/back text.`;
+- Never include markdown formatting, asterisks, or numbering inside front/back text.
+- If the source content is too short, garbled, or unclear to extract ${safeCount} distinct facts from, still return valid JSON: generate as many genuinely useful cards as the content supports (even just 1-2), and set "exam_detected" to a brief note explaining the content was limited. Never reply with plain text or an explanation outside the JSON shape — always return the JSON object.`;
 
   const userPrompt = `Exam/context hint: ${examLabel || "not specified, please infer"}
 Number of cards required: ${safeCount}
@@ -156,12 +157,24 @@ ${String(sourceContent).slice(0, 4000)}
         friendlyError = "Your content is too long for the current AI rate limit. Try a shorter topic, fewer pages, or a shorter transcript excerpt.";
       }
       if (groqRes.status === 400) {
-        // Surface the real reason (e.g. model decommissioned, bad request shape)
-        // instead of a generic message, so this is debuggable without digging
-        // through Vercel function logs.
+        // Surface the real reason (e.g. model decommissioned, bad request shape,
+        // or — most commonly for this app — the model couldn't find usable
+        // content in the source text, e.g. a scanned/image-based PDF that
+        // extracted as garbled or near-empty text) instead of a generic
+        // message, so this is debuggable and actionable for the user.
         let detail = "";
-        try { detail = JSON.parse(errText)?.error?.message || ""; } catch (e) { /* not JSON */ }
-        friendlyError = detail ? `Generation failed: ${detail}` : "Generation failed — the request was rejected by the AI service. Please try again.";
+        let failedGeneration = "";
+        try {
+          const parsedErr = JSON.parse(errText)?.error;
+          detail = parsedErr?.message || "";
+          failedGeneration = parsedErr?.failed_generation || "";
+        } catch (e) { /* not JSON */ }
+
+        if (failedGeneration) {
+          friendlyError = `The AI couldn't find usable content to make flashcards from: "${failedGeneration.slice(0, 200)}". If this was a PDF, it may be scanned/image-based — try the Image (OCR) tab instead, or paste the topic directly.`;
+        } else {
+          friendlyError = detail ? `Generation failed: ${detail}` : "Generation failed — the request was rejected by the AI service. Please try again.";
+        }
       }
 
       res.status(groqRes.status).json({ error: friendlyError, refunded: true });
