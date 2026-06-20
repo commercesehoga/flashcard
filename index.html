@@ -397,7 +397,7 @@ main{max-width:1100px; margin:0 auto; padding:0 24px;}
 .pd-group.open .pd-cat-chevron{transform:rotate(180deg);}
 
 .pd-group-items{
-  display:grid; grid-template-columns:repeat(2, 1fr); gap:10px;
+  display:grid; grid-template-columns:repeat(3, 1fr); gap:8px;
   padding:0 14px 14px;
   max-height:0; opacity:0; overflow:hidden;
   transition:max-height .25s ease, opacity .2s ease, padding .25s ease;
@@ -407,22 +407,23 @@ main{max-width:1100px; margin:0 auto; padding:0 24px;}
 }
 .pd-item{
   display:flex; flex-direction:column; justify-content:space-between;
-  aspect-ratio:1 / 1; width:100%; text-align:left; padding:14px;
-  border-radius:14px; background:var(--surface-card); border:1px solid var(--hairline);
+  width:100%; text-align:left; padding:9px;
+  border-radius:11px; background:var(--surface-card); border:1px solid var(--hairline);
   transition:border-color .15s ease, background .15s ease, transform .15s ease;
+  min-height:74px;
 }
 .pd-item:hover{border-color:var(--primary); background:var(--canvas-parchment);}
 .pd-item:active{transform:scale(.96);}
-.pd-item-text{display:flex; flex-direction:column; gap:4px; min-width:0;}
-.pd-item-title{font-size:13.5px; font-weight:600; color:var(--ink); line-height:1.3;}
-.pd-item-meta{font-size:11px; color:var(--muted-soft); line-height:1.4;}
+.pd-item-text{display:flex; flex-direction:column; gap:2px; min-width:0;}
+.pd-item-title{font-size:11px; font-weight:600; color:var(--ink); line-height:1.25;}
+.pd-item-meta{font-size:9px; color:var(--muted-soft); line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;}
 .pd-item-arrow{
-  width:16px; height:16px; color:var(--muted-soft); flex-shrink:0;
+  width:12px; height:12px; color:var(--muted-soft); flex-shrink:0;
   align-self:flex-end; transform:rotate(-45deg);
 }
 @media(max-width:380px){
-  .pd-group-items{grid-template-columns:repeat(2, 1fr); gap:8px;}
-  .pd-item{padding:11px;}
+  .pd-group-items{grid-template-columns:repeat(2, 1fr); gap:7px;}
+  .pd-item{padding:9px; min-height:68px;}
 }
 
 textarea, input[type="text"]{
@@ -490,6 +491,13 @@ label.field-label{font-size:13px; font-weight:700; color:var(--muted); margin-bo
   transition:transform .15s ease;
 }
 .btn-secondary:active{transform:scale(0.95);}
+.btn-secondary:disabled{opacity:.5; cursor:not-allowed;}
+.btn-secondary.btn-sm{height:44px; padding:0 18px; font-size:13px; flex-shrink:0; display:inline-flex; align-items:center; gap:6px;}
+.btn-secondary.btn-sm svg{width:15px; height:15px;}
+.yt-row{display:flex; gap:8px; align-items:stretch; margin-bottom:6px;}
+.yt-row input{flex:1; min-width:0;}
+.field-hint{font-size:12px; color:var(--muted-soft); margin-top:2px; line-height:1.4;}
+.field-hint.warn{color:var(--error, #dc2626);}
 .spinner{width:16px; height:16px; border:2px solid rgba(255,255,255,.4); border-top-color:#fff; border-radius:50%; animation:spin .7s linear infinite; display:none;}
 .btn-primary.loading .spinner{display:inline-block;}
 .btn-primary.loading .btn-text{display:none;}
@@ -805,7 +813,18 @@ footer{background:var(--canvas-parchment); padding:56px 24px 32px; color:var(--m
 
     <div class="tab-panel" id="panel-youtube">
       <label class="field-label" for="youtubeInput">Paste a YouTube video link</label>
-      <input type="text" id="youtubeInput" placeholder="https://www.youtube.com/watch?v=...">
+      <div class="yt-row">
+        <input type="text" id="youtubeInput" placeholder="https://www.youtube.com/watch?v=...">
+        <button class="btn-secondary btn-sm" id="ytFetchBtn" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Fetch
+        </button>
+      </div>
+      <p class="field-hint" id="ytStatus">Paste a YouTube URL and tap Fetch to grab the transcript.</p>
+      <div id="ytPreviewWrap" style="display:none; margin-top:12px;">
+        <label class="field-label" for="ytPreviewText">Transcript (editable)</label>
+        <textarea id="ytPreviewText" style="min-height:140px;"></textarea>
+      </div>
     </div>
 
     <div class="tab-panel" id="panel-ocr">
@@ -1306,6 +1325,74 @@ async function handleImageFile(file){
   }
 }
 
+// ---------- YouTube transcript fetch (separate step, like Fetch -> Generate) ----------
+function extractYouTubeId(input) {
+  if (!input || typeof input !== "string") return null;
+  const trimmed = input.trim();
+
+  // Already a bare 11-char video ID
+  if (/^[a-zA-Z0-9_-]{11}$/.test(trimmed)) return trimmed;
+
+  try {
+    const url = new URL(trimmed);
+    const host = url.hostname.replace(/^www\./, "");
+    if (host === "youtu.be") return url.pathname.slice(1).split("/")[0] || null;
+    if (host === "youtube.com" || host === "m.youtube.com") {
+      if (url.pathname === "/watch") return url.searchParams.get("v");
+      if (url.pathname.startsWith("/shorts/")) return url.pathname.split("/")[2];
+      if (url.pathname.startsWith("/embed/")) return url.pathname.split("/")[2];
+      if (url.pathname.startsWith("/live/")) return url.pathname.split("/")[2];
+    }
+  } catch (e) { /* not a parseable URL */ }
+  return null;
+}
+
+const ytFetchBtn = document.getElementById("ytFetchBtn");
+const ytStatus = document.getElementById("ytStatus");
+const ytPreviewWrap = document.getElementById("ytPreviewWrap");
+const ytPreviewText = document.getElementById("ytPreviewText");
+
+ytFetchBtn.addEventListener("click", async () => {
+  const rawUrl = document.getElementById("youtubeInput").value.trim();
+  const videoId = extractYouTubeId(rawUrl);
+
+  if (!videoId) {
+    ytStatus.textContent = "Could not find a valid YouTube video ID in that link.";
+    ytStatus.classList.add("warn");
+    return;
+  }
+
+  ytStatus.classList.remove("warn");
+  ytStatus.textContent = "Fetching transcript...";
+  ytFetchBtn.disabled = true;
+
+  try {
+    const res = await fetch("/api/youtube-transcript", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url: rawUrl })
+    });
+    const data = await res.json();
+
+    if (!res.ok || !data.transcript) {
+      ytStatus.textContent = data.error || "Could not fetch a transcript for this video — it may not have captions, or be private/restricted.";
+      ytStatus.classList.add("warn");
+      return;
+    }
+
+    const text = data.transcript.slice(0, 18000);
+    ytPreviewText.value = text;
+    ytPreviewWrap.style.display = "block";
+    ytStatus.textContent = `Transcript fetched (${text.length} characters). Review below, then tap Generate.`;
+  } catch (err) {
+    console.error(err);
+    ytStatus.textContent = "Network error fetching the transcript. Check the link and try again.";
+    ytStatus.classList.add("warn");
+  } finally {
+    ytFetchBtn.disabled = false;
+  }
+});
+
 // ---------- Error / status ----------
 function showError(msg){
   const el = document.getElementById("errorMsg");
@@ -1356,35 +1443,9 @@ async function generateFlashcards(){
     sourceContent = extractedOcrText;
 
   } else if (activeTab === "youtube") {
-    const ytUrl = document.getElementById("youtubeInput").value.trim();
-    if (!ytUrl) { showError("Please paste a YouTube link first."); return; }
-
-    generateBtn.disabled = true;
-    generateBtn.classList.add("loading");
-    statusText.textContent = "Fetching transcript...";
-    try {
-      const ytRes = await fetch("/api/youtube-transcript", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: ytUrl })
-      });
-      const ytData = await ytRes.json();
-      if (!ytRes.ok || !ytData.transcript) {
-        showError(ytData.error || "Could not fetch a transcript for that video.");
-        generateBtn.disabled = false;
-        generateBtn.classList.remove("loading");
-        statusText.textContent = "";
-        return;
-      }
-      sourceContent = ytData.transcript;
-    } catch (err) {
-      console.error(err);
-      showError("Network error fetching the transcript. Check the link and try again.");
-      generateBtn.disabled = false;
-      generateBtn.classList.remove("loading");
-      statusText.textContent = "";
-      return;
-    }
+    const ytText = document.getElementById("ytPreviewText").value.trim();
+    if (!ytText) { showError("Please fetch a transcript first using the Fetch button above."); return; }
+    sourceContent = ytText;
 
   } else {
     if (!topic) { showError("Please enter a topic or question first."); return; }
