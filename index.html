@@ -1287,12 +1287,53 @@ imageInput.addEventListener("change", () => {
   if (imageInput.files.length) handleImageFile(imageInput.files[0]);
 });
 
+// Compress an image file client-side before uploading to /api/ocr.
+// Vercel serverless functions reject bodies > ~4.5 MB with a 413 error,
+// but even well below that limit the network round-trip is faster with a
+// smaller payload. Strategy: draw into a canvas at capped dimensions, then
+// export as JPEG at decreasing quality until the data URL is ≤ MAX_B64_BYTES.
+// For short text / diagrams the quality loss is invisible to Tesseract.
+const OCR_MAX_PX   = 2400;   // longest edge cap in pixels
+const OCR_MAX_B64  = 3_400_000; // ~3.4 MB base64 string → safe under 4.5 MB body limit
+const OCR_QUALITIES = [0.92, 0.80, 0.65, 0.50]; // tried in order until size fits
+
 function fileToBase64(file){
   return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
+    const img = new Image();
+    const objectURL = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(objectURL);
+      try {
+        // Scale down if needed (preserve aspect ratio)
+        let { naturalWidth: w, naturalHeight: h } = img;
+        if (w > OCR_MAX_PX || h > OCR_MAX_PX) {
+          const scale = OCR_MAX_PX / Math.max(w, h);
+          w = Math.round(w * scale);
+          h = Math.round(h * scale);
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width  = w;
+        canvas.height = h;
+        const ctx = canvas.getContext("2d");
+        // White background so transparent PNGs don't become black in JPEG
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, w, h);
+        ctx.drawImage(img, 0, 0, w, h);
+
+        // Try each quality level until the result fits
+        for (const q of OCR_QUALITIES) {
+          const dataURL = canvas.toDataURL("image/jpeg", q);
+          if (dataURL.length <= OCR_MAX_B64 || q === OCR_QUALITIES[OCR_QUALITIES.length - 1]) {
+            resolve(dataURL);
+            return;
+          }
+        }
+      } catch (e) {
+        reject(e);
+      }
+    };
+    img.onerror = () => { URL.revokeObjectURL(objectURL); reject(new Error("Image load failed")); };
+    img.src = objectURL;
   });
 }
 
@@ -1310,6 +1351,12 @@ async function handleImageFile(file){
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ image: base64 })
     });
+    // 413 = body still too large; server never parses it so res.json() would throw
+    if (res.status === 413) {
+      showError("Image is too large even after compression. Please crop it or use a smaller photo.");
+      imageNameEl.textContent = "";
+      return;
+    }
     const data = await res.json();
     if (!res.ok || !data.text) {
       showError(data.error || "Could not read text from that image.");
