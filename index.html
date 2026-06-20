@@ -369,10 +369,13 @@ main{max-width:1100px; margin:0 auto; padding:0 24px;}
 /* Preset Decks panel */
 .preset-deck-groups{display:flex; flex-direction:column; gap:18px;}
 .pd-subtitle{font-size:13px; color:var(--muted); line-height:1.5; margin:-2px 0 16px;}
+.pd-empty{font-size:13px; color:var(--muted); line-height:1.6; padding:16px; border:1px dashed var(--hairline-strong); border-radius:12px; text-align:center;}
 .pd-group-title{
+  display:flex; align-items:center; gap:7px;
   font-size:11px; font-weight:700; letter-spacing:.6px; text-transform:uppercase;
   color:var(--muted-soft); margin-bottom:8px;
 }
+.pd-group-title svg{width:15px; height:15px; flex-shrink:0;}
 .pd-group-items{display:flex; flex-direction:column; gap:8px;}
 .pd-item{
   display:flex; align-items:center; justify-content:space-between; gap:12px;
@@ -783,59 +786,8 @@ footer{background:var(--canvas-parchment); padding:56px 24px 32px; color:var(--m
     <div class="tab-panel" id="panel-presets">
       <label class="field-label">Preset Flashcard Decks</label>
       <p class="pd-subtitle">Ready-made decks — no AI token needed. Click any topic to open it instantly.</p>
-      <div class="preset-deck-groups">
-        <div class="pd-group">
-          <div class="pd-group-title">Class 12 CBSE</div>
-          <div class="pd-group-items">
-            <button class="pd-item" data-preset="newtons-laws">
-              <span class="pd-item-text"><span class="pd-item-title">Newton's Laws of Motion</span><span class="pd-item-meta">Physics</span></span>
-              <svg class="pd-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
-            </button>
-            <button class="pd-item" data-preset="chemical-bonding">
-              <span class="pd-item-text"><span class="pd-item-title">Chemical Bonding</span><span class="pd-item-meta">Chemistry</span></span>
-              <svg class="pd-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
-            </button>
-          </div>
-        </div>
-        <div class="pd-group">
-          <div class="pd-group-title">NEET</div>
-          <div class="pd-group-items">
-            <button class="pd-item" data-preset="digestive-system">
-              <span class="pd-item-text"><span class="pd-item-title">Human Digestive System</span><span class="pd-item-meta">Biology</span></span>
-              <svg class="pd-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
-            </button>
-            <button class="pd-item" data-preset="genetics-heredity">
-              <span class="pd-item-text"><span class="pd-item-title">Genetics and Heredity</span><span class="pd-item-meta">Biology</span></span>
-              <svg class="pd-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
-            </button>
-          </div>
-        </div>
-        <div class="pd-group">
-          <div class="pd-group-title">JEE</div>
-          <div class="pd-group-items">
-            <button class="pd-item" data-preset="thermodynamics">
-              <span class="pd-item-text"><span class="pd-item-title">Laws of Thermodynamics</span><span class="pd-item-meta">Physics</span></span>
-              <svg class="pd-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
-            </button>
-            <button class="pd-item" data-preset="organic-reactions">
-              <span class="pd-item-text"><span class="pd-item-title">Organic Reaction Mechanisms</span><span class="pd-item-meta">Chemistry</span></span>
-              <svg class="pd-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
-            </button>
-          </div>
-        </div>
-        <div class="pd-group">
-          <div class="pd-group-title">Banking & SSC</div>
-          <div class="pd-group-items">
-            <button class="pd-item" data-preset="banking-awareness">
-              <span class="pd-item-text"><span class="pd-item-title">Banking Awareness Basics</span><span class="pd-item-meta">Banking</span></span>
-              <svg class="pd-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
-            </button>
-            <button class="pd-item" data-preset="indian-polity">
-              <span class="pd-item-text"><span class="pd-item-title">Indian Polity Basics</span><span class="pd-item-meta">SSC</span></span>
-              <svg class="pd-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
-            </button>
-          </div>
-        </div>
+      <div class="preset-deck-groups" id="presetDeckGroups">
+        <!-- Rendered from PRESET_DB (dp.js) at load time. See renderPresetDecks() below. -->
       </div>
     </div>
 
@@ -1026,6 +978,7 @@ footer{background:var(--canvas-parchment); padding:56px 24px 32px; color:var(--m
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="dp.js"></script>
 <script>
 // ---------- CONFIG ----------
 // The Groq API key lives ONLY in Vercel's Environment Variables (Project Settings -> Environment
@@ -1160,139 +1113,50 @@ document.querySelectorAll(".cc-chip").forEach(chip => {
 });
 
 // ---------- Preset Decks (ready-made, no AI token needed) ----------
-const PRESET_DECKS = {
-  "newtons-laws": {
-    title: "Newton's Laws of Motion",
-    exam: "Class 12 CBSE",
-    cards: [
-      { front: "What is Newton's First Law of Motion?", back: "An object remains at rest or in uniform motion in a straight line unless acted upon by an external force. Also called the law of inertia." },
-      { front: "What is Newton's Second Law of Motion?", back: "The rate of change of momentum of an object is directly proportional to the applied force: F = ma." },
-      { front: "What is Newton's Third Law of Motion?", back: "For every action, there is an equal and opposite reaction." },
-      { front: "What is inertia?", back: "The natural tendency of an object to resist any change in its state of rest or motion." },
-      { front: "What is the SI unit of force?", back: "The newton (N), equal to 1 kg·m/s²." },
-      { front: "What is momentum?", back: "The product of an object's mass and velocity: p = mv." },
-      { front: "State the law of conservation of momentum.", back: "In the absence of an external force, the total momentum of a system remains constant." },
-      { front: "Why does a standing passenger jerk forward when a moving bus suddenly stops?", back: "Due to inertia of motion — the passenger's body continues moving forward even as the bus stops." }
-    ]
-  },
-  "chemical-bonding": {
-    title: "Chemical Bonding",
-    exam: "Class 12 CBSE",
-    cards: [
-      { front: "What is an ionic bond?", back: "A bond formed by the transfer of electrons between atoms, creating oppositely charged ions that attract each other." },
-      { front: "What is a covalent bond?", back: "A bond formed when atoms share one or more pairs of electrons." },
-      { front: "What is electronegativity?", back: "The tendency of an atom to attract a shared pair of electrons towards itself." },
-      { front: "What is a coordinate (dative) bond?", back: "A covalent bond in which both shared electrons are contributed by the same atom." },
-      { front: "What does VSEPR theory predict?", back: "The geometry of molecules, based on minimizing repulsion between electron pairs around a central atom." },
-      { front: "What is hybridization?", back: "The mixing of atomic orbitals to form new, equivalent hybrid orbitals suited for bonding." },
-      { front: "Give an example of a polar covalent bond.", back: "The O–H bond in water, due to the electronegativity difference between oxygen and hydrogen." },
-      { front: "What is a hydrogen bond?", back: "A weak attractive force between a hydrogen atom bonded to a highly electronegative atom and another nearby electronegative atom." }
-    ]
-  },
-  "digestive-system": {
-    title: "Human Digestive System",
-    exam: "NEET",
-    cards: [
-      { front: "What is the main function of the stomach?", back: "To churn food and secrete gastric juice — including HCl and pepsin — to begin protein digestion." },
-      { front: "Which enzyme breaks down starch in the mouth?", back: "Salivary amylase (ptyalin)." },
-      { front: "Where does most digestion and absorption of nutrients occur?", back: "The small intestine." },
-      { front: "What is the role of bile in digestion?", back: "It emulsifies fats, breaking them into smaller droplets to aid digestion and absorption. It's produced by the liver and stored in the gallbladder." },
-      { front: "What does the pancreas contribute to digestion?", back: "It secretes pancreatic juice containing enzymes such as trypsin, amylase, and lipase into the small intestine." },
-      { front: "What is the main function of the large intestine?", back: "Absorption of water and electrolytes, and formation of feces." },
-      { front: "What is peristalsis?", back: "Wave-like muscular contractions that push food along the digestive tract." },
-      { front: "What is the function of villi in the small intestine?", back: "They increase the surface area available for nutrient absorption." }
-    ]
-  },
-  "genetics-heredity": {
-    title: "Genetics and Heredity",
-    exam: "NEET",
-    cards: [
-      { front: "Who is known as the father of genetics?", back: "Gregor Mendel." },
-      { front: "What is a gene?", back: "A segment of DNA that codes for a specific protein or trait." },
-      { front: "State Mendel's Law of Segregation.", back: "Each organism carries two alleles for a trait, and these separate during the formation of gametes." },
-      { front: "What is a dominant allele?", back: "An allele that expresses its trait even when only one copy is present." },
-      { front: "What is a phenotype?", back: "The observable physical or biochemical characteristics of an organism." },
-      { front: "What is a genotype?", back: "The genetic makeup of an organism for a given trait." },
-      { front: "What is a test cross used for?", back: "Crossing an organism with a homozygous recessive individual to determine its unknown genotype." },
-      { front: "What is incomplete dominance?", back: "A condition where neither allele is fully dominant, producing a blended phenotype in the offspring." }
-    ]
-  },
-  "thermodynamics": {
-    title: "Laws of Thermodynamics",
-    exam: "JEE",
-    cards: [
-      { front: "State the Zeroth Law of Thermodynamics.", back: "If two systems are each in thermal equilibrium with a third system, they are in thermal equilibrium with each other." },
-      { front: "State the First Law of Thermodynamics.", back: "Energy can neither be created nor destroyed: ΔU = Q − W." },
-      { front: "State the Second Law of Thermodynamics.", back: "The entropy of an isolated system never decreases over time." },
-      { front: "What is an isothermal process?", back: "A process that occurs at constant temperature." },
-      { front: "What is an adiabatic process?", back: "A process in which no heat is exchanged between the system and its surroundings." },
-      { front: "What is entropy?", back: "A measure of the disorder or randomness of a system." },
-      { front: "What is a reversible process?", back: "A process that can be reversed, returning both the system and surroundings to their original states." },
-      { front: "What is the efficiency of a Carnot engine?", back: "η = 1 − (T_cold / T_hot), the maximum possible efficiency between two temperatures." }
-    ]
-  },
-  "organic-reactions": {
-    title: "Organic Reaction Mechanisms",
-    exam: "JEE",
-    cards: [
-      { front: "What is an SN1 reaction?", back: "A nucleophilic substitution that proceeds through a carbocation intermediate; it follows first-order kinetics." },
-      { front: "What is an SN2 reaction?", back: "A nucleophilic substitution that occurs in a single concerted step via backside attack; it follows second-order kinetics." },
-      { front: "What is a nucleophile?", back: "An electron-rich species that donates an electron pair to form a new bond." },
-      { front: "What is an electrophile?", back: "An electron-deficient species that accepts an electron pair." },
-      { front: "State Markovnikov's rule.", back: "When HX adds to an alkene, the hydrogen attaches to the carbon that already has more hydrogen atoms." },
-      { front: "What is a carbocation?", back: "A positively charged carbon atom that has only three bonds." },
-      { front: "What is an elimination reaction?", back: "A reaction in which atoms or groups are removed from a molecule, forming a double or triple bond." },
-      { front: "How does an E1 reaction differ from an E2 reaction?", back: "E1 proceeds through a carbocation intermediate in two steps; E2 is a concerted, single-step elimination." }
-    ]
-  },
-  "banking-awareness": {
-    title: "Banking Awareness Basics",
-    exam: "Banking",
-    cards: [
-      { front: "What is the central bank of India?", back: "The Reserve Bank of India (RBI)." },
-      { front: "What is the repo rate?", back: "The rate at which the RBI lends money to commercial banks against government securities." },
-      { front: "What is NEFT?", back: "National Electronic Funds Transfer — an electronic system for transferring funds between bank accounts." },
-      { front: "What is CRR?", back: "Cash Reserve Ratio — the percentage of total deposits banks must hold as reserves with the RBI." },
-      { front: "What does NPA stand for?", back: "Non-Performing Asset — a loan or advance whose interest or principal payment is overdue." },
-      { front: "What is SLR?", back: "Statutory Liquidity Ratio — the minimum percentage of deposits a bank must maintain in liquid assets like cash, gold, or government securities." },
-      { front: "What does IFSC stand for?", back: "Indian Financial System Code — used to identify bank branches in electronic fund transfers." },
-      { front: "What is a fixed deposit?", back: "A financial instrument where a lump sum is deposited for a fixed period at a fixed interest rate." }
-    ]
-  },
-  "indian-polity": {
-    title: "Indian Polity Basics",
-    exam: "SSC",
-    cards: [
-      { front: "When did the Indian Constitution come into effect?", back: "26 January 1950." },
-      { front: "Who is known as the chief architect of the Indian Constitution?", back: "Dr. B. R. Ambedkar." },
-      { front: "How many fundamental rights does the Indian Constitution guarantee?", back: "Six fundamental rights." },
-      { front: "What is the minimum age to become Prime Minister of India?", back: "25 years, along with being a member of either house of Parliament." },
-      { front: "Who appoints the Chief Justice of India?", back: "The President of India." },
-      { front: "What is the term of office of the President of India?", back: "Five years." },
-      { front: "Which article of the Constitution guarantees the Right to Equality?", back: "Article 14." },
-      { front: "What are the Directive Principles of State Policy?", back: "Guidelines in Part IV of the Constitution directing the government to ensure social and economic welfare." }
-    ]
+// Data lives in dp.js as the global PRESET_DB array — this is the ONLY
+// source of truth for what shows up here. To add a new preset deck:
+//   1. Drop the new deck's HTML file in /decks
+//   2. Add one entry to PRESET_DB in dp.js pointing `file` at it
+// Nothing else needs to change.
+function renderPresetDecks(){
+  const container = document.getElementById("presetDeckGroups");
+  if (!container) return;
+
+  const groups = (typeof PRESET_DB !== "undefined" && Array.isArray(PRESET_DB)) ? PRESET_DB : [];
+
+  if (groups.length === 0) {
+    container.innerHTML = `<div class="pd-empty">No preset decks available yet. Check back soon.</div>`;
+    return;
   }
-};
 
-document.querySelectorAll(".pd-item").forEach(item => {
-  item.addEventListener("click", () => {
-    const presetKey = item.dataset.preset;
-    const presetDeck = PRESET_DECKS[presetKey];
-    if (!presetDeck) return;
+  container.innerHTML = groups.map(group => `
+    <div class="pd-group">
+      <div class="pd-group-title" style="color:${group.color || 'var(--muted-soft)'}">
+        ${group.icon || ""}<span>${group.label}</span>
+      </div>
+      <div class="pd-group-items">
+        ${group.topics.map(topic => `
+          <button class="pd-item" data-file="${topic.file}" data-title="${topic.title}">
+            <span class="pd-item-text">
+              <span class="pd-item-title">${topic.title}</span>
+              <span class="pd-item-meta">${topic.desc} · ${topic.cards} cards</span>
+            </span>
+            <svg class="pd-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+        `).join("")}
+      </div>
+    </div>
+  `).join("");
 
-    deck = presetDeck.cards;
-    order = deck.map((_, i) => i);
-    currentIndex = 0;
-
-    document.getElementById("deckTitle").textContent = presetDeck.title + " — " + presetDeck.exam;
-
-    buildDots();
-    renderCard();
-    document.getElementById("deckSection").classList.add("active");
-    document.getElementById("deckSection").scrollIntoView({ behavior: "smooth", block: "start" });
+  container.querySelectorAll(".pd-item").forEach(item => {
+    item.addEventListener("click", () => {
+      const file = item.dataset.file;
+      if (!file) return;
+      window.location.href = file;
+    });
   });
-});
+}
+renderPresetDecks();
 
 // ---------- PDF upload ----------
 const fileDrop = document.getElementById("fileDrop");

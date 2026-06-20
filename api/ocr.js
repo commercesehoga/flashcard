@@ -8,8 +8,8 @@
 // engine — works on Node serverless with no system binary required):
 //   https://github.com/naptha/tesseract.js
 //
-// Install before deploying:
-//   npm install tesseract.js
+// Dependency is declared in package.json ("tesseract.js") so Vercel installs
+// it automatically during the build — nothing to do manually.
 //
 // Note: plain Vercel serverless functions (this file's style) have a hard
 // ~4.5MB request body limit, so very large/uncompressed images may be
@@ -20,14 +20,20 @@
 // Response: 200 { text, confidence }
 //           4xx/5xx { error }
 
-const Tesseract = require("tesseract.js");
+const { createWorker } = require("tesseract.js");
 
 module.exports = async function handler(req, res) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  if (req.method === "OPTIONS") { res.status(200).end(); return; }
+
   if (req.method !== "POST") {
     res.status(405).json({ error: "Method not allowed. Use POST." });
     return;
   }
 
+  let worker;
   try {
     const { image, lang } = req.body || {};
 
@@ -41,10 +47,13 @@ module.exports = async function handler(req, res) {
       ? image
       : `data:image/png;base64,${image}`;
 
-    const { data } = await Tesseract.recognize(imageData, lang || "eng", {
-      logger: () => {} // silence per-tile progress logs in production
-    });
+    // createWorker downloads/caches the wasm core + language data on first
+    // run (cold start). Subsequent warm invocations on the same instance
+    // reuse Vercel's filesystem cache, so only the very first request after
+    // a deploy is slow.
+    worker = await createWorker(lang || "eng");
 
+    const { data } = await worker.recognize(imageData);
     const text = (data && data.text ? data.text : "").trim();
 
     if (!text) {
@@ -59,5 +68,9 @@ module.exports = async function handler(req, res) {
   } catch (err) {
     console.error("ocr error:", err);
     res.status(500).json({ error: "Could not process that image. Try a different file." });
+  } finally {
+    if (worker) {
+      try { await worker.terminate(); } catch (e) { /* ignore */ }
+    }
   }
 };

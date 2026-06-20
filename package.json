@@ -1,0 +1,12 @@
+{
+  "name": "thunderstudy-flashcards",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "tesseract.js": "^7.0.0",
+    "youtube-transcript-plus": "^2.0.0"
+  }
+}

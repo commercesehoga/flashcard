@@ -1,14 +1,28 @@
 // /api/youtube-transcript.js
 //
+// Fetches the caption transcript for a YouTube video, server-side, so the
+// client never talks to YouTube directly (avoids CORS and keeps this a
+// single fetch() call from the frontend).
 //
-// Install before deploying:
-//   npm install youtube-transcript
+// Uses youtube-transcript-plus (dependency declared in package.json — Vercel
+// installs it automatically on deploy). This is a maintained fork of the
+// older "youtube-transcript" package, which is widely reported to get
+// blocked by YouTube once deployed to any cloud platform (Vercel, Render,
+// DigitalOcean, etc.) because it sends no/blank User-Agent header from
+// server IPs. youtube-transcript-plus fixes that by letting us send a real
+// desktop-browser User-Agent, which is what actually avoids the block —
+// just installing a package is not enough on its own.
 //
 // Request:  POST { url: "https://www.youtube.com/watch?v=..." }
 // Response: 200 { videoId, transcript, segmentCount }
 //           4xx/5xx { error }
 
-const { YoutubeTranscript } = require("youtube-transcript");
+const { fetchTranscript } = require("youtube-transcript-plus");
+
+// A realistic, current desktop Chrome UA. YouTube is far less likely to
+// challenge/block requests that look like a normal browser.
+const BROWSER_UA =
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
 
 function extractVideoId(input) {
   if (!input || typeof input !== "string") return null;
@@ -37,6 +51,11 @@ function extractVideoId(input) {
 }
 
 module.exports = async function handler(req, res) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  if (req.method === "OPTIONS") { res.status(200).end(); return; }
+
   if (req.method !== "POST") {
     res.status(405).json({ error: "Method not allowed. Use POST." });
     return;
@@ -51,7 +70,14 @@ module.exports = async function handler(req, res) {
       return;
     }
 
-    const segments = await YoutubeTranscript.fetchTranscript(videoId);
+    const result = await fetchTranscript(videoId, {
+      userAgent: BROWSER_UA,
+      retries: 2,
+      retryDelay: 800
+    });
+
+    // youtube-transcript-plus returns { videoDetails, segments }
+    const segments = Array.isArray(result) ? result : result?.segments;
 
     if (!segments || segments.length === 0) {
       res.status(404).json({ error: "No captions/transcript found for that video." });
@@ -72,8 +98,10 @@ module.exports = async function handler(req, res) {
     });
   } catch (err) {
     console.error("youtube-transcript error:", err);
-    res.status(500).json({
-      error: "Could not fetch a transcript. The video may not have captions, or may be private/age-restricted/region-locked."
-    });
+    const msg = (err && err.message) || "";
+    let friendly = "Could not fetch a transcript. The video may not have captions, or may be private/age-restricted/region-locked.";
+    if (/disabled/i.test(msg)) friendly = "Captions/transcript are disabled for that video.";
+    if (/too many requests|rate.?limit/i.test(msg)) friendly = "YouTube is rate-limiting transcript requests right now. Try again shortly.";
+    res.status(500).json({ error: friendly });
   }
 };

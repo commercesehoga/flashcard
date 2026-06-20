@@ -1,0 +1,14 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "api/ocr.js": {
+      "maxDuration": 60
+    },
+    "api/youtube-transcript.js": {
+      "maxDuration": 30
+    },
+    "api/generate.js": {
+      "maxDuration": 30
+    }
+  }
+}
