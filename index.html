@@ -1260,7 +1260,24 @@ async function handlePdfFile(file){
       const content = await page.getTextContent();
       text += content.items.map(it => it.str).join(" ") + "\n";
     }
-    extractedPdfText = text.trim().slice(0, 4000);
+    const cleanText = text.trim();
+
+    // Heuristic check for scanned/image-based PDFs: pdf.js can only pull
+    // text that's actually embedded as text, not pixels in a scanned page.
+    // A very short extraction, or one that's mostly non-letter characters
+    // (garbled font/encoding artifacts), means there's nothing usable here —
+    // catch it now instead of burning a token on a doomed AI call.
+    const letterCount = (cleanText.match(/[a-zA-Z]/g) || []).length;
+    const looksUsable = cleanText.length >= 80 && (letterCount / cleanText.length) > 0.3;
+
+    if (!looksUsable) {
+      extractedPdfText = "";
+      fileNameEl.textContent = "";
+      showError("Couldn't find readable text in that PDF — it may be scanned or image-based. Try the Image (OCR) tab instead, or paste the topic directly.");
+      return;
+    }
+
+    extractedPdfText = cleanText.slice(0, 4000);
     fileNameEl.textContent = file.name + " — " + pdf.numPages + " page(s) read";
   } catch (err) {
     console.error(err);
