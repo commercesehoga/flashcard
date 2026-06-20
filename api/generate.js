@@ -87,6 +87,14 @@ export default async function handler(req, res) {
 
   const safeCount = Math.min(Math.max(parseInt(count, 10) || 10, 3), 25);
 
+  // Groq's free tier enforces a Tokens-Per-Minute (TPM) budget that covers
+  // BOTH the input prompt and the max_tokens reserved for the reply — a flat
+  // 4096 reservation wastes budget on small decks and pushes larger ones
+  // over the limit (returns a 413 "rate_limit_exceeded" from Groq, despite
+  // the misleading name). Scale the reservation to what this deck actually
+  // needs: ~130 tokens/card (front+back+JSON overhead) plus a small buffer.
+  const maxTokensForReply = Math.min(4096, safeCount * 140 + 300);
+
   // Consume token BEFORE the call
   consumeToken(ip);
 
@@ -105,7 +113,7 @@ Rules:
 Number of cards required: ${safeCount}
 Source content (topic, question, or extracted document text):
 """
-${String(sourceContent).slice(0, 18000)}
+${String(sourceContent).slice(0, 4000)}
 """`;
 
   try {
@@ -118,7 +126,7 @@ ${String(sourceContent).slice(0, 18000)}
       body: JSON.stringify({
         model: "llama-3.3-70b-versatile",
         temperature: 0.4,
-        max_tokens: 4096,
+        max_tokens: maxTokensForReply,
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user",   content: userPrompt   }
@@ -141,6 +149,12 @@ ${String(sourceContent).slice(0, 18000)}
       if (groqRes.status === 429) friendlyError = "AI service is busy right now. Please wait a moment and try again.";
       if (groqRes.status === 401) friendlyError = "API key is invalid or expired. Contact support.";
       if (groqRes.status === 503) friendlyError = "AI service is temporarily unavailable. Try again in a minute.";
+      if (groqRes.status === 413) {
+        // Groq returns 413 for its per-minute token (TPM) rate limit, not
+        // literal request byte size — the name is misleading. Surface the
+        // real reason so it's clear this is a content-length/rate issue.
+        friendlyError = "Your content is too long for the current AI rate limit. Try a shorter topic, fewer pages, or a shorter transcript excerpt.";
+      }
       if (groqRes.status === 400) {
         // Surface the real reason (e.g. model decommissioned, bad request shape)
         // instead of a generic message, so this is debuggable without digging
