@@ -116,9 +116,16 @@ ${String(sourceContent).slice(0, 18000)}
         "Authorization": "Bearer " + apiKey
       },
       body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
+        // llama-3.3-70b-versatile was deprecated by Groq (announced 2026-06-17).
+        // openai/gpt-oss-120b is Groq's recommended replacement: 131K context,
+        // JSON mode support, similar quality/speed for this kind of structured
+        // extraction task. reasoning_effort "low" keeps it fast and avoids
+        // burning the completion-token budget on hidden reasoning steps that
+        // a straightforward flashcard-extraction task doesn't need.
+        model: "openai/gpt-oss-120b",
         temperature: 0.4,
-        max_tokens: 4096,
+        max_completion_tokens: 4096,
+        reasoning_effort: "low",
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user",   content: userPrompt   }
@@ -141,6 +148,14 @@ ${String(sourceContent).slice(0, 18000)}
       if (groqRes.status === 429) friendlyError = "AI service is busy right now. Please wait a moment and try again.";
       if (groqRes.status === 401) friendlyError = "API key is invalid or expired. Contact support.";
       if (groqRes.status === 503) friendlyError = "AI service is temporarily unavailable. Try again in a minute.";
+      if (groqRes.status === 400) {
+        // Surface the real reason (e.g. model decommissioned, bad request shape)
+        // instead of a generic message, so this is debuggable without digging
+        // through Vercel function logs.
+        let detail = "";
+        try { detail = JSON.parse(errText)?.error?.message || ""; } catch (e) { /* not JSON */ }
+        friendlyError = detail ? `Generation failed: ${detail}` : "Generation failed — the request was rejected by the AI service. Please try again.";
+      }
 
       res.status(groqRes.status).json({ error: friendlyError, refunded: true });
       return;
