@@ -93,7 +93,7 @@ export default async function handler(req, res) {
   // over the limit (returns a 413 "rate_limit_exceeded" from Groq, despite
   // the misleading name). Scale the reservation to what this deck actually
   // needs: ~130 tokens/card (front+back+JSON overhead) plus a small buffer.
-  const maxTokensForReply = Math.min(4096, safeCount * 140 + 300);
+  const maxTokensForReply = Math.min(3200, safeCount * 120 + 200);
 
   // Consume token BEFORE the call
   consumeToken(ip);
@@ -114,7 +114,7 @@ Rules:
 Number of cards required: ${safeCount}
 Source content (topic, question, or extracted document text):
 """
-${String(sourceContent).slice(0, 4000)}
+${String(sourceContent).slice(0, 3000)}
 """`;
 
   try {
@@ -125,9 +125,10 @@ ${String(sourceContent).slice(0, 4000)}
         "Authorization": "Bearer " + apiKey
       },
       body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
-        temperature: 0.4,
-        max_tokens: maxTokensForReply,
+        model: "qwen/qwen3.6-27b",
+        temperature: 0.7,
+        reasoning_effort: "none",
+        max_completion_tokens: maxTokensForReply,
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user",   content: userPrompt   }
