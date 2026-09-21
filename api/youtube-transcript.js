@@ -15,10 +15,13 @@
 //   1. youtube-transcript.ai   — free hosted transcript service, no key
 //   2. youtube-transcriber-api — community Vercel-hosted wrapper (Python/jdepoix)
 //   3. youtube-transcript-api-tau-one — community Vercel-hosted wrapper
-//   4. youtube-transcript-plus (npm) — direct-to-YouTube fallback of last resort
+//   4. youtube-transcript-plus (npm) — direct-to-YouTube
 //
-// Sources 2-3 are community-run projects and can occasionally go down or
-// change shape; that's fine here since they're fallbacks, not the only path.
+// All four are raced IN PARALLEL and the first one to return a usable
+// transcript wins (the losers are aborted). Every source has a hard timeout,
+// so one hung/dead service can never eat the whole 30s function budget and
+// turn into a Vercel HTML 504 (which the browser can't parse as JSON).
+// Sources 2-3 are community-run projects and can go down or change shape.
 //
 // Request:  POST { url: "https://www.youtube.com/watch?v=..." }
 // Response: 200 { videoId, transcript, segmentCount? }
@@ -52,17 +55,32 @@ function extractVideoId(input) {
 
 const UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
 
+// Per-source deadline, tied to a shared "winner found" controller so that the
+// moment one source succeeds every other in-flight request is cancelled and
+// its timer cleared.
+function makeSignal(ms, parent) {
+  const c = new AbortController();
+  const t = setTimeout(() => c.abort(new Error(`timed out after ${ms}ms`)), ms);
+  c.signal.addEventListener("abort", () => clearTimeout(t), { once: true });
+  if (parent) {
+    if (parent.aborted) c.abort(parent.reason);
+    else parent.addEventListener("abort", () => c.abort(parent.reason), { once: true });
+  }
+  return c.signal;
+}
+
 // ── Source 1: youtube-transcript.ai ────────────────────────────────────────
 // Returns Markdown: a YAML front-matter block, then "[m:ss] line" transcript.
-async function tryYoutubeTranscriptAi(videoId) {
+async function tryYoutubeTranscriptAi(videoId, parent) {
   const res = await fetch(`https://youtube-transcript.ai/transcript/${encodeURIComponent(videoId)}.txt`, {
-    headers: { "User-Agent": "ThunderStudyFlashcards/1.0 (transcript-fetch)", "Accept": "text/plain, text/markdown, */*" }
+    headers: { "User-Agent": "ThunderStudyFlashcards/1.0 (transcript-fetch)", "Accept": "text/plain, text/markdown, */*" },
+    signal: makeSignal(10000, parent)
   });
   if (!res.ok) throw new Error(`youtube-transcript.ai status ${res.status}`);
 
   let text = await res.text();
-  text = text.replace(/^---[\s\S]*?---\s*/m, "");       // strip YAML front-matter
-  text = text.replace(/\[\d+:\d+\]/g, "");                // strip [m:ss] timestamps
+  text = text.replace(/^\s*---\s*\n[\s\S]*?\n---\s*/, "");   // strip YAML front-matter (only at the very top)
+  text = text.replace(/\[(?:\d+:)?\d+:\d+\]/g, "");        // strip [m:ss] AND [h:mm:ss] timestamps (long videos)
   text = text.replace(/\n{3,}/g, "\n\n").trim();
 
   if (text.length < 50) throw new Error("youtube-transcript.ai returned empty/short text");
@@ -70,9 +88,10 @@ async function tryYoutubeTranscriptAi(videoId) {
 }
 
 // ── Source 2: youtube-transcriber-api.vercel.app (community, Python/jdepoix) ──
-async function tryMongjFallback(videoId) {
+async function tryMongjFallback(videoId, parent) {
   const res = await fetch(`https://youtube-transcriber-api.vercel.app/v1/transcripts?id=${encodeURIComponent(videoId)}&type=text&lang=en`, {
-    headers: { "User-Agent": "ThunderStudyFlashcards/1.0" }
+    headers: { "User-Agent": "ThunderStudyFlashcards/1.0" },
+    signal: makeSignal(10000, parent)
   });
   if (!res.ok) throw new Error(`mongj fallback status ${res.status}`);
 
@@ -84,11 +103,12 @@ async function tryMongjFallback(videoId) {
 }
 
 // ── Source 3: youtube-transcript-api-tau-one.vercel.app (community) ────────
-async function tryJaypaunFallback(videoId) {
+async function tryJaypaunFallback(videoId, parent) {
   const res = await fetch("https://youtube-transcript-api-tau-one.vercel.app/transcript", {
     method: "POST",
     headers: { "Content-Type": "application/json", "User-Agent": "ThunderStudyFlashcards/1.0" },
-    body: JSON.stringify({ video_url: `https://www.youtube.com/watch?v=${videoId}` })
+    body: JSON.stringify({ video_url: `https://www.youtube.com/watch?v=${videoId}` }),
+    signal: makeSignal(10000, parent)
   });
   if (!res.ok) throw new Error(`jaypaun fallback status ${res.status}`);
 
@@ -99,17 +119,40 @@ async function tryJaypaunFallback(videoId) {
 }
 
 // ── Source 4: youtube-transcript-plus (npm, direct to YouTube) ─────────────
-// Last resort — talks to YouTube directly with a real browser User-Agent.
-// Most likely to get blocked on a cloud IP, but costs nothing to try.
-async function tryYoutubeTranscriptPlus(videoId) {
+// Talks to YouTube directly with a real browser User-Agent. Needs no third
+// party to be alive, but can get blocked on a cloud IP — hence the race.
+// Keeps the library's typed errors (Disabled / Unavailable / TooManyRequest)
+// so the handler can tell the user the real reason.
+async function tryYoutubeTranscriptPlus(videoId, parent) {
   const { fetchTranscript } = require("youtube-transcript-plus");
-  const result = await fetchTranscript(videoId, { userAgent: UA, retries: 1, retryDelay: 500 });
+  const result = await fetchTranscript(videoId, {
+    userAgent: UA,
+    retries: 1,
+    retryDelay: 500,
+    signal: makeSignal(15000, parent)
+  });
   const segments = Array.isArray(result) ? result : result?.segments;
   if (!segments || segments.length === 0) throw new Error("youtube-transcript-plus returned no segments");
 
   const text = segments.map(s => s.text).join(" ").replace(/\s+/g, " ").trim();
   if (text.length < 50) throw new Error("youtube-transcript-plus returned empty/short text");
-  return { text, segmentCount: segments.length };
+  return text;
+}
+
+// Turn the direct-to-YouTube library's typed error into a specific message.
+// Returns null when the error is generic (network, timeout, parse, …).
+function friendlyYoutubeError(err) {
+  switch (err && err.name) {
+    case "YoutubeTranscriptDisabledError":
+    case "YoutubeTranscriptNotAvailableError":
+      return "No captions could be found for this video. It may not have subtitles, or YouTube blocked the request — you can paste the transcript into the box below instead.";
+    case "YoutubeTranscriptVideoUnavailableError":
+      return "That video is unavailable (private, removed, or region/age-restricted).";
+    case "YoutubeTranscriptTooManyRequestError":
+      return "YouTube is rate-limiting the server right now. Wait a minute and try again, or paste the transcript into the box below.";
+    default:
+      return null;
+  }
 }
 
 module.exports = async function handler(req, res) {
@@ -132,32 +175,45 @@ module.exports = async function handler(req, res) {
   }
 
   const sources = [
-    { name: "youtube-transcript.ai", run: tryYoutubeTranscriptAi },
-    { name: "youtube-transcriber-api", run: tryMongjFallback },
+    { name: "youtube-transcript.ai",          run: tryYoutubeTranscriptAi },
+    { name: "youtube-transcriber-api",        run: tryMongjFallback },
     { name: "youtube-transcript-api-tau-one", run: tryJaypaunFallback },
+    { name: "youtube-transcript-plus",        run: tryYoutubeTranscriptPlus },
   ];
 
-  for (const source of sources) {
-    try {
-      const text = await source.run(videoId);
-      const transcript = text.slice(0, 20000);
-      res.status(200).json({ videoId, transcript });
-      return;
-    } catch (err) {
-      console.warn(`[youtube-transcript] ${source.name} failed:`, err.message);
-    }
-  }
-
-  // Last resort: direct-to-YouTube npm package
+  // Race all sources; first usable transcript wins, then the rest are aborted.
+  const winner = new AbortController();
+  const failures = [];
+  let result = null;
   try {
-    const { text, segmentCount } = await tryYoutubeTranscriptPlus(videoId);
-    res.status(200).json({ videoId, transcript: text.slice(0, 20000), segmentCount });
-    return;
-  } catch (err) {
-    console.warn("[youtube-transcript] youtube-transcript-plus failed:", err.message);
+    result = await Promise.any(sources.map(async (source) => {
+      try {
+        const text = await source.run(videoId, winner.signal);
+        return { name: source.name, text };
+      } catch (err) {
+        if (!winner.signal.aborted) {   // don't log the losers we cancelled ourselves
+          console.warn(`[youtube-transcript] ${source.name} failed:`, err && err.message);
+          failures.push({ name: source.name, err });
+        }
+        throw err;
+      }
+    }));
+  } catch (aggregate) {
+    // every source failed — handled below
+  } finally {
+    winner.abort(); // cancel losers + clear their timers
   }
 
+  if (result) {
+    console.log(`[youtube-transcript] ${result.name} succeeded for ${videoId}`);
+    res.status(200).json({ videoId, transcript: result.text.slice(0, 20000), source: result.name });
+    return;
+  }
+
+  // Prefer the specific reason from the direct-to-YouTube library when it has one.
+  const direct = failures.find(f => f.name === "youtube-transcript-plus");
+  const specific = direct && friendlyYoutubeError(direct.err);
   res.status(502).json({
-    error: "Could not fetch a transcript. The video may not have captions, or may be private/age-restricted/region-locked."
+    error: specific || "Could not fetch a transcript. The video may not have captions, or may be private/age-restricted/region-locked — you can paste the transcript into the box below instead."
   });
 };
