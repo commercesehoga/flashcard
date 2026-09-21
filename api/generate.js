@@ -8,6 +8,19 @@ const WEEK_MS = 7  * DAY_MS;
 const DAILY_LIMIT  = 5;
 const WEEKLY_LIMIT = 20;
 
+// Ordered fallback chain — tried top to bottom. If Groq closes/decommissions a model,
+// or one is rate-limited / erroring, the next one is used automatically.
+// gpt-oss models are reasoning models: max_completion_tokens also has to cover their
+// thinking, so they get +800 headroom and reasoning_effort "low". Llama models reject
+// reasoning_effort, so extras are per-model.
+const GROQ_MODELS = [
+  { id: "openai/gpt-oss-120b",     extraTokens: 800, extra: { reasoning_effort: "low" } },
+  { id: "openai/gpt-oss-20b",      extraTokens: 800, extra: { reasoning_effort: "low" } },
+  { id: "llama-3.3-70b-versatile", extraTokens: 0,   extra: {} }, // being closed by Groq — last-resort only
+  { id: "llama-3.1-8b-instant",    extraTokens: 0,   extra: {} }
+];
+const deadModels = new Set(); // models Groq reported as gone; skipped for the life of this warm instance
+
 // In-memory store (resets on cold start — for persistent limits use Vercel KV)
 const ipStore = new Map();
 
@@ -118,27 +131,58 @@ ${String(sourceContent).slice(0, 3000)}
 """`;
 
   try {
-    const groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + apiKey
-      },
-      body: JSON.stringify({
-        model: "qwen/qwen3.6-27b",
-        temperature: 0.7,
-        reasoning_effort: "none",
-        max_completion_tokens: maxTokensForReply,
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user",   content: userPrompt   }
-        ],
-        response_format: { type: "json_object" }
-      }),
-      // Streaming note: Groq supports SSE streaming; to add it, set stream:true
-      // and pipe groqRes.body directly to res with Transfer-Encoding: chunked.
-      // Keeping JSON mode for now for reliable structured output.
-    });
+    // Walk the model chain. `groqRes` ends up as the first OK response, or the last
+    // failed one (which the error handling below turns into a friendly message).
+    let groqRes = null;
+    let lastNetworkErr = null;
+    for (const model of GROQ_MODELS) {
+      if (deadModels.has(model.id)) continue;
+
+      try {
+        groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + apiKey
+          },
+          signal: AbortSignal.timeout(12000),
+          body: JSON.stringify({
+            model: model.id,
+            temperature: 0.7,
+            max_completion_tokens: maxTokensForReply + model.extraTokens,
+            messages: [
+              { role: "system", content: systemPrompt },
+              { role: "user",   content: userPrompt   }
+            ],
+            response_format: { type: "json_object" },
+            ...model.extra
+          })
+          // Streaming note: Groq supports SSE streaming; to add it, set stream:true
+          // and pipe groqRes.body directly to res with Transfer-Encoding: chunked.
+          // Keeping JSON mode for now for reliable structured output.
+        });
+      } catch (netErr) {
+        console.warn(`Groq network error/timeout on ${model.id}, trying next model:`, netErr.message);
+        lastNetworkErr = netErr;
+        groqRes = null;
+        continue;
+      }
+
+      if (groqRes.ok) break;
+
+      // A bad/forbidden key fails identically on every model — don't burn the chain.
+      if (groqRes.status === 401 || groqRes.status === 403) break;
+
+      // Model closed / decommissioned → never try it again on this instance.
+      const peek = await groqRes.clone().text();
+      console.error(`Groq error on ${model.id}:`, groqRes.status, peek);
+      if (groqRes.status === 404 || /decommission|deprecat|does not exist|not found/i.test(peek)) {
+        deadModels.add(model.id);
+      }
+      // Anything else (429, 413 TPM, 5xx, json_validate_failed 400) → next model.
+      // Each model has its own rate-limit bucket, so falling through often just works.
+    }
+    if (!groqRes) throw lastNetworkErr || new Error("No Groq model available");
 
     if (!groqRes.ok) {
       const errText = await groqRes.text();
