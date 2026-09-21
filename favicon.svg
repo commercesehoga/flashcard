@@ -1,0 +1,159 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+
+  <defs>
+
+    <!-- Background -->
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="50%" stop-color="#F0F9FF"/>
+      <stop offset="100%" stop-color="#D6F0FF"/>
+    </linearGradient>
+
+    <!-- Main Blue -->
+    <linearGradient id="mainBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="100%" stop-color="#2563EB"/>
+    </linearGradient>
+
+    <!-- Gold -->
+    <linearGradient id="gold" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFF5B8"/>
+      <stop offset="45%" stop-color="#FFD54A"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+
+    <!-- Card -->
+    <linearGradient id="glass" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.7"/>
+    </linearGradient>
+
+    <!-- Glow -->
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#7DD3FC" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#7DD3FC" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Shadow -->
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="25" stdDeviation="30"
+        flood-color="#2563EB"
+        flood-opacity="0.18"/>
+    </filter>
+
+    <!-- Bolt Glow -->
+    <filter id="boltGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="14" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+  </defs>
+
+  <!-- Background -->
+  <rect width="1024" height="1024" rx="240" fill="url(#bg)"/>
+
+  <!-- Glow -->
+  <circle cx="512" cy="512" r="350" fill="url(#glow)"/>
+
+  <!-- Main Rounded Card -->
+  <rect x="170"
+        y="170"
+        width="684"
+        height="684"
+        rx="170"
+        fill="url(#glass)"
+        filter="url(#shadow)"/>
+
+  <!-- Outer Stroke -->
+  <rect x="170"
+        y="170"
+        width="684"
+        height="684"
+        rx="170"
+        fill="none"
+        stroke="#D7EEFF"
+        stroke-width="4"/>
+
+  <!-- Corner Accent Arcs -->
+  <path d="M250 330
+           A180 180 0 0 1 430 250"
+        fill="none"
+        stroke="url(#mainBlue)"
+        stroke-width="14"
+        stroke-linecap="round"/>
+
+  <path d="M774 694
+           A180 180 0 0 1 594 774"
+        fill="none"
+        stroke="url(#mainBlue)"
+        stroke-width="14"
+        stroke-linecap="round"
+        opacity="0.8"/>
+
+  <!-- Orbit Ring -->
+  <circle cx="512"
+          cy="512"
+          r="220"
+          fill="none"
+          stroke="#C8EBFF"
+          stroke-width="5"
+          stroke-dasharray="12 18"/>
+
+  <!-- Core Circle -->
+  <circle cx="512"
+          cy="512"
+          r="175"
+          fill="#FFFFFF"
+          filter="url(#shadow)"/>
+
+  <!-- Blue Halo -->
+  <circle cx="512"
+          cy="512"
+          r="150"
+          fill="none"
+          stroke="#BAE6FD"
+          stroke-width="5"/>
+
+  <!-- Thunder Bolt -->
+  <path
+    d="M560 215
+       L375 535
+       H490
+       L438 808
+       L648 475
+       H535
+       L560 215Z"
+    fill="url(#gold)"
+    stroke="#FFF4B5"
+    stroke-width="5"
+    stroke-linejoin="round"
+    filter="url(#boltGlow)"/>
+
+  <!-- Bolt Highlight -->
+  <path
+    d="M545 265
+       L425 505
+       H505
+       L475 675
+       L595 455
+       H525
+       L545 265Z"
+    fill="#FFFFFF"
+    opacity="0.35"/>
+
+  <!-- Floating Dots -->
+  <circle cx="305" cy="305" r="10" fill="#38BDF8"/>
+  <circle cx="719" cy="719" r="10" fill="#38BDF8"/>
+
+  <circle cx="719" cy="305" r="8" fill="#BAE6FD"/>
+  <circle cx="305" cy="719" r="8" fill="#BAE6FD"/>
+
+  <!-- Tiny Stars -->
+  <circle cx="820" cy="200" r="5" fill="#FFFFFF"/>
+  <circle cx="180" cy="760" r="4" fill="#FFFFFF"/>
+  <circle cx="870" cy="540" r="4" fill="#FFFFFF"/>
+
+</svg>
