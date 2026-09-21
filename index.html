@@ -823,7 +823,7 @@ footer{background:var(--canvas-parchment); padding:56px 24px 32px; color:var(--m
       <p class="field-hint" id="ytStatus">Paste a YouTube URL and tap Fetch to grab the transcript.</p>
       <div id="ytPreviewWrap" style="display:none; margin-top:12px;">
         <label class="field-label" for="ytPreviewText">Transcript (editable)</label>
-        <textarea id="ytPreviewText" style="min-height:140px;"></textarea>
+        <textarea id="ytPreviewText" style="min-height:140px;" placeholder="Transcript appears here after Fetch — or paste one manually."></textarea>
       </div>
     </div>
 
@@ -1226,6 +1226,53 @@ function renderPresetDecks(){
 }
 renderPresetDecks();
 
+// ---------- Source-text helpers (shared by PDF + YouTube) ----------
+// /api/generate only reads ~3000 characters. Instead of sending just the FIRST 3000
+// (title page / preface for a PDF, the intro minutes for a video), take evenly-spaced
+// chunks from across the whole text so the flashcards cover the entire document.
+const SOURCE_CHAR_LIMIT = 3000;
+const PDF_TEXT_CAP = 40000;   // how much PDF text we keep in memory before sampling
+
+function sampleText(text, limit = SOURCE_CHAR_LIMIT){
+  text = (text || "").replace(/\s+/g, " ").trim();
+  if (text.length <= limit) return text;
+  const chunks = 8, gap = " … ";
+  const size = Math.floor((limit - gap.length * (chunks - 1)) / chunks);
+  const step = (text.length - size) / (chunks - 1);
+  const parts = [];
+  for (let i = 0; i < chunks; i++) {
+    let start = Math.round(i * step);
+    if (start > 0) {                      // begin on a word boundary, not mid-word
+      const sp = text.indexOf(" ", start);
+      if (sp !== -1 && sp - start < 40) start = sp + 1;
+    }
+    parts.push(text.slice(start, start + size).trim());
+  }
+  return parts.join(gap);
+}
+
+// If the cdnjs copy of pdf.js was blocked/failed, load it from jsDelivr instead.
+function loadScript(src){
+  return new Promise((resolve, reject) => {
+    const el = document.createElement("script");
+    el.src = src;
+    el.onload = resolve;
+    el.onerror = () => reject(new Error("Failed to load " + src));
+    document.head.appendChild(el);
+  });
+}
+async function ensurePdfJs(){
+  if (window.pdfjsLib) return true;
+  try {
+    await loadScript("https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js");
+    if (window.pdfjsLib) {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js";
+      return true;
+    }
+  } catch (e) { console.error(e); }
+  return false;
+}
+
 // ---------- PDF upload ----------
 const fileDrop = document.getElementById("fileDrop");
 const pdfInput = document.getElementById("pdfInput");
@@ -1245,44 +1292,66 @@ pdfInput.addEventListener("change", () => {
 });
 
 async function handlePdfFile(file){
-  if (file.type !== "application/pdf") {
+  // Some browsers/OS combos (drag-drop, Android, Windows) hand over an empty MIME
+  // type for real PDFs, so fall back to the file extension.
+  const isPdf = file.type === "application/pdf" || /\.pdf$/i.test(file.name || "");
+  if (!isPdf) {
     showError("Please upload a valid PDF file.");
     return;
   }
+
+  extractedPdfText = "";   // never keep the previous file's text if this one fails
+  clearError();
   fileNameEl.textContent = "Reading " + file.name + "...";
+  let pdf = null;
   try {
+    if (!(await ensurePdfJs())) {
+      showError("The PDF reader couldn't load (check your internet connection or ad-blocker), then refresh and try again.");
+      fileNameEl.textContent = "";
+      return;
+    }
     const buf = await file.arrayBuffer();
-    const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
-    let text = "";
+    pdf = await pdfjsLib.getDocument({ data: buf }).promise;
     const maxPages = Math.min(pdf.numPages, 30);
-    for (let i = 1; i <= maxPages; i++) {
+    let text = "";
+    let pagesRead = 0;
+    for (let i = 1; i <= maxPages && text.length < PDF_TEXT_CAP; i++) {
       const page = await pdf.getPage(i);
       const content = await page.getTextContent();
       text += content.items.map(it => it.str).join(" ") + "\n";
+      page.cleanup();
+      pagesRead++;
     }
-    const cleanText = text.trim();
+    const cleanText = text.replace(/[ \t]+/g, " ").trim();
 
     // Heuristic check for scanned/image-based PDFs: pdf.js can only pull
     // text that's actually embedded as text, not pixels in a scanned page.
     // A very short extraction, or one that's mostly non-letter characters
     // (garbled font/encoding artifacts), means there's nothing usable here —
     // catch it now instead of burning a token on a doomed AI call.
-    const letterCount = (cleanText.match(/[a-zA-Z]/g) || []).length;
+    // \p{L} = letters in ANY script, so Hindi/Devanagari PDFs pass too
+    // (the old [a-zA-Z] check rejected them as "unreadable").
+    const letterCount = (cleanText.match(/\p{L}/gu) || []).length;
     const looksUsable = cleanText.length >= 80 && (letterCount / cleanText.length) > 0.3;
 
     if (!looksUsable) {
-      extractedPdfText = "";
       fileNameEl.textContent = "";
       showError("Couldn't find readable text in that PDF — it may be scanned or image-based. Try the Image (OCR) tab instead, or paste the topic directly.");
       return;
     }
 
-    extractedPdfText = cleanText.slice(0, 4000);
-    fileNameEl.textContent = file.name + " — " + pdf.numPages + " page(s) read";
+    extractedPdfText = cleanText.slice(0, PDF_TEXT_CAP);
+    fileNameEl.textContent = file.name + " — " + pagesRead + (pagesRead < pdf.numPages ? " of " + pdf.numPages : "") + " page(s) read";
   } catch (err) {
     console.error(err);
-    showError("Could not read that PDF. Try a different file.");
+    let msg = "Could not read that PDF. Try a different file.";
+    if (err && err.name === "PasswordException") msg = "That PDF is password-protected. Remove the password and try again.";
+    else if (err && err.name === "InvalidPDFException") msg = "That file doesn't look like a valid PDF.";
+    showError(msg);
     fileNameEl.textContent = "";
+  } finally {
+    if (pdf) { try { pdf.destroy(); } catch (e) { /* ignore */ } }
+    pdfInput.value = "";   // so picking the same file again still fires "change"
   }
 }
 
@@ -1389,21 +1458,31 @@ ytFetchBtn.addEventListener("click", async () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ url: rawUrl })
     });
-    const data = await res.json();
+    // A platform timeout/crash returns an HTML error page, not JSON — don't let
+    // that surface as a misleading "network error".
+    let data = {};
+    try { data = await res.json(); } catch (e) { /* non-JSON body */ }
 
     if (!res.ok || !data.transcript) {
-      ytStatus.textContent = data.error || "Could not fetch a transcript for this video — it may not have captions, or be private/restricted.";
+      ytStatus.textContent = data.error ||
+        (res.status === 504 || res.status === 408
+          ? "The transcript service timed out. Try again, or paste the transcript into the box below."
+          : "Could not fetch a transcript for this video — you can paste it into the box below instead.");
       ytStatus.classList.add("warn");
+      // Never a dead end: reveal the editable box so the transcript can be pasted by hand.
+      ytPreviewWrap.style.display = "block";
       return;
     }
 
-    const text = data.transcript.slice(0, 4000);
-    ytPreviewText.value = text;
+    const full = data.transcript.trim();
+    ytPreviewText.value = full;   // keep the FULL transcript visible/editable; it's sampled at Generate time
     ytPreviewWrap.style.display = "block";
-    ytStatus.textContent = `Transcript fetched (${text.length} characters). Review below, then tap Generate.`;
+    ytStatus.textContent = full.length > SOURCE_CHAR_LIMIT
+      ? `Transcript fetched (${full.length} characters). A ~${SOURCE_CHAR_LIMIT}-character sample spread across the whole video will be used. Review below, then tap Generate.`
+      : `Transcript fetched (${full.length} characters). Review below, then tap Generate.`;
   } catch (err) {
     console.error(err);
-    ytStatus.textContent = "Network error fetching the transcript. Check the link and try again.";
+    ytStatus.textContent = "Network error fetching the transcript. Check your connection and try again.";
     ytStatus.classList.add("warn");
   } finally {
     ytFetchBtn.disabled = false;
@@ -1453,7 +1532,7 @@ async function generateFlashcards(){
 
   if (activeTab === "pdf") {
     if (!extractedPdfText) { showError("Please upload a PDF first."); return; }
-    sourceContent = extractedPdfText;
+    sourceContent = sampleText(extractedPdfText);
 
   } else if (activeTab === "ocr") {
     if (!extractedOcrText) { showError("Please upload an image first."); return; }
@@ -1461,8 +1540,8 @@ async function generateFlashcards(){
 
   } else if (activeTab === "youtube") {
     const ytText = document.getElementById("ytPreviewText").value.trim();
-    if (!ytText) { showError("Please fetch a transcript first using the Fetch button above."); return; }
-    sourceContent = ytText;
+    if (!ytText) { showError("Please fetch a transcript first using the Fetch button above (or paste one into the box)."); return; }
+    sourceContent = sampleText(ytText);
 
   } else {
     if (!topic) { showError("Please enter a topic or question first."); return; }
