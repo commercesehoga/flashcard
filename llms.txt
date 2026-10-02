@@ -1,17 +1,19 @@
-# ThunderStudy
+# ThunderStudy AI
 
-ThunderStudy is a free educational flashcard tool for students, run by Wondermayank. It turns topics, notes, PDFs, images, and YouTube captions into focused revision cards.
+ThunderStudy AI is a free browser-based flashcard maker for students. Wondermayank builds and maintains it so students can turn topics, notes, PDFs, images and YouTube transcripts into revision decks.
 
 ## Main pages
 
-- [Home](https://flashcard.thunderstudy.indevs.in/) — Create flashcards from a topic or question.
-- [PDF flashcards](https://flashcard.thunderstudy.indevs.in/pdf.html) — Extract study material from PDF files.
-- [Image flashcards](https://flashcard.thunderstudy.indevs.in/img.html) — Read text from images with browser OCR.
-- [YouTube flashcards](https://flashcard.thunderstudy.indevs.in/youtube.html) — Use a YouTube transcript as study material.
-- [Preset decks](https://flashcard.thunderstudy.indevs.in/dack.html) — Browse exam-focused starter decks.
-- [Saved decks](https://flashcard.thunderstudy.indevs.in/save.html) — Open and back up locally saved decks.
-- [About](https://flashcard.thunderstudy.indevs.in/about.html) — Learn who runs the project and why.
-- [FAQ](https://flashcard.thunderstudy.indevs.in/faq.html) — Read common questions and answers.
-- [Changelog](https://flashcard.thunderstudy.indevs.in/new.html) — See recent additions and fixes.
+- [Flashcard maker](https://flashcard.thunderstudy.indevs.in/) — Create AI flashcards from topics, questions, notes and source files.
+- [Text flashcards](https://flashcard.thunderstudy.indevs.in/home.html) — Start a deck from a topic, question or pasted study text.
+- [Preset decks](https://flashcard.thunderstudy.indevs.in/dack.html) — Browse and generate focused study decks.
+- [Image to flashcards](https://flashcard.thunderstudy.indevs.in/img.html) — Extract text from images and scans with browser OCR.
+- [PDF to flashcards](https://flashcard.thunderstudy.indevs.in/pdf.html) — Turn PDF notes and textbook material into cards.
+- [YouTube to flashcards](https://flashcard.thunderstudy.indevs.in/youtube.html) — Create cards from supported video transcripts.
+- [CUET Commerce deck](https://flashcard.thunderstudy.indevs.in/decks/cuet-bs-ch1.html) — Review a Commerce management deck.
+- [CBSE Business Studies deck](https://flashcard.thunderstudy.indevs.in/decks/cuet-bs-ch2.html) — Review Class 12 Business Studies cards.
+- [About ThunderStudy AI](https://flashcard.thunderstudy.indevs.in/about.html) — Learn about Wondermayank and the project mission.
+- [FAQ](https://flashcard.thunderstudy.indevs.in/faq.html) — Find answers about creating, importing, exporting and saving decks.
+- [Changelog](https://flashcard.thunderstudy.indevs.in/new.html) — Read the latest product and publishing updates.
 
 Contact: contact@wondermayank.indevs.in
