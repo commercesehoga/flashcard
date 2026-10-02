@@ -1,0 +1,4 @@
+/index.html /
+/about-us /about.html
+# /old-path /new-path 301
+# /legacy-tool /index.html 301

@@ -1,0 +1,17 @@
+# ThunderStudy
+
+ThunderStudy is a free educational flashcard tool for students, run by Wondermayank. It turns topics, notes, PDFs, images, and YouTube captions into focused revision cards.
+
+## Main pages
+
+- [Home](https://flashcard.thunderstudy.indevs.in/) — Create flashcards from a topic or question.
+- [PDF flashcards](https://flashcard.thunderstudy.indevs.in/pdf.html) — Extract study material from PDF files.
+- [Image flashcards](https://flashcard.thunderstudy.indevs.in/img.html) — Read text from images with browser OCR.
+- [YouTube flashcards](https://flashcard.thunderstudy.indevs.in/youtube.html) — Use a YouTube transcript as study material.
+- [Preset decks](https://flashcard.thunderstudy.indevs.in/dack.html) — Browse exam-focused starter decks.
+- [Saved decks](https://flashcard.thunderstudy.indevs.in/save.html) — Open and back up locally saved decks.
+- [About](https://flashcard.thunderstudy.indevs.in/about.html) — Learn who runs the project and why.
+- [FAQ](https://flashcard.thunderstudy.indevs.in/faq.html) — Read common questions and answers.
+- [Changelog](https://flashcard.thunderstudy.indevs.in/new.html) — See recent additions and fixes.
+
+Contact: contact@wondermayank.indevs.in

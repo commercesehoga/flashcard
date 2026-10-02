@@ -1,0 +1,38 @@
+# ThunderStudy — full site guide
+
+ThunderStudy is a free educational project run by Wondermayank, a solo student developer building free educational tools since 2018. The site is hosted on Cloudflare Pages and is designed for students who want quick, focused revision without a complicated setup.
+
+## What the site does
+
+ThunderStudy generates question-and-answer flashcards from a topic, question, pasted notes, a PDF, an image, or a public YouTube video with captions. Generated decks can be studied in the browser, shuffled, graded as known or needing review, saved locally, exported, printed, or moved between devices with a backup file.
+
+## Input tools
+
+- Home/topic input: enter a subject, question, or notes and choose an optional exam context.
+- PDF input: extract readable PDF text and turn it into study cards.
+- Image input: run OCR in the browser with Tesseract WASM. Clear, well-lit images work best.
+- YouTube input: fetch available captions or paste a transcript manually when captions cannot be retrieved.
+- Preset decks: start from exam-oriented decks for CUET, Class 12 CBSE, NEET, JEE, SSC, Banking, NTA/UGC NET, and related subjects.
+
+## Study and deck management
+
+The study view flips between a question and answer, supports forward/back navigation and shuffle, and offers review grading. Saved decks remain in browser storage on the current device. JSON backup restores saved decks elsewhere. Individual decks can be exported as JSON, CSV, Anki-compatible tab-separated text, or printable cards that can be saved as PDF from the browser print dialog.
+
+## Privacy and limits
+
+Saved decks are local to the browser. AI generation sends the submitted study content to the configured AI service through the site's server-side function. The free service may enforce daily and weekly generation limits to protect availability.
+
+## Public information
+
+- [Home](https://flashcard.thunderstudy.indevs.in/) — Main flashcard generator.
+- [PDF flashcards](https://flashcard.thunderstudy.indevs.in/pdf.html) — PDF-to-flashcard workflow.
+- [Image flashcards](https://flashcard.thunderstudy.indevs.in/img.html) — Image OCR workflow.
+- [YouTube flashcards](https://flashcard.thunderstudy.indevs.in/youtube.html) — Caption/transcript workflow.
+- [Preset decks](https://flashcard.thunderstudy.indevs.in/dack.html) — Curated starter decks.
+- [Saved decks](https://flashcard.thunderstudy.indevs.in/save.html) — Local deck library and backup tools.
+- [About](https://flashcard.thunderstudy.indevs.in/about.html) — Mission, ownership, and contact.
+- [FAQ](https://flashcard.thunderstudy.indevs.in/faq.html) — Common usage questions.
+- [Changelog](https://flashcard.thunderstudy.indevs.in/new.html) — Product history.
+
+Owner: Wondermayank
+Contact: contact@wondermayank.indevs.in

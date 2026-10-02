@@ -1031,7 +1031,7 @@ textarea:focus, input[type="text"]:focus{border:2px solid var(--primary); paddin
 <!-- NAV -->
 <header class="nav">
 <div class="wrap">
-<a aria-label="ThunderStudy AI by Wondermayank" class="brand" href="/">
+<a aria-label="ThunderStudy AI by Wondermayank" class="brand" href="index.html">
 <span class="brand-mark">
 <img alt="ThunderStudy AI logo" height="32" src="/favicon.svg" width="32"/>
 </span>
@@ -1041,10 +1041,10 @@ textarea:focus, input[type="text"]:focus{border:2px solid var(--primary); paddin
 </span>
 </a>
 <nav aria-label="Main navigation" class="nav-links">
-<a href="/">Home</a>
-<a href="/about">About</a>
-<a href="/faq">FAQ</a>
-<a href="/new">New</a>
+<a href="index.html">Home</a>
+<a href="about.html">About</a>
+<a href="faq.html">FAQ</a>
+<a href="new.html">New</a>
 </nav>
 <div class="nav-right">
 <button class="theme-btn" id="exportBtn" aria-label="Export current deck" title="Export current deck" type="button">⇩</button>
@@ -1073,17 +1073,17 @@ textarea:focus, input[type="text"]:focus{border:2px solid var(--primary); paddin
 </header>
 <!-- MOBILE MENU -->
 <div class="mobile-menu" id="mobileMenu">
-<a href="/">Home</a>
-<a href="/about">About</a>
-<a href="/faq">FAQ</a>
-<a href="/new">New</a>
+<a href="index.html">Home</a>
+<a href="about.html">About</a>
+<a href="faq.html">FAQ</a>
+<a href="new.html">New</a>
 <a href="https://thundertest.indevs.in">Mock Test</a>
 </div>
 <div class="mobile-menu" id="mobileMenu">
-<a href="/">Home</a>
-<a href="/about">About</a>
-<a href="/faq">FAQ</a>
-<a href="/new">New</a>
+<a href="index.html">Home</a>
+<a href="about.html">About</a>
+<a href="faq.html">FAQ</a>
+<a href="new.html">New</a>
 <a href="https://thundertest.indevs.in">Mock Test</a>
 </div>
 
@@ -1438,7 +1438,7 @@ textarea:focus, input[type="text"]:focus{border:2px solid var(--primary); paddin
 <div class="wrap">
 <div class="footer-grid">
 <div class="footer-brand-col">
-<a aria-label="ThunderStudy AI by Wondermayank" class="footer-brand" href="/">
+<a aria-label="ThunderStudy AI by Wondermayank" class="footer-brand" href="index.html">
 <span class="brand-mark">
 <img alt="ThunderStudy AI logo" decoding="async" height="22" loading="lazy" src="/favicon.svg" width="22"/>
 </span>
@@ -1501,12 +1501,12 @@ textarea:focus, input[type="text"]:focus{border:2px solid var(--primary); paddin
 </div>
 <div class="footer-bottom">
 <div class="wrap footer-bottom-inner">
-<div class="footer-copy">© 2026 ThunderStudy AI by <a href="/about" title="About Wondermayank, the owner of ThunderStudy">wondermayank</a>. All rights reserved.</div>
+<div class="footer-copy">© 2026 ThunderStudy AI by <a href="about.html" title="About Wondermayank, the owner of ThunderStudy">wondermayank</a>. All rights reserved.</div>
 <nav aria-label="Legal" class="footer-legal">
 <a href="https://wondermayank.in/terms">Terms</a>
 <a href="https://wondermayank.in/privacy">Privacy</a>
 <a href="https://wondermayank.in/disclaimer">Disclaimer</a>
-<a href="/sitemap">Sitemap</a>
+<a href="sitemap.xml">Sitemap</a>
 </nav>
 </div>
 </div>
@@ -2419,5 +2419,5 @@ document.querySelectorAll('.faq-item').forEach(function(d){
 </script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@7/dist/tesseract.min.js"></script>
 <script src="deck-transfer.js"></script>
-</body>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("/sw.js").catch(function(){});});}</script>`r`n</body>
 </html>

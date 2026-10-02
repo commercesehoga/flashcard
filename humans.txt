@@ -1,0 +1,8 @@
+/* TEAM */
+Owner: Wondermayank
+Contact: contact@wondermayank.indevs.in
+
+/* SITE */
+Site: ThunderStudy
+Stack: HTML, CSS, JavaScript, Cloudflare Pages, Cloudflare Pages Functions
+Last update: 2026-10-02
