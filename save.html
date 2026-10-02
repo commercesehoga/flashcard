@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en-IN">
-<head>`n<meta charset="UTF-8">`n<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Saved Flashcard Decks | ThunderStudy</title>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Saved Flashcard Decks | ThunderStudy</title>
 <meta name="description" content="Open, review, import and export flashcard decks saved on your device by ThunderStudy AI. Your local study cards stay in your browser.">
 <meta name="author" content="Wondermayank">
 <meta name="robots" content="noindex, nofollow">
@@ -284,7 +286,7 @@ main{max-width:1100px; margin:0 auto; padding:0 24px;}
   padding:7px 16px; border-radius:9999px; margin-bottom:22px;
 }
 [data-theme="dark"] .hero2-eyebrow{ background:rgba(255,255,255,.08); color:var(--primary); }
-.hero2-left h1{
+.hero2-left h1,.hero2-left h2{
   font-size:46px; line-height:1.08; letter-spacing:-0.5px; font-weight:800;
   color:var(--body-strong); margin-bottom:20px;
 }
@@ -425,7 +427,7 @@ main{max-width:1100px; margin:0 auto; padding:0 24px;}
 }
 @media(max-width:640px){
   .hero2{padding:40px 20px 48px;}
-  .hero2-left h1{font-size:30px;}
+  .hero2-left h1,.hero2-left h2{font-size:30px;}
   .hero2-options{grid-template-columns:1fr;}
 }
 
@@ -703,7 +705,7 @@ body[data-page="save"] .input-card { display:none; }
 .saved-item h3 { font-size:16px; margin-bottom:5px; }
 .saved-item p { color:var(--muted); font-size:13px; }
 .saved-empty { padding:30px; text-align:center; color:var(--muted); border:1px dashed var(--hairline-strong); border-radius:16px; }
-@media(max-width:640px){ .page-heading,.saved-page{padding-top:34px;} .page-heading h1,.saved-page h1{font-size:30px;} .saved-item{align-items:flex-start; flex-direction:column;} }
+@media(max-width:640px){ .page-heading,.saved-page{padding-top:34px;} .page-heading h1,.saved-page h1,.saved-page h2{font-size:30px;} .saved-item{align-items:flex-start; flex-direction:column;} }
 
 /* ==== SHARED HEADER/FOOTER (matches 404.html) ==== */
 .wrap{ max-width:1240px; margin:0 auto; padding:0 32px; }
@@ -1146,12 +1148,12 @@ textarea:focus, input[type="text"]:focus{border:2px solid var(--primary); paddin
 
 
 <main>
-  <section class="page-heading"><h1>Saved flashcard generator</h1><p>Turn your saved content into focused, exam-ready flashcards with ThunderStudy.</p></section>
+  <section class="page-heading"><h1>Saved flashcard generator</h1><p>Review flashcard decks saved on this device with ThunderStudy AI. Local decks can be opened, imported and exported for backup, so students can continue revision without an account or cloud profile. Wondermayank maintains this free study workspace.</p></section>
   <section class="hero2">
     <div class="hero2-inner">
       <div class="hero2-left">
         <span class="hero2-eyebrow">AI-Powered Study Tool</span>
-        <h1>Flashcards Generator using AI</h1>
+        <h2>Flashcards Generator using AI</h2>
         <p class="hero2-lead">Generate flashcards from any source: notes, PDFs, books, or AI. Highlight exactly what to study, test yourself with quizzes, measure what you know, and print ready-to-study cards in seconds.</p>
 
         <div class="hero2-search">
@@ -1420,7 +1422,7 @@ textarea:focus, input[type="text"]:focus{border:2px solid var(--primary); paddin
   </div>
 
   <section class="saved-page" id="savedPage">
-    <h1>Saved flashcard decks</h1>
+    <h2>Saved flashcard decks</h2>
     <p>Your decks are stored locally on this device. Open a deck whenever you want to continue studying.</p>
     <div class="saved-toolbar" aria-label="Deck backup tools">
       <button class="btn-primary" id="exportBackupBtn" type="button">Export all decks</button>
