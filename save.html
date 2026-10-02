@@ -1662,7 +1662,7 @@ async function generateFlashcards(){
     return;
   }
 
-  const activeTab = document.querySelector(".tab-btn.active").dataset.tab;
+  const activeTab = document.querySelector(".tab-btn.active")?.dataset.tab || ({ index:"topic", home:"topic", pdf:"pdf", img:"ocr", youtube:"youtube", dack:"presets", save:"topic" }[document.body.dataset.page] || "topic");
   const topic = document.getElementById("topicInput").value.trim();
   const customExam = document.getElementById("customExam").value.trim();
   const count = selectedCardCount;
