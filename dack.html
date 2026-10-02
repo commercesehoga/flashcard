@@ -886,8 +886,29 @@ textarea:focus, input[type="text"]:focus{border:2px solid var(--primary); paddin
 /* FAQ */
 .faq-section{background:var(--canvas-deep); border-radius:var(--radius-card); margin:40px 0 0; padding:56px 28px}
 .faq-item{border-bottom:1px solid var(--hairline)}
-.faq-item h3{color:var(--ink)}
-.faq-item p{color:var(--body-c)}
+.faq-inner{display:flex; flex-direction:column; gap:14px}
+.faq-section h2{margin-bottom:18px}
+.faq-item{background:var(--surface); border:none; border-radius:24px; padding:0; overflow:hidden;
+  box-shadow:6px 6px 14px var(--clay-dark),-6px -6px 14px var(--clay-light); transition:box-shadow .2s ease}
+.faq-item summary{list-style:none; display:flex; align-items:center; justify-content:space-between; gap:16px;
+  padding:22px 22px 22px 28px; cursor:pointer; -webkit-tap-highlight-color:transparent; user-select:none}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item summary:focus-visible{outline:2px solid var(--primary); outline-offset:-2px; border-radius:24px}
+.faq-item h3{color:var(--ink); font-size:17px; font-weight:700; margin:0; line-height:1.35}
+.faq-icon{position:relative; flex:0 0 38px; width:38px; height:38px; border-radius:50%; background:var(--primary-soft);
+  transition:transform .25s ease, background .2s ease}
+.faq-icon::before,.faq-icon::after{content:""; position:absolute; top:50%; left:50%; background:var(--primary);
+  border-radius:2px; transform:translate(-50%,-50%); transition:transform .25s ease, opacity .25s ease}
+.faq-icon::before{width:14px; height:2.5px}
+.faq-icon::after{width:2.5px; height:14px}
+.faq-item[open] .faq-icon{background:var(--primary)}
+.faq-item[open] .faq-icon::before{background:#fff}
+.faq-item[open] .faq-icon::after{background:#fff; transform:translate(-50%,-50%) rotate(90deg); opacity:0}
+.faq-answer{padding:0 28px 24px}
+.faq-item[open] .faq-answer{animation:faqIn .25s ease}
+.faq-item p{color:var(--body-c); font-size:15px; line-height:1.6; margin:0}
+@keyframes faqIn{from{opacity:0; transform:translateY(-6px)}to{opacity:1; transform:none}}
+@media(max-width:640px){.faq-item summary{padding:18px 16px 18px 20px}.faq-answer{padding:0 20px 20px}}
 
 /* saved */
 .saved-item{background:var(--surface); border:none; border-radius:20px; box-shadow:6px 6px 14px var(--clay-dark),-6px -6px 14px var(--clay-light)}
@@ -1263,79 +1284,6 @@ textarea:focus, input[type="text"]:focus{border:2px solid var(--primary); paddin
       </div>
     </div>
 
-    <div>
-      <label class="field-label" style="margin-top:18px;">Exam / Context</label>
-      <div class="presets" id="presetChips">
-        <button class="preset-chip selected" data-exam="Auto-detect">Auto-detect</button>
-        <button class="preset-chip" data-exam="Class 12 CBSE">Class 12 CBSE</button>
-        <button class="preset-chip" data-exam="NEET">NEET</button>
-        <button class="preset-chip" data-exam="JEE">JEE</button>
-        <button class="preset-chip" data-exam="Banking">Banking</button>
-        <button class="preset-chip" data-exam="SSC">SSC</button>
-        <button class="preset-chip" data-exam="Other">Other</button>
-      </div>
-    </div>
-
-    <div class="row-2">
-      <div>
-        <label class="field-label" for="customExam">Custom exam name (optional)</label>
-        <input type="text" id="customExam" placeholder="e.g. UPSC Prelims, Class 10 ICSE...">
-      </div>
-    </div>
-
-    <div style="margin-top:16px;">
-      <label class="field-label">Number of cards</label>
-      <div class="card-count-options" id="cardCountOptions">
-        <button type="button" class="cc-chip" data-count="5" data-tokens="1">
-          <span class="cc-num">5</span><span class="cc-tag">1 token</span>
-        </button>
-        <button type="button" class="cc-chip selected" data-count="10" data-tokens="1">
-          <span class="cc-num">10</span><span class="cc-tag">1 token</span>
-        </button>
-        <button type="button" class="cc-chip" data-count="15" data-tokens="1">
-          <span class="cc-num">15</span><span class="cc-tag">1 token</span>
-        </button>
-        <button type="button" class="cc-chip" data-count="20" data-tokens="1">
-          <span class="cc-num">20</span><span class="cc-tag">1 token</span>
-        </button>
-        <button type="button" class="cc-chip cc-chip-premium" data-count="25" data-tokens="2">
-          <span class="cc-num">25</span><span class="cc-tag">2 tokens</span>
-        </button>
-      </div>
-    </div>
-
-    <div class="generate-row">
-      <button class="btn-primary" id="generateBtn">
-        <span class="spinner"></span>
-        <span class="btn-text">Generate Flashcards</span>
-      </button>
-      <span style="font-size:13px; color:var(--muted-soft);" id="statusText"></span>
-    </div>
-
-    <div class="usage-limits" id="usageLimits">
-      <div class="usage-limit-item">
-        <div class="usage-limit-head">
-          <span class="ul-label">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><polyline points="12 7 12 12 15 15"></polyline></svg>
-            Daily tokens
-          </span>
-          <span class="ul-count" id="dailyUsageText">0 / 5 left</span>
-        </div>
-        <div class="usage-limit-track"><div class="usage-limit-fill" id="dailyUsageFill"></div></div>
-      </div>
-      <div class="usage-limit-item">
-        <div class="usage-limit-head">
-          <span class="ul-label">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="16" y1="2" x2="16" y2="6"></line></svg>
-            Weekly tokens
-          </span>
-          <span class="ul-count" id="weeklyUsageText">0 / 20 left</span>
-        </div>
-        <div class="usage-limit-track"><div class="usage-limit-fill" id="weeklyUsageFill"></div></div>
-      </div>
-      <div class="usage-limit-note">Daily resets at midnight · weekly resets every Monday</div>
-    </div>
-
     <div class="error-msg" id="errorMsg"></div>
   </div>
 
@@ -1381,22 +1329,22 @@ textarea:focus, input[type="text"]:focus{border:2px solid var(--primary); paddin
   <section class="faq-section">
     <div class="faq-inner">
       <h2>Frequently Asked Questions</h2>
-      <div class="faq-item">
-        <h3>How does the AI flashcard maker work?</h3>
-        <p>Enter a topic, a question, or upload a PDF. The AI reads your input, detects the right exam context, and generates a set of flip flashcards with a clear question on the front and a concise answer on the back.</p>
-      </div>
-      <div class="faq-item">
-        <h3>Which exams are supported?</h3>
-        <p>Class 12 CBSE, NEET, JEE, Banking, SSC, and a general "Other" mode for any other subject, exam, or certification.</p>
-      </div>
-      <div class="faq-item">
-        <h3>Can I upload a PDF to make flashcards?</h3>
-        <p>Yes. PDFs are read directly in your browser using PDF.js, and the extracted text is sent to the AI to generate flashcards from the actual content of your document.</p>
-      </div>
-      <div class="faq-item">
-        <h3>Is my data stored anywhere?</h3>
-        <p>No. Everything runs in your browser. Your topic, PDF text, and generated cards are sent only to the Groq API to produce the flashcards and are not stored on any server.</p>
-      </div>
+      <details class="faq-item">
+        <summary><h3>How does the AI flashcard maker work?</h3><span class="faq-icon" aria-hidden="true"></span></summary>
+        <div class="faq-answer"><p>Enter a topic, a question, or upload a PDF. The AI reads your input, detects the right exam context, and generates a set of flip flashcards with a clear question on the front and a concise answer on the back.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary><h3>Which exams are supported?</h3><span class="faq-icon" aria-hidden="true"></span></summary>
+        <div class="faq-answer"><p>Class 12 CBSE, NEET, JEE, Banking, SSC, and a general "Other" mode for any other subject, exam, or certification.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary><h3>Can I upload a PDF to make flashcards?</h3><span class="faq-icon" aria-hidden="true"></span></summary>
+        <div class="faq-answer"><p>Yes. PDFs are read directly in your browser using PDF.js, and the extracted text is sent to the AI to generate flashcards from the actual content of your document.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary><h3>Is my data stored anywhere?</h3><span class="faq-icon" aria-hidden="true"></span></summary>
+        <div class="faq-answer"><p>No. Everything runs in your browser. Your topic, PDF text, and generated cards are sent only to the Groq API to produce the flashcards and are not stored on any server.</p></div>
+      </details>
     </div>
   </section>
 </main>
@@ -1703,6 +1651,7 @@ function renderUsageLimits(){
   const dPct = Math.min(100, (daily.count / DAILY_LIMIT) * 100);
   const wPct = Math.min(100, (weekly.count / WEEKLY_LIMIT) * 100);
 
+  if (!document.getElementById("dailyUsageText")) return;
   document.getElementById("dailyUsageText").textContent = dailyLeft + " / " + DAILY_LIMIT + " left";
   document.getElementById("weeklyUsageText").textContent = weeklyLeft + " / " + WEEKLY_LIMIT + " left";
 
@@ -2091,7 +2040,7 @@ let deck = [];
 let order = [];
 let currentIndex = 0;
 
-generateBtn.addEventListener("click", generateFlashcards);
+if (generateBtn) generateBtn.addEventListener("click", generateFlashcards);
 
 async function generateFlashcards(){
   clearError();
@@ -2110,7 +2059,7 @@ async function generateFlashcards(){
 
   const activeTab = document.querySelector(".tab-btn.active")?.dataset.tab || ({ index:"topic", home:"topic", pdf:"pdf", img:"ocr", youtube:"youtube", dack:"presets", save:"topic" }[document.body.dataset.page] || "topic");
   const topic = document.getElementById("topicInput").value.trim();
-  const customExam = document.getElementById("customExam").value.trim();
+  const customExam = (document.getElementById("customExam")?.value || "").trim();
   const count = selectedCardCount;
 
   let sourceContent = "";
@@ -2135,9 +2084,8 @@ async function generateFlashcards(){
 
   const examLabel = customExam || (selectedExam === "Auto-detect" ? "" : selectedExam);
 
-  generateBtn.disabled = true;
-  generateBtn.classList.add("loading");
-  statusText.textContent = "Thinking...";
+  if (generateBtn) { generateBtn.disabled = true; generateBtn.classList.add("loading"); }
+  if (statusText) statusText.textContent = "Thinking...";
 
   try {
     const res = await fetch("/api/generate", {
@@ -2177,9 +2125,8 @@ async function generateFlashcards(){
     console.error(err);
     showError("Network error reaching the server. Check your connection and try again.");
   } finally {
-    generateBtn.disabled = false;
-    generateBtn.classList.remove("loading");
-    statusText.textContent = "";
+    if (generateBtn) { generateBtn.disabled = false; generateBtn.classList.remove("loading"); }
+    if (statusText) statusText.textContent = "";
   }
 }
 
@@ -2395,6 +2342,13 @@ if(hamBtn&&mobileMenu){
     });
   },{passive:true});
 })();
+</script>
+<script>
+document.querySelectorAll('.faq-item').forEach(function(d){
+  d.addEventListener('toggle',function(){
+    if(d.open) document.querySelectorAll('.faq-item[open]').forEach(function(o){ if(o!==d) o.open=false; });
+  });
+});
 </script>
 </body>
 </html>

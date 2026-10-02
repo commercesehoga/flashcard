@@ -458,7 +458,7 @@ textarea:focus, input[type="text"]:focus{outline:none; border:2px solid var(--pr
 .file-drop:hover, .file-drop.dragover{border-color:var(--primary); background:var(--canvas-parchment);}
 .file-drop svg{width:28px; height:28px; margin-bottom:8px; color:var(--muted-soft);}
 .file-drop .fname{color:var(--ink); font-weight:600; margin-top:6px;}
-#pdfInput{display:none;}
+#pdfInput,#imageInput{display:none;}
 
 .presets{display:flex; flex-wrap:wrap; gap:8px; margin-top:16px;}
 .preset-chip{
@@ -886,8 +886,54 @@ textarea:focus, input[type="text"]:focus{border:2px solid var(--primary); paddin
 /* FAQ */
 .faq-section{background:var(--canvas-deep); border-radius:var(--radius-card); margin:40px 0 0; padding:56px 28px}
 .faq-item{border-bottom:1px solid var(--hairline)}
-.faq-item h3{color:var(--ink)}
-.faq-item p{color:var(--body-c)}
+.faq-inner{display:flex; flex-direction:column; gap:14px}
+.faq-section h2{margin-bottom:18px}
+.faq-item{background:var(--surface); border:none; border-radius:24px; padding:0; overflow:hidden;
+  box-shadow:6px 6px 14px var(--clay-dark),-6px -6px 14px var(--clay-light); transition:box-shadow .2s ease}
+.faq-item summary{list-style:none; display:flex; align-items:center; justify-content:space-between; gap:16px;
+  padding:22px 22px 22px 28px; cursor:pointer; -webkit-tap-highlight-color:transparent; user-select:none}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item summary:focus-visible{outline:2px solid var(--primary); outline-offset:-2px; border-radius:24px}
+.faq-item h3{color:var(--ink); font-size:17px; font-weight:700; margin:0; line-height:1.35}
+.faq-icon{position:relative; flex:0 0 38px; width:38px; height:38px; border-radius:50%; background:var(--primary-soft);
+  transition:transform .25s ease, background .2s ease}
+.faq-icon::before,.faq-icon::after{content:""; position:absolute; top:50%; left:50%; background:var(--primary);
+  border-radius:2px; transform:translate(-50%,-50%); transition:transform .25s ease, opacity .25s ease}
+.faq-icon::before{width:14px; height:2.5px}
+.faq-icon::after{width:2.5px; height:14px}
+.faq-item[open] .faq-icon{background:var(--primary)}
+.faq-item[open] .faq-icon::before{background:#fff}
+.faq-item[open] .faq-icon::after{background:#fff; transform:translate(-50%,-50%) rotate(90deg); opacity:0}
+.faq-answer{padding:0 28px 24px}
+.faq-item[open] .faq-answer{animation:faqIn .25s ease}
+.faq-item p{color:var(--body-c); font-size:15px; line-height:1.6; margin:0}
+@keyframes faqIn{from{opacity:0; transform:translateY(-6px)}to{opacity:1; transform:none}}
+@media(max-width:640px){.faq-item summary{padding:18px 16px 18px 20px}.faq-answer{padding:0 20px 20px}}
+
+/* upload dropzone */
+.file-drop{position:relative; display:flex; flex-direction:column; align-items:center; gap:6px; padding:34px 20px 28px;
+  border:2px dashed var(--hairline-strong); border-radius:24px; background:var(--canvas); color:var(--muted);
+  box-shadow:inset 3px 3px 8px var(--clay-dark),inset -3px -3px 8px var(--clay-light);
+  transition:border-color .2s ease, background .2s ease, transform .2s ease; -webkit-tap-highlight-color:transparent}
+[data-theme="dark"] .file-drop{box-shadow:none; background:var(--canvas-deep)}
+.file-drop:hover,.file-drop.dragover{border-color:var(--primary); background:var(--primary-soft)}
+.file-drop.dragover{transform:scale(1.015)}
+.file-drop:active{transform:scale(.99)}
+.file-drop:focus-visible{outline:2px solid var(--primary); outline-offset:3px}
+.file-drop .fd-icon{width:60px; height:60px; border-radius:50%; background:var(--primary-soft); color:var(--primary);
+  display:flex; align-items:center; justify-content:center; margin-bottom:6px; transition:transform .25s ease, background .2s ease, color .2s ease}
+.file-drop .fd-icon svg{width:28px; height:28px; margin:0; color:inherit}
+.file-drop:hover .fd-icon,.file-drop.dragover .fd-icon{background:var(--primary); color:#fff; transform:translateY(-3px)}
+.file-drop .fd-title{font-size:17px; font-weight:700; color:var(--ink)}
+.file-drop .fd-sub{font-size:14px; color:var(--body-c)}
+.file-drop .fd-btn{margin-top:10px; display:inline-flex; align-items:center; gap:8px; padding:10px 22px; border-radius:9999px;
+  background:var(--primary); color:#fff; font-size:14px; font-weight:700; box-shadow:4px 4px 10px var(--clay-dark),-4px -4px 10px var(--clay-light)}
+.file-drop .fd-meta{font-size:12px; color:var(--muted-soft); margin-top:4px}
+.file-drop .fname{margin-top:10px; padding:7px 14px; border-radius:9999px; background:var(--surface); color:var(--ink);
+  font-size:13px; font-weight:600; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  box-shadow:3px 3px 8px var(--clay-dark),-3px -3px 8px var(--clay-light)}
+.file-drop .fname:empty{display:none}
+@media(max-width:640px){.file-drop{padding:28px 16px 24px}}
 
 /* saved */
 .saved-item{background:var(--surface); border:none; border-radius:20px; box-shadow:6px 6px 14px var(--clay-dark),-6px -6px 14px var(--clay-light)}
@@ -1214,9 +1260,12 @@ textarea:focus, input[type="text"]:focus{border:2px solid var(--primary); paddin
 
     <div class="tab-panel active" id="panel-pdf">
       <label class="field-label">Upload a PDF</label>
-      <div class="file-drop" id="fileDrop">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-        <div>Click to choose a PDF, or drag it here</div>
+      <div class="file-drop" id="fileDrop" role="button" tabindex="0" aria-label="Click to choose a PDF">
+        <span class="fd-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg></span>
+        <div class="fd-title">Click to choose a PDF</div>
+        <div class="fd-sub">or drag and drop it here</div>
+        <span class="fd-btn">Choose file</span>
+        <div class="fd-meta">PDF files only</div>
         <div class="fname" id="fileName"></div>
       </div>
       <input type="file" id="pdfInput" accept="application/pdf">
@@ -1240,9 +1289,12 @@ textarea:focus, input[type="text"]:focus{border:2px solid var(--primary); paddin
 
     <div class="tab-panel" id="panel-ocr">
       <label class="field-label">Upload an image (typed, handwritten, or scanned)</label>
-      <div class="file-drop" id="imageDrop">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-        <div>Click to choose an image, or drag it here</div>
+      <div class="file-drop" id="imageDrop" role="button" tabindex="0" aria-label="Click to choose an image">
+        <span class="fd-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg></span>
+        <div class="fd-title">Click to choose an image</div>
+        <div class="fd-sub">or drag and drop it here</div>
+        <span class="fd-btn">Choose file</span>
+        <div class="fd-meta">JPG, PNG or WebP · typed, handwritten or scanned</div>
         <div class="fname" id="imageName"></div>
       </div>
       <input type="file" id="imageInput" accept="image/*">
@@ -1374,22 +1426,22 @@ textarea:focus, input[type="text"]:focus{border:2px solid var(--primary); paddin
   <section class="faq-section">
     <div class="faq-inner">
       <h2>Frequently Asked Questions</h2>
-      <div class="faq-item">
-        <h3>How does the AI flashcard maker work?</h3>
-        <p>Enter a topic, a question, or upload a PDF. The AI reads your input, detects the right exam context, and generates a set of flip flashcards with a clear question on the front and a concise answer on the back.</p>
-      </div>
-      <div class="faq-item">
-        <h3>Which exams are supported?</h3>
-        <p>Class 12 CBSE, NEET, JEE, Banking, SSC, and a general "Other" mode for any other subject, exam, or certification.</p>
-      </div>
-      <div class="faq-item">
-        <h3>Can I upload a PDF to make flashcards?</h3>
-        <p>Yes. PDFs are read directly in your browser using PDF.js, and the extracted text is sent to the AI to generate flashcards from the actual content of your document.</p>
-      </div>
-      <div class="faq-item">
-        <h3>Is my data stored anywhere?</h3>
-        <p>No. Everything runs in your browser. Your topic, PDF text, and generated cards are sent only to the Groq API to produce the flashcards and are not stored on any server.</p>
-      </div>
+      <details class="faq-item">
+        <summary><h3>How does the AI flashcard maker work?</h3><span class="faq-icon" aria-hidden="true"></span></summary>
+        <div class="faq-answer"><p>Enter a topic, a question, or upload a PDF. The AI reads your input, detects the right exam context, and generates a set of flip flashcards with a clear question on the front and a concise answer on the back.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary><h3>Which exams are supported?</h3><span class="faq-icon" aria-hidden="true"></span></summary>
+        <div class="faq-answer"><p>Class 12 CBSE, NEET, JEE, Banking, SSC, and a general "Other" mode for any other subject, exam, or certification.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary><h3>Can I upload a PDF to make flashcards?</h3><span class="faq-icon" aria-hidden="true"></span></summary>
+        <div class="faq-answer"><p>Yes. PDFs are read directly in your browser using PDF.js, and the extracted text is sent to the AI to generate flashcards from the actual content of your document.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary><h3>Is my data stored anywhere?</h3><span class="faq-icon" aria-hidden="true"></span></summary>
+        <div class="faq-answer"><p>No. Everything runs in your browser. Your topic, PDF text, and generated cards are sent only to the Groq API to produce the flashcards and are not stored on any server.</p></div>
+      </details>
     </div>
   </section>
 </main>
@@ -2388,6 +2440,16 @@ if(hamBtn&&mobileMenu){
     });
   },{passive:true});
 })();
+</script>
+<script>
+document.querySelectorAll('.file-drop').forEach(function(z){
+  z.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); z.click(); } });
+});
+document.querySelectorAll('.faq-item').forEach(function(d){
+  d.addEventListener('toggle',function(){
+    if(d.open) document.querySelectorAll('.faq-item[open]').forEach(function(o){ if(o!==d) o.open=false; });
+  });
+});
 </script>
 </body>
 </html>
