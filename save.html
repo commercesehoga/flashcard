@@ -1646,11 +1646,12 @@ const PRESET_DB = [
 
 </script>
 <script>document.getElementById('importDeckBtn').addEventListener('click', function(){ document.getElementById('deckImportInput').click(); });</script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@7/dist/tesseract.min.js"></script>
 <script src="deck-transfer.js"></script>
 <script>
 // ---------- CONFIG ----------
-// The Groq API key lives ONLY in Vercel's Environment Variables (Project Settings -> Environment
-// Variables -> add GROQ_API_KEY). It is read server-side inside /api/generate.js and is never
+// The Groq API key lives only in Cloudflare Pages Environment Variables. It is read server-side
+// inside functions/api/generate.js and is never
 // present in this file or sent to the browser.
 
 if (window["pdfjsLib"]) {
@@ -1969,7 +1970,7 @@ async function handlePdfFile(file){
   }
 }
 
-// ---------- Image upload (OCR via /api/ocr, server-side only) ----------
+// ---------- Image upload (OCR in the browser via Tesseract WASM) ----------
 const imageDrop = document.getElementById("imageDrop");
 const imageInput = document.getElementById("imageInput");
 const imageNameEl = document.getElementById("imageName");
@@ -2004,19 +2005,10 @@ async function handleImageFile(file){
   extractedOcrText = "";
   imageNameEl.textContent = "Reading " + file.name + " (OCR)...";
   try {
-    const base64 = await fileToBase64(file);
-    const res = await fetch("/api/ocr", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ image: base64 })
-    });
-    const data = await res.json();
-    if (!res.ok || !data.text) {
-      showError(data.error || "Could not read text from that image.");
-      imageNameEl.textContent = "";
-      return;
-    }
-    extractedOcrText = data.text.trim().slice(0, 4000);
+    if (!window.Tesseract) throw new Error("OCR engine unavailable");
+    const result = await Tesseract.recognize(file, "eng", { logger: function (info) { if (info.status === "recognizing text") imageNameEl.textContent = file.name + " — OCR " + Math.round((info.progress || 0) * 100) + "%"; } });
+    extractedOcrText = String(result.data.text || "").trim().slice(0, 4000);
+    if (!extractedOcrText) throw new Error("No readable text");
     imageNameEl.textContent = file.name + " — text extracted";
   } catch (err) {
     console.error(err);
