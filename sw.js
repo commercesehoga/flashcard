@@ -1,4 +1,4 @@
-const CACHE = "thunderstudy-shell-2026-10-02";
+const CACHE = "thunderstudy-shell-2026-10-03";
 const SHELL = [
   "/", "/index.html", "/home.html", "/pdf.html", "/img.html", "/youtube.html", "/dack.html", "/save.html",
   "/about.html", "/faq.html", "/new.html", "/offline.html", "/favicon.svg", "/manifest.json", "/og-image.png", "/icons/icon-192.png", "/icons/icon-512.png"

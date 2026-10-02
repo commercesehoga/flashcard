@@ -1,4 +1,4 @@
 Contact: mailto:contact@wondermayank.indevs.in
-Expires: 2027-10-02T23:59:59.000Z
+Expires: 2027-10-03T23:59:59.000Z
 Preferred-Languages: en
 Canonical: https://flashcard.thunderstudy.indevs.in/.well-known/security.txt
