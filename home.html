@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Flashcard Maker — AI Flashcards for CBSE, JEE, NEET, SSC & Banking | ThunderStudy</title>
+<title>Create Flashcards from Text | ThunderStudy</title>
 <meta name="description" content="Generate AI-powered flashcards instantly from any topic, question, or PDF. Built for Class 12 CBSE, JEE, NEET, SSC, and Banking exam prep. Free, fast, and flips beautifully.">
 
 <link rel="icon" type="image/svg+xml" href="https://commercesehoga.github.io/favicon.svg">
@@ -637,23 +637,10 @@ body[data-page="pdf"] .dock-btn[data-tab="pdf"],
 body[data-page="img"] .dock-btn[data-tab="ocr"],
 body[data-page="youtube"] .dock-btn[data-tab="youtube"],
 body[data-page="index"] .dock-btn[data-tab="topic"] { background:radial-gradient(circle at 32% 26%, #7C8CFF, #2C46E6 72%); color:#fff; border-color:transparent; transform:scale(1.4) translateY(-4px); box-shadow:0 8px 18px rgba(40,60,220,.4); }
-body[data-page="index"] .hero2-search,
-body[data-page="index"] .hero2-divider,
-body[data-page="index"] .hero2-options,
-body[data-page="index"] .input-card,
-body[data-page="index"] .deck-section,
-body[data-page="index"] .dock,
-body[data-page="index"] #promoBanner,
-body[data-page="index"] #appToast,
-body[data-page="index"] #loader,
-body[data-page="index"] #saveBtn { display:none; }
-body[data-page="index"] .hero2-left { max-width:560px; }
-body[data-page="index"] .hero2-generate { text-decoration:none; }
-body[data-page="index"] { padding-bottom:0; }
 @media(max-width:640px){ .page-heading,.saved-page{padding-top:34px;} .page-heading h1,.saved-page h1{font-size:30px;} .saved-item{align-items:flex-start; flex-direction:column;} }
 </style>
 </head>
-<body data-page="index">
+<body data-page="home">
 
 <div id="loader">
   <svg class="loader-ring" viewBox="0 0 60 60"><circle cx="30" cy="30" r="24"></circle></svg>
@@ -689,6 +676,7 @@ body[data-page="index"] { padding-bottom:0; }
 </nav>
 
 <main>
+  <section class="page-heading"><h1>Home flashcard generator</h1><p>Turn your home content into focused, exam-ready flashcards with ThunderStudy.</p></section>
   <section class="hero2">
     <div class="hero2-inner">
       <div class="hero2-left">
@@ -701,10 +689,10 @@ body[data-page="index"] { padding-bottom:0; }
           <input type="text" id="heroTopicInput" placeholder="Enter a topic, e.g. Cell Biology, French Revolution...">
         </div>
 
-        <a class="hero2-generate" id="heroGenerateBtn" href="home.html">
+        <button class="hero2-generate" id="heroGenerateBtn">
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"></path></svg>
-          Start creating flashcards
-        </a>
+          Generate Flashcards
+        </button>
 
         <div class="hero2-divider"><span>OR</span></div>
 
