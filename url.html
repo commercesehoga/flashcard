@@ -96,14 +96,14 @@
           "item": "https://flashcard.thunderstudy.indevs.in/url.html",
           "position": 2,
           "@type": "ListItem",
-          "name": "YouTube flashcard maker"
+          "name": "Webpage flashcard maker"
         }
       ],
       "@id": "https://flashcard.thunderstudy.indevs.in/url.html#breadcrumb",
       "@type": "BreadcrumbList"
     },
     {
-      "name": "YouTube flashcard maker",
+      "name": "Webpage flashcard maker",
       "operatingSystem": "Any",
       "publisher": {
         "@id": "https://flashcard.thunderstudy.indevs.in/#organization"
@@ -1173,7 +1173,7 @@ textarea:focus, input[type="text"]:focus{border:2px solid var(--primary); paddin
 
 
 <main>
-  <section class="page-heading"><h1>Webpage flashcard generator</h1><p>Use a webpage text to create revision flashcards with ThunderStudy AI. Paste a supported video link, generate a focused deck and review the questions and answers in your browser. Wondermayank maintains this free video-to-flashcards tool for students. No account is needed, and saved decks remain available in your browser.</p></section>
+  <section class="page-heading"><h1>Webpage flashcard generator</h1><p>Use webpage text to create revision flashcards with ThunderStudy AI. Paste a supported article or webpage URL, fetch the readable content, generate a focused deck and review the questions and answers in your browser. Wondermayank maintains this free URL-to-flashcards tool for students.</p></section>
   <section class="hero2">
     <div class="hero2-inner">
       <div class="hero2-left">
@@ -1606,7 +1606,7 @@ textarea:focus, input[type="text"]:focus{border:2px solid var(--primary); paddin
     <div class="dock-bar">
     <span class="dock-indicator" aria-hidden="true"></span>
     <a class="tab-btn dock-btn" data-tab="pdf" href="pdf.html" aria-label="Upload PDF" data-label="Upload PDF"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></a>
-    <a class="tab-btn dock-btn" data-tab="youtube" href="url.html" aria-label="YouTube Link" data-label="YouTube Link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="4"></rect><polygon points="10 9 16 12 10 15" fill="currentColor" stroke="none"></polygon></svg></a>
+    <a class="tab-btn dock-btn" data-tab="youtube" href="youtube.html" aria-label="YouTube Link" data-label="YouTube Link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="4"></rect><polygon points="10 9 16 12 10 15" fill="currentColor" stroke="none"></polygon></svg></a>
     <a class="tab-btn dock-btn" data-tab="topic" href="home.html" aria-label="Topic or Question" data-label="Topic or Question"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5L12 3l9 7.5"></path><path d="M5 9.5V20a1 1 0 001 1h4v-6h4v6h4a1 1 0 001-1V9.5"></path></svg></a>
     <a class="tab-btn dock-btn" data-tab="ocr" href="img.html" aria-label="Image (OCR)" data-label="Image (OCR)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg></a>
     <a class="tab-btn dock-btn" data-tab="presets" href="dack.html" aria-label="Preset Decks" data-label="Preset Decks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg></a>
@@ -2100,28 +2100,6 @@ async function handleImageFile(file){
   }
 }
 
-// ---------- webpage text fetch (separate step, like Fetch -> Generate) ----------
-function extractYouTubeId(input) {
-  if (!input || typeof input !== "string") return null;
-  const trimmed = input.trim();
-
-  // Already a bare 11-char video ID
-  if (/^[a-zA-Z0-9_-]{11}$/.test(trimmed)) return trimmed;
-
-  try {
-    const url = new URL(trimmed);
-    const host = url.hostname.replace(/^www\./, "");
-    if (host === "youtu.be") return url.pathname.slice(1).split("/")[0] || null;
-    if (host === "youtube.com" || host === "m.youtube.com") {
-      if (url.pathname === "/watch") return url.searchParams.get("v");
-      if (url.pathname.startsWith("/shorts/")) return url.pathname.split("/")[2];
-      if (url.pathname.startsWith("/embed/")) return url.pathname.split("/")[2];
-      if (url.pathname.startsWith("/live/")) return url.pathname.split("/")[2];
-    }
-  } catch (e) { /* not a parseable URL */ }
-  return null;
-}
-
 const ytFetchBtn = document.getElementById("ytFetchBtn");
 const ytStatus = document.getElementById("ytStatus");
 const ytPreviewWrap = document.getElementById("ytPreviewWrap");
@@ -2129,49 +2107,53 @@ const ytPreviewText = document.getElementById("ytPreviewText");
 
 ytFetchBtn.addEventListener("click", async () => {
   const rawUrl = document.getElementById("youtubeInput").value.trim();
-  const videoId = extractYouTubeId(rawUrl);
-
-  if (!videoId) {
-    ytStatus.textContent = "Could not find a valid YouTube video ID in that link.";
+  if (!/^https?:\/\//i.test(rawUrl)) {
+    ytStatus.textContent = "Enter a complete webpage URL beginning with http:// or https://.";
     ytStatus.classList.add("warn");
     return;
   }
 
   ytStatus.classList.remove("warn");
-  ytStatus.textContent = "Fetching transcript...";
+  ytStatus.textContent = "Fetching webpage text...";
   ytFetchBtn.disabled = true;
 
   try {
-    const res = await fetch("/api/youtube-transcript", {
+    const res = await fetch("/api/url", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ url: rawUrl })
     });
-    // A platform timeout/crash returns an HTML error page, not JSON — don't let
-    // that surface as a misleading "network error".
+    const body = await res.text();
     let data = {};
-    try { data = await res.json(); } catch (e) { /* non-JSON body */ }
-
-    if (!res.ok || !data.transcript) {
+    if (!res.ok) {
+      try { data = JSON.parse(body); } catch (e) { /* non-JSON error body */ }
       ytStatus.textContent = data.error ||
         (res.status === 504 || res.status === 408
-          ? "The transcript service timed out. Try again, or paste the transcript into the box below."
-          : "Could not fetch a transcript for this video — you can paste it into the box below instead.");
+          ? "The webpage took too long to respond. Try again, or paste the text into the box below."
+          : "Could not fetch that webpage — you can paste its text into the box below instead.");
       ytStatus.classList.add("warn");
-      // Never a dead end: reveal the editable box so the transcript can be pasted by hand.
       ytPreviewWrap.style.display = "block";
       return;
     }
 
-    const full = data.transcript.trim();
-    ytPreviewText.value = full;   // keep the FULL transcript visible/editable; it's sampled at Generate time
+    const doc = new DOMParser().parseFromString(body, "text/html");
+    doc.querySelectorAll("script, style, noscript, template, svg").forEach(el => el.remove());
+    const root = doc.querySelector("article, main") || doc.body;
+    const full = (root.innerText || root.textContent || "").replace(/\s+/g, " ").trim();
+    if (full.length < 50) {
+      ytStatus.textContent = "The webpage did not contain enough readable text. Paste the text below instead.";
+      ytStatus.classList.add("warn");
+      ytPreviewWrap.style.display = "block";
+      return;
+    }
+    ytPreviewText.value = full.slice(0, 20000);
     ytPreviewWrap.style.display = "block";
     ytStatus.textContent = full.length > SOURCE_CHAR_LIMIT
-      ? `Transcript fetched (${full.length} characters). A ~${SOURCE_CHAR_LIMIT}-character sample spread across the whole video will be used. Review below, then tap Generate.`
-      : `Transcript fetched (${full.length} characters). Review below, then tap Generate.`;
+      ? `Webpage text fetched (${full.length} characters). A ~${SOURCE_CHAR_LIMIT}-character sample will be used. Review below, then tap Generate.`
+      : `Webpage text fetched (${full.length} characters). Review below, then tap Generate.`;
   } catch (err) {
     console.error(err);
-    ytStatus.textContent = "Network error fetching the transcript. Check your connection and try again.";
+    ytStatus.textContent = "Network error fetching the webpage. Check your connection and try again.";
     ytStatus.classList.add("warn");
   } finally {
     ytFetchBtn.disabled = false;
