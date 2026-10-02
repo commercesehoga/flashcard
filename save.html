@@ -1,66 +1,130 @@
 <!DOCTYPE html>
 <html lang="en-IN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Saved Flashcard Decks | ThunderStudy</title>
-<meta name="description" content="Generate AI-powered flashcards instantly from any topic, question, or PDF. Built for Class 12 CBSE, JEE, NEET, SSC, and Banking exam prep. Free, fast, and flips beautifully.">
-
+<head>`n<meta charset="UTF-8">`n<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Saved Flashcard Decks | ThunderStudy</title>
+<meta name="description" content="Open, review, import and export flashcard decks saved on your device by ThunderStudy AI. Your local study cards stay in your browser.">
+<meta name="author" content="Wondermayank">
+<meta name="robots" content="noindex, nofollow">
+<link rel="canonical" href="https://flashcard.thunderstudy.indevs.in/save.html">
 <meta name="theme-color" content="#573AFC">
-<script>(function(){try{var t=localStorage.getItem('theme');if(!t){t='light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-<meta property="og:title" content="Flashcard Maker — ThunderStudy">
-<meta property="og:description" content="Turn any topic, question, or PDF into AI-generated flip flashcards. Free exam prep tool for CBSE, JEE, NEET, SSC, Banking and more.">
-<meta property="og:url" content="https://flashcard.thunderstudy.indevs.in">
 <meta property="og:type" content="website">
-<meta property="og:image" content="https://commercesehoga.github.io/og-image.png">
+<meta property="og:site_name" content="ThunderStudy AI">
+<meta property="og:title" content="Saved Flashcard Decks | ThunderStudy">
+<meta property="og:description" content="Open, review, import and export flashcard decks saved on your device by ThunderStudy AI. Your local study cards stay in your browser.">
+<meta property="og:url" content="https://flashcard.thunderstudy.indevs.in/save.html">
+<meta property="og:image" content="https://flashcard.thunderstudy.indevs.in/assets/og-image.png">
+<meta property="og:image:alt" content="ThunderStudy AI flashcard maker for student revision">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_IN">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Flashcard Maker — ThunderStudy">
-<meta name="twitter:description" content="Turn any topic, question, or PDF into AI-generated flip flashcards. Free exam prep tool for CBSE, JEE, NEET, SSC, Banking and more.">
-<meta name="twitter:image" content="https://commercesehoga.github.io/og-image.png">
-
+<meta name="twitter:title" content="Saved Flashcard Decks | ThunderStudy">
+<meta name="twitter:description" content="Open, review, import and export flashcard decks saved on your device by ThunderStudy AI. Your local study cards stay in your browser.">
+<meta name="twitter:image" content="https://flashcard.thunderstudy.indevs.in/assets/og-image.png">
+<meta name="twitter:site" content="@wondermayankx">
+<meta name="twitter:creator" content="@wondermayankx">
+<link rel="sitemap" type="application/xml" href="/sitemap.xml">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="manifest" href="/manifest.json">
+<script>(function(){try{var t=localStorage.getItem('theme')||'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "EducationalOrganization",
-  "name": "ThunderStudy Flashcard Maker",
-  "url": "https://flashcard.thunderstudy.indevs.in",
-  "description": "AI-powered flashcard generator for exam preparation across CBSE, JEE, NEET, SSC and Banking exams.",
-  "sameAs": ["https://commercesehoga.github.io/"]
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
+  "@graph": [
     {
-      "@type": "Question",
-      "name": "How does the AI flashcard maker work?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Enter a topic, a question, or upload a PDF. The AI reads your input, detects the right exam context, and generates a set of flip flashcards with a question on the front and a clear answer on the back." }
+      "name": "ThunderStudy AI",
+      "description": "ThunderStudy AI is a free flashcard maker for students, built and maintained by Wondermayank.",
+      "@id": "https://flashcard.thunderstudy.indevs.in/#organization",
+      "logo": {
+        "height": 512,
+        "url": "https://flashcard.thunderstudy.indevs.in/icons/icon-512.png",
+        "@type": "ImageObject",
+        "width": 512
+      },
+      "contactPoint": {
+        "email": "contact@wondermayank.indevs.in",
+        "contactType": "customer support",
+        "@type": "ContactPoint",
+        "url": "https://flashcard.thunderstudy.indevs.in/about.html"
+      },
+      "founder": {
+        "url": "https://flashcard.thunderstudy.indevs.in/about.html",
+        "@type": "Person",
+        "name": "Wondermayank"
+      },
+      "sameAs": [
+        "https://flashcard.thunderstudy.indevs.in/",
+        "https://www.instagram.com/wondermayank",
+        "https://www.youtube.com/@wondermayank",
+        "https://x.com/wondermayankx",
+        "https://t.me/wondermayank"
+      ],
+      "@type": [
+        "Organization",
+        "EducationalOrganization"
+      ],
+      "url": "https://flashcard.thunderstudy.indevs.in/"
     },
     {
-      "@type": "Question",
-      "name": "Which exams are supported?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Class 12 CBSE, NEET, JEE, Banking, SSC, and a general mode for any other subject or exam." }
+      "publisher": {
+        "@id": "https://flashcard.thunderstudy.indevs.in/#organization"
+      },
+      "name": "ThunderStudy AI",
+      "inLanguage": "en-IN",
+      "potentialAction": {
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://flashcard.thunderstudy.indevs.in/?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string",
+        "@type": "SearchAction"
+      },
+      "@type": "WebSite",
+      "@id": "https://flashcard.thunderstudy.indevs.in/#website",
+      "url": "https://flashcard.thunderstudy.indevs.in/"
     },
     {
-      "@type": "Question",
-      "name": "Can I upload a PDF to make flashcards?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Yes. PDFs are read directly in your browser, and the extracted text is sent to the AI to generate flashcards from the content." }
+      "itemListElement": [
+        {
+          "item": "https://flashcard.thunderstudy.indevs.in/",
+          "position": 1,
+          "@type": "ListItem",
+          "name": "Home"
+        },
+        {
+          "item": "https://flashcard.thunderstudy.indevs.in/save.html",
+          "position": 2,
+          "@type": "ListItem",
+          "name": "Saved flashcard decks"
+        }
+      ],
+      "@id": "https://flashcard.thunderstudy.indevs.in/save.html#breadcrumb",
+      "@type": "BreadcrumbList"
     },
     {
-      "@type": "Question",
-      "name": "Is my Groq API key stored anywhere?",
-      "acceptedAnswer": { "@type": "Answer", "text": "No personal data is sent anywhere except directly to the Groq API to generate flashcards. Nothing is stored on a server." }
+      "name": "Saved flashcard decks",
+      "operatingSystem": "Any",
+      "publisher": {
+        "@id": "https://flashcard.thunderstudy.indevs.in/#organization"
+      },
+      "description": "Open, review, import and export flashcard decks saved on your device by ThunderStudy AI. Your local study cards stay in your browser.",
+      "applicationCategory": "EducationalApplication",
+      "author": {
+        "url": "https://flashcard.thunderstudy.indevs.in/about.html",
+        "@type": "Person",
+        "name": "Wondermayank"
+      },
+      "@id": "https://flashcard.thunderstudy.indevs.in/save.html#webpage",
+      "inLanguage": "en-IN",
+      "isAccessibleForFree": true,
+      "@type": [
+        "WebApplication",
+        "LearningResource"
+      ],
+      "url": "https://flashcard.thunderstudy.indevs.in/save.html"
     }
   ]
 }
 </script>
-
 <style>
 
 
