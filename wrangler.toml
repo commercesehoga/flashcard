@@ -1,0 +1,6 @@
+name = "thunderstudy-flashcards"
+compatibility_date = "2026-10-02"
+pages_build_output_dir = "."
+
+[vars]
+# Set GROQ_API_KEY in the Cloudflare Pages dashboard as a secret, not here.

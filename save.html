@@ -631,7 +631,9 @@ body[data-page="save"] .input-card { display:none; }
 .page-heading p { margin-top:10px; color:var(--muted); line-height:1.6; max-width:620px; }
 .saved-page { padding:54px 0 40px; }
 .saved-page h1 { font-size:36px; line-height:1.12; letter-spacing:-.4px; margin-bottom:10px; }
-.saved-page > p { color:var(--muted); line-height:1.6; margin-bottom:26px; }
+.saved-page > p { color:var(--muted); line-height:1.6; margin-bottom:18px; }
+.saved-toolbar { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:24px; }
+.saved-actions { display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
 .saved-list { display:grid; gap:12px; }
 .saved-item { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:18px 20px; border:1px solid var(--hairline); border-radius:16px; background:var(--surface-card); }
 .saved-item h3 { font-size:16px; margin-bottom:5px; }
@@ -1356,6 +1358,11 @@ textarea:focus, input[type="text"]:focus{border:2px solid var(--primary); paddin
   <section class="saved-page" id="savedPage">
     <h1>Saved flashcard decks</h1>
     <p>Your decks are stored locally on this device. Open a deck whenever you want to continue studying.</p>
+    <div class="saved-toolbar" aria-label="Deck backup tools">
+      <button class="btn-primary" id="exportBackupBtn" type="button">Export all decks</button>
+      <button class="btn-secondary" id="importDeckBtn" type="button">Import deck or backup</button>
+      <input id="deckImportInput" type="file" accept=".json,.csv,.txt,application/json,text/csv,text/plain" hidden>
+    </div>
     <div class="saved-list" id="savedList"></div>
   </section>
 
@@ -1638,6 +1645,8 @@ const PRESET_DB = [
 // (No ES module syntax needed — loaded via <script src="db.js"> as a global)
 
 </script>
+<script>document.getElementById('importDeckBtn').addEventListener('click', function(){ document.getElementById('deckImportInput').click(); });</script>
+<script src="deck-transfer.js"></script>
 <script>
 // ---------- CONFIG ----------
 // The Groq API key lives ONLY in Vercel's Environment Variables (Project Settings -> Environment
@@ -2415,17 +2424,6 @@ if(hamBtn&&mobileMenu){
     });
   },{passive:true});
 })();
-</script>
-<script>
-  try {
-    const savedList = document.getElementById('savedList');
-    const saved = JSON.parse(localStorage.getItem('ts_flashcard_saved_decks') || '[]');
-    savedList.innerHTML = saved.length
-      ? saved.map((item, index) => '<article class="saved-item"><div><h3>' + (item.title || 'Flashcard Deck') + '</h3><p>' + (item.cards?.length || 0) + ' cards · Saved ' + new Date(item.savedAt).toLocaleDateString() + '</p></div><button class="btn-secondary" type="button" data-saved-index="' + index + '">Open deck</button></article>').join('')
-      : '<div class="saved-empty">No saved decks yet. Generate a deck, then use the save button in the header.</div>';
-  } catch (error) {
-    document.getElementById('savedList').innerHTML = '<div class="saved-empty">Saved decks could not be loaded on this device.</div>';
-  }
 </script>
 <script>
 document.querySelectorAll('.faq-item').forEach(function(d){
