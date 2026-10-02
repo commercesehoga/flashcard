@@ -55,7 +55,7 @@ export default async function handler(request) {
     const response = await fetch(parsedUrl.href, {
       signal: AbortSignal.timeout(TIMEOUT_MS),
       headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; ThunderStudyBot/1.0; +https://thunderstudy.indevs.in)',
+        'User-Agent': 'Mozilla/5.0 (compatible; ThunderStudyFlashcards/1.0; +https://flashcard.thunderstudy.indevs.in)',
         'Accept': 'text/html,application/xhtml+xml;q=0.9,*/*;q=0.8',
         'Accept-Language': 'en-US,en;q=0.9'
       }

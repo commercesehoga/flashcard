@@ -10,6 +10,7 @@ ThunderStudy AI is a free browser-based flashcard maker for students. Wondermaya
 - [Image to flashcards](https://flashcard.thunderstudy.indevs.in/img.html) — Extract text from images and scans with browser OCR.
 - [PDF to flashcards](https://flashcard.thunderstudy.indevs.in/pdf.html) — Turn PDF notes and textbook material into cards.
 - [YouTube to flashcards](https://flashcard.thunderstudy.indevs.in/youtube.html) — Create cards from supported video transcripts.
+- [Webpage to flashcards](https://flashcard.thunderstudy.indevs.in/url.html) — Fetch readable text from a webpage URL and turn it into cards.
 - [CUET Commerce deck](https://flashcard.thunderstudy.indevs.in/decks/cuet-bs-ch1.html) — Review a Commerce management deck.
 - [CBSE Business Studies deck](https://flashcard.thunderstudy.indevs.in/decks/cuet-bs-ch2.html) — Review Class 12 Business Studies cards.
 - [About ThunderStudy AI](https://flashcard.thunderstudy.indevs.in/about.html) — Learn about Wondermayank and the project mission.

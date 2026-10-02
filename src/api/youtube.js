@@ -56,7 +56,7 @@ async function tryYoutubeTranscriptAi(videoId, parent) {
     `https://youtube-transcript.ai/transcript/${encodeURIComponent(videoId)}.txt`,
     {
       headers: {
-        'User-Agent': 'ThunderStudyAiMock/1.0 (transcript-fetch)',
+        'User-Agent': 'ThunderStudyFlashcards/1.0 (transcript-fetch)',
         'Accept': 'text/plain, text/markdown, */*'
       },
       signal: makeSignal(10000, parent)
@@ -77,7 +77,7 @@ async function tryYoutubeTranscriptAi(videoId, parent) {
 async function tryMongjFallback(videoId, parent) {
   const res = await fetch(
     `https://youtube-transcriber-api.vercel.app/v1/transcripts?id=${encodeURIComponent(videoId)}&type=text&lang=en`,
-    { headers: { 'User-Agent': 'ThunderStudyAiMock/1.0' }, signal: makeSignal(10000, parent) }
+    { headers: { 'User-Agent': 'ThunderStudyFlashcards/1.0' }, signal: makeSignal(10000, parent) }
   );
   if (!res.ok) throw new Error(`mongj fallback status ${res.status}`);
 
@@ -94,7 +94,7 @@ async function tryJaypaunFallback(videoId, parent) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'User-Agent': 'ThunderStudyAiMock/1.0'
+      'User-Agent': 'ThunderStudyFlashcards/1.0'
     },
     body: JSON.stringify({ video_url: `https://www.youtube.com/watch?v=${videoId}` }),
     signal: makeSignal(10000, parent)
