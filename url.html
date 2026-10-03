@@ -2047,7 +2047,7 @@ async function generateFlashcards(){
 
     document.getElementById("deckTitle").textContent =
       parsed.exam_detected ? "Flashcards — " + parsed.exam_detected : "Your Flashcards";
-    if (autoSaveDeck()) return;
+    autoSaveDeck();
 
     buildDots();
     renderCard();
@@ -2139,30 +2139,33 @@ function showToast(emoji, title, body){
   clearTimeout(appToastTimer);
   appToastTimer = setTimeout(() => appToast.classList.remove("show"), 4200);
 }
-// ---------- Auto-save + open on card.html (every generated deck gets /card?card{no}{id}) ----------
+// ---------- Auto-save deck (every generated deck lands in save.html) ----------
 function autoSaveDeck(){
-  if (!deck || deck.length === 0) return false;
+  if (!deck || deck.length === 0) return;
   try {
-    const page = document.body.dataset.page || "index";
-    const val = id => { const n = document.getElementById(id); if (!n) return ""; return ((n.tagName === "INPUT" || n.tagName === "TEXTAREA") ? n.value : (n.textContent || "")).replace(/\s+/g, " ").trim(); };
-    const tab = ({ pdf:"pdf", img:"ocr", youtube:"youtube", url:"url" })[page] || (document.querySelector(".tab-btn.active")?.dataset.tab || "topic");
-    let name = "";
-    if (tab === "pdf") name = val("fileName").replace(/\.pdf$/i, "");
-    else if (tab === "ocr") name = val("imageName").replace(/\.[a-z0-9]+$/i, "");
-    else if (tab === "youtube") name = "YouTube video";
-    else if (tab === "url") { try { name = new URL(val("urlInput")).hostname.replace(/^www\./, ""); } catch (e) { name = "Webpage"; } }
-    else name = val("topicInput");
-    name = name.slice(0, 60);
-    const exam = (document.getElementById("deckTitle").textContent || "").replace(/^Flashcards\s*—\s*/, "").replace(/^Your Flashcards$/, "").trim();
-    const title = (name ? name : "Flashcards") + (exam ? " — " + exam : "");
-    const saved = TSDecks.add({ title: title, cards: deck, source: page });
-    if (!saved) throw new Error("storage unavailable");
-    location.assign(TSDecks.url(saved));
-    return true;
+    const key = "ts_flashcard_saved_decks";
+    const saved = JSON.parse(localStorage.getItem(key) || "[]");
+    const val = id => { const n = document.getElementById(id); if (!n) return ""; return ((n.tagName === "INPUT" || n.tagName === "TEXTAREA") ? n.value : (n.textContent || "")).trim(); };
+    const fallback = (document.getElementById("deckTitle").textContent || "Flashcard Deck").trim();
+    const name = (val("topicInput") || val("fileName") || val("imageName") || "").replace(/\s+/g, " ").slice(0, 60);
+    const title = name ? name + " — " + fallback.replace(/^Flashcards\s*—\s*/, "").replace(/^Your Flashcards$/, "Flashcards") : fallback;
+    saved.unshift({
+      id: "d" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+      title: title,
+      cards: deck,
+      savedAt: new Date().toISOString(),
+      source: document.body.dataset.page || "index"
+    });
+    while (saved.length > 50) {
+      let i = saved.length - 1;
+      while (i > 0 && saved[i].pinned) i--;
+      saved.splice(i, 1);
+    }
+    localStorage.setItem(key, JSON.stringify(saved));
+    showToast("💾", "Deck saved", "Added to Saved automatically. View all in My Cards.");
   } catch (err) {
     console.error(err);
-    showToast("⚠️", "Could not auto-save", "Local storage might be full or disabled. Showing the deck here instead.");
-    return false;
+    showToast("⚠️", "Could not auto-save", "Local storage might be full or disabled.");
   }
 }
 
@@ -2242,7 +2245,6 @@ document.querySelectorAll('.faq-item').forEach(function(d){
   });
 });
 </script>
-<script src="deck-store.js"></script>
 <script src="deck-transfer.js"></script>
 <script>
 (function(){
