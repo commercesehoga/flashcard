@@ -7,6 +7,6 @@ This project is now structured for Cloudflare Pages:
 3. Add `GROQ_API_KEY` under Settings → Environment variables as an encrypted secret.
 4. Deploy. The Pages Functions in `functions/api/` provide `/api/generate` and `/api/youtube-transcript`.
 
-OCR runs in the browser with Tesseract WASM, so it no longer depends on the Vercel Node OCR function. The old `api/` folder is retained only for rollback/reference and is not used by Cloudflare Pages.
+OCR runs in the browser with Tesseract WASM, so no server-side OCR function is needed.
 
 For local development, install Wrangler and run `npx wrangler pages dev .`.

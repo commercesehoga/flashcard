@@ -6,7 +6,7 @@ export const CORS = {
   'Access-Control-Allow-Headers': 'Content-Type'
 };
 
-// JSON response with CORS headers (replaces Vercel's res.status(n).json(obj)).
+// JSON response with CORS headers.
 export function json(obj, status = 200) {
   return new Response(JSON.stringify(obj), {
     status,

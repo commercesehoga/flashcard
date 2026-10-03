@@ -3,7 +3,7 @@
 // system from ThunderStudy Flashcards (youtube-transcript.js).
 //
 // Why multi-fallback: hitting YouTube's Innertube API directly from a cloud
-// IP (Cloudflare, Vercel, Render, etc.) gets blocked. Instead we chain through reliable
+// IP (Cloudflare, Render, etc.) gets blocked. Instead we chain through reliable
 // 3rd-party transcript services in order, falling through on failure:
 //
 //   1. youtube-transcript.ai   — free hosted service, no key
