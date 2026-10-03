@@ -30,7 +30,15 @@
     }
     return true;
   }
-  function readSaved() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); } catch (e) { return []; } }
+  function newId() { return "d" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+  function readSaved() {
+    var arr; try { arr = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); } catch (e) { return []; }
+    if (!Array.isArray(arr)) return [];
+    var dirty = false;
+    arr.forEach(function (d) { if (d && !d.id) { d.id = newId(); dirty = true; } });
+    if (dirty) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); } catch (e) {} }
+    return arr;
+  }
   function writeSaved(decks) { localStorage.setItem(STORAGE_KEY, JSON.stringify(decks.slice(0, 50))); }
   function flash(message) { if (typeof window.showToast === "function") window.showToast("✓", "Deck transfer", message); else window.alert(message); }
   function parseImport(text, name) {
@@ -44,8 +52,7 @@
   function renderSaved() {
     const list = document.getElementById("savedList"); if (!list) return;
     const saved = readSaved();
-    list.innerHTML = saved.length ? saved.map(function (item, index) { return '<article class="saved-item"><div><h3>' + escapeHtml(item.title || "Flashcard Deck") + '</h3><p>' + (item.cards?.length || 0) + ' cards · Saved ' + new Date(item.savedAt || Date.now()).toLocaleDateString() + '</p></div><div class="saved-actions"><button class="btn-secondary" type="button" data-open-index="' + index + '">Open</button><button class="btn-secondary" type="button" data-export-index="' + index + '" data-format="json">JSON</button><button class="btn-secondary" type="button" data-export-index="' + index + '" data-format="csv">CSV</button><button class="btn-secondary" type="button" data-export-index="' + index + '" data-format="anki">Anki</button><button class="btn-secondary" type="button" data-print-index="' + index + '">Print</button></div></article>'; }).join("") : '<div class="saved-empty">No saved decks yet. Generate a deck, then use the save button in the header.</div>';
-    list.querySelectorAll("[data-open-index]").forEach(function (button) { button.onclick = function () { sessionStorage.setItem("ts_flashcard_transfer_deck", JSON.stringify(saved[Number(button.dataset.openIndex)])); window.location.href = "index.html?imported=1"; }; });
+    list.innerHTML = saved.length ? saved.map(function (item, index) { return '<article class="saved-item"><div><h3><a href="card.html?deck=' + encodeURIComponent(item.id || "") + '" style="color:inherit;text-decoration:none">' + escapeHtml(item.title || "Flashcard Deck") + '</a></h3><p>' + (item.cards?.length || 0) + ' cards · Saved ' + new Date(item.savedAt || Date.now()).toLocaleDateString() + '</p></div><div class="saved-actions"><a class="btn-secondary" href="card.html?deck=' + encodeURIComponent(item.id || "") + '" style="display:inline-flex;align-items:center;justify-content:center;text-decoration:none">Open</a><button class="btn-secondary" type="button" data-export-index="' + index + '" data-format="json">JSON</button><button class="btn-secondary" type="button" data-export-index="' + index + '" data-format="csv">CSV</button><button class="btn-secondary" type="button" data-export-index="' + index + '" data-format="anki">Anki</button><button class="btn-secondary" type="button" data-print-index="' + index + '">Print</button></div></article>'; }).join("") : '<div class="saved-empty">No saved decks yet. Generate a deck, then use the save button in the header.</div>';
     list.querySelectorAll("[data-export-index]").forEach(function (button) { button.onclick = function () { const item = saved[Number(button.dataset.exportIndex)]; exportDeck(item.cards, item.title, button.dataset.format); }; });
     list.querySelectorAll("[data-print-index]").forEach(function (button) { button.onclick = function () { const item = saved[Number(button.dataset.printIndex)]; exportDeck(item.cards, item.title, "print"); }; });
   }
@@ -63,7 +70,7 @@
             const decks = Array.isArray(parsed)
               ? (parsed.length && (parsed[0].front || parsed[0].question) ? [{ title: file.name.replace(/\.[^.]+$/, ""), cards: parsed }] : parsed)
               : (Array.isArray(parsed.decks) ? parsed.decks : [{ title: parsed.title || file.name.replace(/\.[^.]+$/, ""), cards: cleanCards(parsed.cards || parsed) }]);
-            const valid = decks.map(function (d) { return { title: d.title || "Imported Deck", cards: cleanCards(d.cards), savedAt: d.savedAt || new Date().toISOString() }; }).filter(function (d) { return d.cards.length; });
+            const valid = decks.map(function (d) { return { id: newId(), title: d.title || "Imported Deck", cards: cleanCards(d.cards), savedAt: d.savedAt || new Date().toISOString() }; }).filter(function (d) { return d.cards.length; });
             writeSaved(valid.concat(readSaved())); renderSaved(); flash(valid.length + " deck" + (valid.length === 1 ? "" : "s") + " imported.");
           } catch (error) { flash("That file is not a valid JSON, CSV, or Anki deck."); }
           importInput.value = "";

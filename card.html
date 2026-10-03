@@ -772,6 +772,8 @@ if(hamBtn&&mobileMenu){
   var toastEl = document.getElementById("mcToast");
   var openIds = {};
   var firstRender = true;
+  var targetId = null;
+  try { targetId = new URLSearchParams(location.search).get("deck"); } catch (e) {}
   var toastTimer = null;
   var openMenu = null;
 
@@ -967,6 +969,7 @@ if(hamBtn&&mobileMenu){
   function section(d) {
     var open = !!openIds[d.id];
     var s = el("section", "mc-section" + (open ? " open" : ""));
+    s.id = "deck-" + d.id;
     var head = el("div", "mc-head");
 
     var tg = el("button", "mc-toggle");
@@ -1041,7 +1044,11 @@ if(hamBtn&&mobileMenu){
     var q = (searchEl.value || "").trim().toLowerCase();
 
     var decks = all.slice().sort(function (a, b) { return (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0); });
-    if (firstRender && decks.length) { openIds[decks[0].id] = true; }
+    var wasFirst = firstRender, target = null;
+    if (wasFirst && decks.length) {
+      if (targetId) target = decks.filter(function (d) { return d.id === targetId; })[0] || null;
+      openIds[(target || decks[0]).id] = true;
+    }
     firstRender = false;
 
     if (q) {
@@ -1055,6 +1062,10 @@ if(hamBtn&&mobileMenu){
 
     listEl.textContent = "";
     decks.forEach(function (d) { listEl.appendChild(section(d)); });
+    if (wasFirst && target) {
+      var node = document.getElementById("deck-" + target.id);
+      if (node) setTimeout(function () { node.scrollIntoView({ behavior: "smooth", block: "start" }); }, 60);
+    }
 
     var totalCards = all.reduce(function (n, d) { return n + d.cards.length; }, 0);
     countEl.textContent = all.length ? all.length + (all.length === 1 ? " deck · " : " decks · ") + totalCards + " cards" : "";
