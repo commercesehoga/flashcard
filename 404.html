@@ -1224,6 +1224,20 @@ footer{
 .social-btn svg{width:24px;height:24px}
 .social-btn:hover,.social-btn:focus-visible{transform:translateY(-2px)}
 </style>
+<style id="theme-anim">
+/* theme toggle: icons morph (rotate + scale + fade), page reveals in a circle from the button */
+.theme-btn{position:relative;overflow:hidden}
+.theme-btn svg{position:absolute;inset:0;margin:auto;transition:transform .55s cubic-bezier(.2,.8,.2,1),opacity .3s ease}
+#themeIconSun{opacity:1;transform:rotate(0) scale(1)}
+#themeIconMoon{opacity:0;transform:rotate(-90deg) scale(.3)}
+[data-theme="dark"] #themeIconSun{opacity:0;transform:rotate(90deg) scale(.3)}
+[data-theme="dark"] #themeIconMoon{opacity:1;transform:rotate(0) scale(1)}
+.theme-btn:active{transform:translateY(0) scale(.92)}
+::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
+::view-transition-old(root){z-index:1}::view-transition-new(root){z-index:2}
+html.theme-swap *{transition:none!important}
+@media(prefers-reduced-motion:reduce){.theme-btn svg{transition:none}}
+</style>
 </head>
 <body>
 <!-- LOADER -->
@@ -1259,7 +1273,7 @@ footer{
 <path d="M2.5 12h2.4M19.1 12h2.4"></path>
 <path d="M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"></path>
 </svg>
-<svg fill="none" id="themeIconMoon" stroke="currentColor" stroke-linecap="round" stroke-width="1.8" style="display:none" viewbox="0 0 24 24">
+<svg fill="none" id="themeIconMoon" stroke="currentColor" stroke-linecap="round" stroke-width="1.8" viewbox="0 0 24 24">
 <path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"></path>
 </svg>
 </button>
@@ -1428,19 +1442,21 @@ var themeBtn=document.getElementById('themeBtn');
 var sunIcon=document.getElementById('themeIconSun');
 var moonIcon=document.getElementById('themeIconMoon');
 
-function syncIcons(){
-  var theme=document.documentElement.getAttribute('data-theme');
-  sunIcon.style.display=theme === 'dark' ? 'none' : 'block';
-  moonIcon.style.display=theme === 'dark' ? 'block' : 'none';
-}
+function syncIcons(){ var dark=document.documentElement.getAttribute('data-theme')==='dark'; themeBtn.setAttribute('aria-pressed',dark?'true':'false'); }
 
 syncIcons();
 themeBtn.addEventListener('click',function(){
-  var next=document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', next);
-  try{ localStorage.setItem('theme', next); }catch(e){}
-  syncIcons();
-});
+    var de=document.documentElement,next=de.getAttribute('data-theme')==='dark'?'light':'dark';
+    function apply(){ de.setAttribute('data-theme',next); try{ localStorage.setItem('theme',next); }catch(e){} syncIcons(); }
+    var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(!document.startViewTransition||reduce){ apply(); return; }
+    var r=themeBtn.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2;
+    var rad=Math.hypot(Math.max(x,innerWidth-x),Math.max(y,innerHeight-y));
+    de.classList.add('theme-swap');
+    var t=document.startViewTransition(apply);
+    t.ready.then(function(){ de.animate({clipPath:['circle(0px at '+x+'px '+y+'px)','circle('+rad+'px at '+x+'px '+y+'px)']},{duration:650,easing:'cubic-bezier(.4,0,.2,1)',pseudoElement:'::view-transition-new(root)'}); });
+    t.finished.then(function(){ de.classList.remove('theme-swap'); },function(){ de.classList.remove('theme-swap'); });
+  });
 
 /* =========================
    BROKEN URL + REPORT LINK
