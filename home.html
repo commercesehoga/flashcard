@@ -666,6 +666,8 @@ label.field-label{font-size:13px; font-weight:700; color:var(--muted); margin-bo
 .tap-hint{position:absolute; bottom:16px; font-size:12px; color:var(--muted-soft); font-weight:400;}
 
 .deck-controls{display:flex; justify-content:center; gap:12px; margin-bottom:8px;}
+.deck-controls .btn-secondary{display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px; padding:0; flex:0 0 48px;}
+.deck-controls .btn-secondary svg{width:20px; height:20px; margin:0; flex:none; pointer-events:none;}
 
 .dots{display:flex; justify-content:center; gap:6px; margin-top:18px; flex-wrap:wrap;}
 .dot{width:8px; height:8px; border-radius:9999px; background:var(--hairline-strong); transition:background .15s ease, width .15s ease;}
@@ -1454,8 +1456,8 @@ textarea:focus, input[type="text"]:focus{border:2px solid var(--primary); paddin
     </div>
 
     <div class="deck-controls">
-      <button class="btn-secondary" id="shuffleBtn">Shuffle</button>
-      <button class="btn-secondary" id="newDeckBtn">New Deck</button><button class="btn-secondary" id="exportCsvBtn">CSV</button><button class="btn-secondary" id="exportAnkiBtn">Anki</button>
+      <button class="btn-secondary" id="shuffleBtn" type="button" aria-label="Shuffle cards" title="Shuffle cards"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg></button>
+      <button class="btn-secondary" id="newDeckBtn" type="button" aria-label="New deck" title="New deck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button><button class="btn-secondary" id="exportCsvBtn" type="button" aria-label="Export CSV" title="Export CSV"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><polyline points="14 3 14 8 19 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/><line x1="12" y1="11" x2="12" y2="19"/></svg></button><button class="btn-secondary" id="exportAnkiBtn" type="button" aria-label="Export for Anki" title="Export for Anki"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="14" height="14" rx="2.5"/><path d="M7 6V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-2"/><path d="M7 13l3 3 4-5"/></svg></button>
     </div>
 
     <div class="dots" id="dots"></div>
@@ -2242,7 +2244,7 @@ async function generateFlashcards(){
 
     document.getElementById("deckTitle").textContent =
       parsed.exam_detected ? "Flashcards — " + parsed.exam_detected : "Your Flashcards";
-    autoSaveDeck();
+    if (autoSaveDeck()) return;
 
     buildDots();
     renderCard();
@@ -2365,33 +2367,30 @@ document.getElementById("heroOptionUpload").addEventListener("click", () => {
   scrollToGenerator();
 });
 
-// ---------- Auto-save deck (every generated deck lands in save.html) ----------
+// ---------- Auto-save + open on card.html (every generated deck gets /card?card{no}{id}) ----------
 function autoSaveDeck(){
-  if (!deck || deck.length === 0) return;
+  if (!deck || deck.length === 0) return false;
   try {
-    const key = "ts_flashcard_saved_decks";
-    const saved = JSON.parse(localStorage.getItem(key) || "[]");
-    const val = id => { const n = document.getElementById(id); if (!n) return ""; return ((n.tagName === "INPUT" || n.tagName === "TEXTAREA") ? n.value : (n.textContent || "")).trim(); };
-    const fallback = (document.getElementById("deckTitle").textContent || "Flashcard Deck").trim();
-    const name = (val("topicInput") || val("fileName") || val("imageName") || "").replace(/\s+/g, " ").slice(0, 60);
-    const title = name ? name + " — " + fallback.replace(/^Flashcards\s*—\s*/, "").replace(/^Your Flashcards$/, "Flashcards") : fallback;
-    saved.unshift({
-      id: "d" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
-      title: title,
-      cards: deck,
-      savedAt: new Date().toISOString(),
-      source: document.body.dataset.page || "index"
-    });
-    while (saved.length > 50) {
-      let i = saved.length - 1;
-      while (i > 0 && saved[i].pinned) i--;
-      saved.splice(i, 1);
-    }
-    localStorage.setItem(key, JSON.stringify(saved));
-    showToast("💾", "Deck saved", "Added to Saved automatically. View all in My Cards.");
+    const page = document.body.dataset.page || "index";
+    const val = id => { const n = document.getElementById(id); if (!n) return ""; return ((n.tagName === "INPUT" || n.tagName === "TEXTAREA") ? n.value : (n.textContent || "")).replace(/\s+/g, " ").trim(); };
+    const tab = ({ pdf:"pdf", img:"ocr", youtube:"youtube", url:"url" })[page] || (document.querySelector(".tab-btn.active")?.dataset.tab || "topic");
+    let name = "";
+    if (tab === "pdf") name = val("fileName").replace(/\.pdf$/i, "");
+    else if (tab === "ocr") name = val("imageName").replace(/\.[a-z0-9]+$/i, "");
+    else if (tab === "youtube") name = "YouTube video";
+    else if (tab === "url") { try { name = new URL(val("urlInput")).hostname.replace(/^www\./, ""); } catch (e) { name = "Webpage"; } }
+    else name = val("topicInput");
+    name = name.slice(0, 60);
+    const exam = (document.getElementById("deckTitle").textContent || "").replace(/^Flashcards\s*—\s*/, "").replace(/^Your Flashcards$/, "").trim();
+    const title = (name ? name : "Flashcards") + (exam ? " — " + exam : "");
+    const saved = TSDecks.add({ title: title, cards: deck, source: page });
+    if (!saved) throw new Error("storage unavailable");
+    location.assign(TSDecks.url(saved));
+    return true;
   } catch (err) {
     console.error(err);
-    showToast("⚠️", "Could not auto-save", "Local storage might be full or disabled.");
+    showToast("⚠️", "Could not auto-save", "Local storage might be full or disabled. Showing the deck here instead.");
+    return false;
   }
 }
 
@@ -2488,6 +2487,7 @@ document.querySelectorAll('.faq-item').forEach(function(d){
 });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@7/dist/tesseract.min.js"></script>
+<script src="deck-store.js"></script>
 <script src="deck-transfer.js"></script>
 <script>if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("/sw.js").catch(function(){});});}</script>
 </body>

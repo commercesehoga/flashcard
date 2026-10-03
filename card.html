@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>My Flashcards | ThunderStudy AI</title>
 <meta name="description" content="View every flashcard deck you create with ThunderStudy AI in one place. Flip cards, keep, download or share decks, all saved on your device.">
 <meta name="author" content="Wondermayank">
-<meta name="robots" content="index, follow">
-<link rel="canonical" href="https://flashcard.thunderstudy.indevs.in/card.html">
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="https://flashcard.thunderstudy.indevs.in/card">
 <meta name="theme-color" content="#573AFC">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ThunderStudy AI">
 <meta property="og:title" content="My Flashcards | ThunderStudy AI">
 <meta property="og:description" content="View every flashcard deck you create with ThunderStudy AI in one place. Flip cards, keep, download or share decks, all saved on your device.">
-<meta property="og:url" content="https://flashcard.thunderstudy.indevs.in/card.html">
+<meta property="og:url" content="https://flashcard.thunderstudy.indevs.in/card">
 <meta property="og:image" content="https://flashcard.thunderstudy.indevs.in/assets/og-image.png">
 <meta property="og:image:alt" content="ThunderStudy AI flashcard maker for student revision">
 <meta property="og:image:width" content="1200">
@@ -29,7 +29,7 @@
 <link rel="manifest" href="/manifest.json">
 <script>(function(){try{var t=localStorage.getItem('theme')||'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebPage","name":"My Flashcards","description":"View every flashcard deck you create with ThunderStudy AI in one place. Flip cards, keep, download or share decks, all saved on your device.","url":"https://flashcard.thunderstudy.indevs.in/card.html","isPartOf":{"@type":"WebSite","name":"ThunderStudy AI","url":"https://flashcard.thunderstudy.indevs.in/"},"publisher":{"@type":"Person","name":"Wondermayank"}}
+{"@context":"https://schema.org","@type":"WebPage","name":"My Flashcards","description":"View every flashcard deck you create with ThunderStudy AI in one place. Flip cards, keep, download or share decks, all saved on your device.","url":"https://flashcard.thunderstudy.indevs.in/card","isPartOf":{"@type":"WebSite","name":"ThunderStudy AI","url":"https://flashcard.thunderstudy.indevs.in/"},"publisher":{"@type":"Person","name":"Wondermayank"}}
 </script>
 <style>
 :root{--canvas:#F4F1FC;
@@ -490,6 +490,16 @@ textarea:focus, input[type="text"]:focus{border:2px solid var(--primary); paddin
 .mc-empty a{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 22px;border-radius:var(--radius-pill);background:var(--primary);color:var(--on-primary);font-weight:600;font-size:14px;text-decoration:none;box-shadow:4px 4px 10px var(--clay-dark),-4px -4px 10px var(--clay-light)}
 .mc-toast{position:fixed;left:50%;bottom:calc(100px + env(safe-area-inset-bottom));transform:translate(-50%,16px);opacity:0;pointer-events:none;background:var(--ink);color:var(--canvas);padding:11px 18px;border-radius:var(--radius-pill);font-size:14px;font-weight:600;transition:opacity .25s ease,transform .25s ease;z-index:80;max-width:90vw;text-align:center}
 .mc-toast.show{opacity:1;transform:translate(-50%,0)}
+
+.mc-back{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 16px 0 10px;border-radius:var(--radius-pill);background:var(--surface);color:var(--ink);font-size:14px;font-weight:600;text-decoration:none;box-shadow:4px 4px 10px var(--clay-dark),-4px -4px 10px var(--clay-light);transition:transform .2s ease,color .2s ease}
+.mc-back:hover{color:var(--primary);transform:translateY(-2px)}
+.mc-back svg{width:18px;height:18px}
+.mc-back[hidden],.mc-search[hidden],.mc-count[hidden]{display:none}
+.mc-toolbar .theme-btn{margin-left:auto}
+a.mc-toggle{text-decoration:none}
+.mc-section.single .mc-toggle{cursor:default}
+.mc-section.single .mc-body{padding-top:0}
+.mc-section.single .mc-meta{font-size:13.5px;margin:0}
 @media(max-width:560px){
   .mc-head{padding:14px}
   .mc-actions{width:100%;justify-content:flex-end;gap:6px}
@@ -563,17 +573,18 @@ textarea:focus, input[type="text"]:focus{border:2px solid var(--primary); paddin
 
 <main>
   <section class="page-heading">
-    <h1>My flashcards</h1>
-    <p>Every deck you generate is saved on this device automatically. Open a section to flip through its cards, or use the icons to keep, download or share a deck.</p>
+    <h1 id="mcHeading">My flashcards</h1>
+    <p id="mcLead">Every deck you generate is saved on this device automatically. Open a section to see its cards, or use the icons to keep, download or share a deck.</p>
   </section>
 
   <div class="mc-toolbar">
-    <label class="mc-search">
+    <a class="mc-back" id="mcBack" href="save.html" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>Saved decks</a>
+    <label class="mc-search" id="mcSearchWrap">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
       <input type="search" id="mcSearch" placeholder="Search decks and cards" aria-label="Search decks and cards" autocomplete="off">
     </label>
     <span class="mc-count" id="mcCount" aria-live="polite"></span>
-    <a class="theme-btn" href="index.html" aria-label="Create a new deck" title="Create a new deck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></a>
+    <a class="theme-btn" id="mcNew" href="index.html" aria-label="Create a new deck" title="Create a new deck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></a>
   </div>
 
   <div class="mc-list" id="mcList"></div>
@@ -761,15 +772,22 @@ if(hamBtn&&mobileMenu){
   },{passive:true});
 })();
 </script>
+<script src="deck-store.js"></script>
 <script>
 (function () {
   "use strict";
-  var KEY = "ts_flashcard_saved_decks";
+  var D = window.TSDecks;
   var listEl = document.getElementById("mcList");
   var emptyEl = document.getElementById("mcEmpty");
   var countEl = document.getElementById("mcCount");
+  var searchWrap = document.getElementById("mcSearchWrap");
   var searchEl = document.getElementById("mcSearch");
   var toastEl = document.getElementById("mcToast");
+  var headingEl = document.getElementById("mcHeading");
+  var leadEl = document.getElementById("mcLead");
+  var backEl = document.getElementById("mcBack");
+  var newEl = document.getElementById("mcNew");
+  var tok = D.token(location.search);
   var openIds = {};
   var firstRender = true;
   var toastTimer = null;
@@ -798,17 +816,15 @@ if(hamBtn&&mobileMenu){
     s.setAttribute("stroke-linecap", "round");
     s.setAttribute("stroke-linejoin", "round");
     s.setAttribute("aria-hidden", "true");
-    s.innerHTML = ICON[name]; // static, trusted constants only
+    s.innerHTML = ICON[name]; // static trusted constants only
     return s;
   }
-
   function el(tag, cls, text) {
     var n = document.createElement(tag);
     if (cls) n.className = cls;
     if (text != null) n.textContent = text;
     return n;
   }
-
   function iconBtn(name, label, onClick, cls) {
     var b = el("button", "mc-ic" + (cls ? " " + cls : ""));
     b.type = "button";
@@ -818,113 +834,52 @@ if(hamBtn&&mobileMenu){
     b.addEventListener("click", function (e) { e.stopPropagation(); if (name !== "more") closeMenu(); onClick(b, e); });
     return b;
   }
-
-  /* ---------- storage ---------- */
-  function persist(arr) {
-    try { localStorage.setItem(KEY, JSON.stringify(arr)); return true; }
-    catch (e) { toast("Could not save changes"); return false; }
-  }
-
-  function load() {
-    var arr;
-    try { arr = JSON.parse(localStorage.getItem(KEY) || "[]"); } catch (e) { arr = []; }
-    if (!Array.isArray(arr)) arr = [];
-    var dirty = false;
-    arr = arr.filter(function (d) { return d && Array.isArray(d.cards); });
-    arr.forEach(function (d) {
-      if (!d.id) { d.id = "d" + Math.random().toString(36).slice(2, 10); dirty = true; }
-      d.cards = d.cards.filter(function (c) { return c && typeof c.front === "string" && typeof c.back === "string"; });
-    });
-    if (dirty) persist(arr);
-    return arr;
-  }
-
-  /* ---------- helpers ---------- */
   function toast(msg) {
     toastEl.textContent = msg;
     toastEl.classList.add("show");
     clearTimeout(toastTimer);
     toastTimer = setTimeout(function () { toastEl.classList.remove("show"); }, 2600);
   }
-
   function fmtDate(iso) {
     var d = new Date(iso);
-    if (isNaN(d.getTime())) return "";
-    return d.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+    return isNaN(d.getTime()) ? "" : d.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
   }
-
-  function slug(s) { return (s || "deck").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 40) || "deck"; }
-
-  function saveFile(name, mime, text, bom) {
-    var blob = new Blob([(bom ? "\ufeff" : "") + text], { type: mime + ";charset=utf-8" });
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement("a");
-    a.href = url; a.download = name;
-    document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(function () { URL.revokeObjectURL(url); }, 1500);
-  }
-
-  function csvCell(v) { return '"' + String(v).replace(/"/g, '""') + '"'; }
-  function toCsv(d) { return "Question,Answer\r\n" + d.cards.map(function (c) { return csvCell(c.front) + "," + csvCell(c.back); }).join("\r\n"); }
-  function toAnki(d) { return d.cards.map(function (c) { return c.front.replace(/\s*[\r\n\t]+\s*/g, " ") + "\t" + c.back.replace(/\s*[\r\n\t]+\s*/g, " "); }).join("\n"); }
-  function toText(d) {
-    return d.title + "\n\n" + d.cards.map(function (c, i) { return (i + 1) + ". Q: " + c.front + "\n   A: " + c.back; }).join("\n\n") + "\n\nMade with ThunderStudy AI — " + location.origin;
-  }
-
-  function copyText(text, okMsg) {
+  function copyText(t, okMsg) {
     function fallback() {
-      var t = document.createElement("textarea");
-      t.value = text; t.style.position = "fixed"; t.style.opacity = "0";
-      document.body.appendChild(t); t.select();
+      var ta = document.createElement("textarea");
+      ta.value = t; ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
       var ok = false; try { ok = document.execCommand("copy"); } catch (e) {}
-      t.remove();
+      ta.remove();
       toast(ok ? okMsg : "Could not copy");
     }
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text).then(function () { toast(okMsg); }, fallback);
-    } else fallback();
-  }
-
-  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
-
-  function printDeck(d) {
-    var w = window.open("", "_blank");
-    if (!w) { toast("Allow pop-ups to print"); return; }
-    var rows = d.cards.map(function (c, i) {
-      return "<tr><td>" + (i + 1) + "</td><td>" + esc(c.front) + "</td><td>" + esc(c.back) + "</td></tr>";
-    }).join("");
-    w.document.write("<!doctype html><meta charset=utf-8><title>" + esc(d.title) + "</title><style>body{font:14px/1.5 system-ui,sans-serif;margin:32px;color:#222}h1{font-size:20px}table{border-collapse:collapse;width:100%}td,th{border:1px solid #bbb;padding:8px 10px;text-align:left;vertical-align:top}th{background:#f0eefc}td:first-child{width:36px;color:#777}</style><h1>" + esc(d.title) + "</h1><table><tr><th>#</th><th>Question</th><th>Answer</th></tr>" + rows + "</table>");
-    w.document.close();
-    w.focus();
-    setTimeout(function () { w.print(); }, 250);
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(function () { toast(okMsg); }, fallback);
+    else fallback();
   }
 
   /* ---------- actions ---------- */
   function mutate(id, fn) {
-    var arr = load();
+    var arr = D.load();
     var i = arr.findIndex(function (d) { return d.id === id; });
     if (i < 0) return;
     fn(arr, i);
-    persist(arr);
+    if (!D.save(arr)) toast("Could not save changes");
     render();
   }
-
   function togglePin(d) {
     mutate(d.id, function (arr, i) {
       arr[i].pinned = !arr[i].pinned;
       toast(arr[i].pinned ? "Saved — this deck is kept permanently" : "Removed from kept decks");
     });
   }
-
   function share(d) {
-    var text = toText(d);
+    var t = D.text(d);
     if (navigator.share) {
-      navigator.share({ title: d.title, text: text.slice(0, 4000) }).catch(function (e) {
-        if (!e || e.name !== "AbortError") copyText(text, "Deck copied to clipboard");
+      navigator.share({ title: d.title, text: t.slice(0, 4000) }).catch(function (e) {
+        if (!e || e.name !== "AbortError") copyText(t, "Deck copied to clipboard");
       });
-    } else copyText(text, "Deck copied to clipboard");
+    } else copyText(t, "Deck copied to clipboard");
   }
-
   function rename(d) {
     var name = window.prompt("Rename deck", d.title);
     if (name == null) return;
@@ -932,16 +887,15 @@ if(hamBtn&&mobileMenu){
     if (!name) return;
     mutate(d.id, function (arr, i) { arr[i].title = name; });
   }
-
   function remove(d) {
     if (!window.confirm('Delete "' + d.title + '"? This cannot be undone.')) return;
-    mutate(d.id, function (arr, i) { arr.splice(i, 1); });
+    var arr = D.load().filter(function (x) { return x.id !== d.id; });
+    D.save(arr);
+    if (tok) { location.replace("save.html"); return; }
     toast("Deck deleted");
+    render();
   }
-
-  function closeMenu() {
-    if (openMenu) { openMenu.classList.remove("show"); openMenu = null; }
-  }
+  function closeMenu() { if (openMenu) { openMenu.classList.remove("show"); openMenu = null; } }
 
   /* ---------- render ---------- */
   function cardTile(c) {
@@ -964,32 +918,42 @@ if(hamBtn&&mobileMenu){
     return t;
   }
 
-  function section(d) {
-    var open = !!openIds[d.id];
-    var s = el("section", "mc-section" + (open ? " open" : ""));
-    var head = el("div", "mc-head");
-
-    var tg = el("button", "mc-toggle");
-    tg.type = "button";
-    tg.setAttribute("aria-expanded", open ? "true" : "false");
-    var chev = el("span", "mc-chev"); chev.appendChild(svg("chev", "2"));
-    var titles = el("span", "mc-titles");
-    titles.appendChild(el("span", "mc-title", d.title || "Flashcard deck"));
+  function metaLine(d) {
     var when = fmtDate(d.savedAt);
-    titles.appendChild(el("span", "mc-meta", d.cards.length + (d.cards.length === 1 ? " card" : " cards") + (when ? " · " + when : "") + (d.pinned ? " · Kept" : "")));
-    tg.appendChild(chev); tg.appendChild(titles);
-    tg.addEventListener("click", function () {
-      var on = s.classList.toggle("open");
-      openIds[d.id] = on;
-      tg.setAttribute("aria-expanded", on ? "true" : "false");
-      if (on && !body.firstChild) fillBody();
-    });
+    return "Card " + d.no + " · " + d.cards.length + (d.cards.length === 1 ? " card" : " cards") + (when ? " · " + when : "") + (d.pinned ? " · Kept" : "");
+  }
+
+  function section(d, single) {
+    var open = single || !!openIds[d.id];
+    var s = el("section", "mc-section" + (open ? " open" : "") + (single ? " single" : ""));
+    var head = el("div", "mc-head");
+    var body = el("div", "mc-body");
+    function fillBody() {
+      var grid = el("div", "mc-grid");
+      d.cards.forEach(function (c) { grid.appendChild(cardTile(c)); });
+      body.appendChild(grid);
+    }
+
+    var left;
+    if (single) {
+      left = el("div", "mc-toggle");
+      left.appendChild(el("span", "mc-meta", metaLine(d)));
+    } else {
+      left = el("a", "mc-toggle");
+      left.href = D.url(d);
+      left.setAttribute("aria-label", "Open " + d.title);
+      var chev = el("span", "mc-chev"); chev.appendChild(svg("chev", "2"));
+      var titles = el("span", "mc-titles");
+      titles.appendChild(el("span", "mc-title", d.title));
+      titles.appendChild(el("span", "mc-meta", metaLine(d)));
+      left.appendChild(chev); left.appendChild(titles);
+    }
 
     var actions = el("div", "mc-actions");
     var pin = iconBtn("save", d.pinned ? "Unsave deck" : "Save deck", function () { togglePin(d); }, d.pinned ? "on" : "");
     pin.setAttribute("aria-pressed", d.pinned ? "true" : "false");
     var dl = iconBtn("download", "Download as CSV", function () {
-      saveFile("flashcards-" + slug(d.title) + ".csv", "text/csv", toCsv(d), true);
+      D.download("flashcards-" + D.slug(d.title) + ".csv", "text/csv", D.csv(d), true);
       toast("CSV downloaded");
     });
     var sh = iconBtn("share", "Share deck", function () { share(d); });
@@ -1004,76 +968,87 @@ if(hamBtn&&mobileMenu){
       menu.appendChild(b);
     }
     item("edit", "Rename", function () { rename(d); });
-    item("copy", "Copy as text", function () { copyText(toText(d), "Deck copied to clipboard"); });
-    item("anki", "Export for Anki", function () { saveFile("flashcards-" + slug(d.title) + "-anki.txt", "text/plain", toAnki(d)); toast("Anki file downloaded"); });
-    item("json", "Backup (JSON)", function () {
-      saveFile("flashcards-" + slug(d.title) + ".json", "application/json", JSON.stringify({ title: d.title, cards: d.cards, savedAt: d.savedAt }, null, 2));
-      toast("Backup downloaded");
-    });
-    item("print", "Print", function () { printDeck(d); });
+    item("copy", "Copy as text", function () { copyText(D.text(d), "Deck copied to clipboard"); });
+    item("anki", "Export for Anki", function () { D.download("flashcards-" + D.slug(d.title) + "-anki.txt", "text/plain", D.anki(d)); toast("Anki file downloaded"); });
+    item("json", "Backup (JSON)", function () { D.download("flashcards-" + D.slug(d.title) + ".json", "application/json", D.json(d)); toast("Backup downloaded"); });
+    item("print", "Print", function () { if (!D.print(d)) toast("Allow pop-ups to print"); });
     item("trash", "Delete", function () { remove(d); }, "danger");
 
     var more = iconBtn("more", "More options", function (b) {
-      var wasOpen = menu.classList.contains("show");
+      var was = menu.classList.contains("show");
       closeMenu();
-      if (!wasOpen) { menu.classList.add("show"); openMenu = menu; b.setAttribute("aria-expanded", "true"); }
+      if (!was) { menu.classList.add("show"); openMenu = menu; }
     });
     more.setAttribute("aria-haspopup", "menu");
 
     actions.appendChild(pin); actions.appendChild(dl); actions.appendChild(sh); actions.appendChild(more); actions.appendChild(menu);
-    head.appendChild(tg); head.appendChild(actions);
-
-    var body = el("div", "mc-body");
-    function fillBody() {
-      var grid = el("div", "mc-grid");
-      d.cards.forEach(function (c) { grid.appendChild(cardTile(c)); });
-      body.appendChild(grid);
-    }
+    head.appendChild(left); head.appendChild(actions);
     if (open) fillBody();
-
     s.appendChild(head); s.appendChild(body);
     return s;
   }
 
+  function showEmpty(title, text, ctaText, ctaHref) {
+    emptyEl.hidden = false;
+    document.getElementById("mcEmptyTitle").textContent = title;
+    document.getElementById("mcEmptyText").textContent = text;
+    var cta = document.getElementById("mcEmptyCta");
+    cta.hidden = !ctaText;
+    if (ctaText) { cta.textContent = ctaText; cta.href = ctaHref; }
+  }
+
   function render() {
     closeMenu();
-    var all = load();
+    var all = D.load();
+    listEl.textContent = "";
+    emptyEl.hidden = true;
+
+    /* ----- single deck: /card?card{no}{id} ----- */
+    if (tok) {
+      searchWrap.hidden = true; countEl.hidden = true; backEl.hidden = false; newEl.hidden = false;
+      var d = D.find(tok, all);
+      if (!d) {
+        headingEl.textContent = "Deck not found";
+        leadEl.textContent = "This link points to a deck that is not on this device. Decks are stored in the browser that created them.";
+        document.title = "Deck not found | ThunderStudy AI";
+        showEmpty("Nothing here", "It may have been deleted, or it was created on another device or browser.", "See saved decks", "save.html");
+        return;
+      }
+      headingEl.textContent = d.title;
+      leadEl.textContent = "Auto-saved on this device. Tap any card to flip it.";
+      document.title = d.title + " | ThunderStudy AI";
+      listEl.appendChild(section(d, true));
+      return;
+    }
+
+    /* ----- all decks: /card ----- */
     var q = (searchEl.value || "").trim().toLowerCase();
-
     var decks = all.slice().sort(function (a, b) { return (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0); });
-    if (firstRender && decks.length) { openIds[decks[0].id] = true; }
+    if (firstRender && decks.length) openIds[decks[0].id] = true;
     firstRender = false;
-
     if (q) {
       decks = decks.filter(function (d) {
-        return (d.title || "").toLowerCase().indexOf(q) > -1 || d.cards.some(function (c) {
+        return d.title.toLowerCase().indexOf(q) > -1 || d.cards.some(function (c) {
           return c.front.toLowerCase().indexOf(q) > -1 || c.back.toLowerCase().indexOf(q) > -1;
         });
       });
       decks.forEach(function (d) { openIds[d.id] = true; });
     }
-
-    listEl.textContent = "";
-    decks.forEach(function (d) { listEl.appendChild(section(d)); });
-
-    var totalCards = all.reduce(function (n, d) { return n + d.cards.length; }, 0);
-    countEl.textContent = all.length ? all.length + (all.length === 1 ? " deck · " : " decks · ") + totalCards + " cards" : "";
-
-    var none = decks.length === 0;
-    emptyEl.hidden = !none;
-    if (none) {
+    decks.forEach(function (d) { listEl.appendChild(section(d, false)); });
+    var total = all.reduce(function (n, d) { return n + d.cards.length; }, 0);
+    countEl.textContent = all.length ? all.length + (all.length === 1 ? " deck · " : " decks · ") + total + " cards" : "";
+    if (!decks.length) {
       var searching = !!q && all.length > 0;
-      document.getElementById("mcEmptyTitle").textContent = searching ? "No matches" : "No flashcards yet";
-      document.getElementById("mcEmptyText").textContent = searching ? "Nothing in your saved decks matches that search." : "Generate a deck from a topic, PDF, image, webpage or YouTube video and it will show up here automatically.";
-      document.getElementById("mcEmptyCta").hidden = searching;
+      showEmpty(searching ? "No matches" : "No flashcards yet",
+        searching ? "Nothing in your saved decks matches that search." : "Generate a deck from a topic, PDF, image, webpage or YouTube video and it will show up here automatically.",
+        searching ? "" : "Create your first deck", "index.html");
     }
   }
 
   document.addEventListener("click", function (e) { if (openMenu && !openMenu.contains(e.target)) closeMenu(); });
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
   searchEl.addEventListener("input", render);
-  window.addEventListener("storage", function (e) { if (e.key === KEY) render(); });
-
+  window.addEventListener("storage", function (e) { if (e.key === D.KEY) render(); });
   render();
 })();
 </script>
