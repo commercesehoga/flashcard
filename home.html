@@ -1107,17 +1107,14 @@ textarea:focus, input[type="text"]:focus{border:2px solid var(--primary); paddin
 </span>
 </a>
 <nav aria-label="Main navigation" class="nav-links">
-<a href="index.html">Home</a>
-<a href="about.html">About</a>
+<a href="index.html" class="active" aria-current="page">Home</a>
 <a href="faq.html">FAQ</a>
 <a href="new.html">New</a>
+<a href="about.html">About</a>
 </nav>
 <div class="nav-right">
-<button class="theme-btn" id="exportBtn" aria-label="Export current deck" title="Export current deck" type="button">⇩</button>
-<button class="theme-btn" id="printBtn" aria-label="Print current deck" title="Print current deck" type="button">⎙</button>
 
 <a aria-label="Contact" class="nav-request" href="https://wondermayank.in/contact" rel="noopener noreferrer" target="_blank"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path><path d="M12 12v6M9 15h6"></path></svg><span class="nav-request-text">Contact</span></a>
-<button class="theme-btn" id="saveBtn" aria-label="Save current deck" title="Save deck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg></button>
 <button aria-label="Toggle dark mode" class="theme-btn" id="themeToggle">
 <svg fill="none" id="sunIcon" stroke="currentColor" stroke-linecap="round" stroke-width="1.8" viewbox="0 0 24 24">
 <circle cx="12" cy="12" r="4.2"></circle>
@@ -1130,27 +1127,24 @@ textarea:focus, input[type="text"]:focus{border:2px solid var(--primary); paddin
 <path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"></path>
 </svg>
 </button>
-<a aria-label="Mock Test: ThunderStudy CBT mock tests" class="nav-cta" href="https://thundertest.indevs.in">Mock Test</a>
 <button aria-expanded="false" aria-label="Menu" class="ham-btn" id="hamBtn">
 <svg aria-hidden="true" class="ham-icon" fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-width="2" viewbox="0 0 24 24" width="20"><path class="ham-top" d="M3 6h18"></path><path class="ham-mid" d="M3 12h18"></path><path class="ham-bot" d="M3 18h18"></path></svg>
 </button>
 </div>
 </div>
-</header>
+<span hidden aria-hidden="true" id="exportBtn"></span><span hidden aria-hidden="true" id="printBtn"></span><span hidden aria-hidden="true" id="saveBtn"></span></header>
 <!-- MOBILE MENU -->
 <div class="mobile-menu" id="mobileMenu">
-<a href="index.html">Home</a>
-<a href="about.html">About</a>
+<a href="index.html" class="active" aria-current="page">Home</a>
 <a href="faq.html">FAQ</a>
 <a href="new.html">New</a>
-<a href="https://thundertest.indevs.in">Mock Test</a>
+<a href="about.html">About</a>
 </div>
 <div class="mobile-menu" id="mobileMenu">
-<a href="index.html">Home</a>
-<a href="about.html">About</a>
+<a href="index.html" class="active" aria-current="page">Home</a>
 <a href="faq.html">FAQ</a>
 <a href="new.html">New</a>
-<a href="https://thundertest.indevs.in">Mock Test</a>
+<a href="about.html">About</a>
 </div>
 
 
@@ -1551,7 +1545,7 @@ textarea:focus, input[type="text"]:focus{border:2px solid var(--primary); paddin
 <ul class="footer-links">
 <li><a aria-label="Wondermayank FAQ" href="https://wondermayank.in/fqa">FAQ</a></li>
 <li><a aria-label="Email Wondermayank" href="https://wondermayank.in/mail">Mail</a></li>
-<li><a href="https://wondermayank.in/contact">Contact</a></li><li><a href="about.html">About</a></li><li><a href="faq.html">FAQ</a></li><li><a href="new.html">Changelog</a></li>
+<li><a href="https://wondermayank.in/contact">Contact</a></li><li><a href="about.html">About</a></li><li><a href="faq.html">FAQ</a></li><li><a href="new.html">Changelog</a></li><li><a href="card.html">My Cards</a></li>
 </ul>
 </nav>
 <nav aria-label="wondermayank">
@@ -2248,6 +2242,7 @@ async function generateFlashcards(){
 
     document.getElementById("deckTitle").textContent =
       parsed.exam_detected ? "Flashcards — " + parsed.exam_detected : "Your Flashcards";
+    autoSaveDeck();
 
     buildDots();
     renderCard();
@@ -2370,27 +2365,35 @@ document.getElementById("heroOptionUpload").addEventListener("click", () => {
   scrollToGenerator();
 });
 
-// ---------- Save deck ----------
-document.getElementById("saveBtn").addEventListener("click", () => {
-  if (!deck || deck.length === 0) {
-    showToast("📌", "Nothing to save yet", "Generate a deck first, then tap save.");
-    return;
-  }
+// ---------- Auto-save deck (every generated deck lands in save.html) ----------
+function autoSaveDeck(){
+  if (!deck || deck.length === 0) return;
   try {
     const key = "ts_flashcard_saved_decks";
     const saved = JSON.parse(localStorage.getItem(key) || "[]");
+    const val = id => { const n = document.getElementById(id); if (!n) return ""; return ((n.tagName === "INPUT" || n.tagName === "TEXTAREA") ? n.value : (n.textContent || "")).trim(); };
+    const fallback = (document.getElementById("deckTitle").textContent || "Flashcard Deck").trim();
+    const name = (val("topicInput") || val("fileName") || val("imageName") || "").replace(/\s+/g, " ").slice(0, 60);
+    const title = name ? name + " — " + fallback.replace(/^Flashcards\s*—\s*/, "").replace(/^Your Flashcards$/, "Flashcards") : fallback;
     saved.unshift({
-      title: document.getElementById("deckTitle").textContent || "Flashcard Deck",
+      id: "d" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+      title: title,
       cards: deck,
-      savedAt: new Date().toISOString()
+      savedAt: new Date().toISOString(),
+      source: document.body.dataset.page || "index"
     });
-    localStorage.setItem(key, JSON.stringify(saved.slice(0, 50)));
-    showToast("💾", "Deck saved", "Stored locally on this device for next time.");
+    while (saved.length > 50) {
+      let i = saved.length - 1;
+      while (i > 0 && saved[i].pinned) i--;
+      saved.splice(i, 1);
+    }
+    localStorage.setItem(key, JSON.stringify(saved));
+    showToast("💾", "Deck saved", "Added to Saved automatically. View all in My Cards.");
   } catch (err) {
     console.error(err);
-    showToast("⚠️", "Could not save", "Local storage might be full or disabled.");
+    showToast("⚠️", "Could not auto-save", "Local storage might be full or disabled.");
   }
-});
+}
 
 // ---------- Promo banner ----------
 const promoBanner = document.getElementById("promoBanner");
