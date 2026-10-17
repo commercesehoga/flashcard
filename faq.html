@@ -189,7 +189,15 @@
         {
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Image text recognition and PDF text extraction run in your browser. Avoid importing anything private or confidential unless you are comfortable storing it locally."
+            "text": "Every AI deck is written by the Tiny model, the same Tiny you can meet on Tiny Create. Your topic or the text taken from your file is sent only to Tiny to write the cards and is not stored on any server."
+          },
+          "@type": "Question",
+          "name": "Which AI model makes the flashcards?"
+        },
+        {
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Image text recognition and PDF text extraction run in your browser, and only the extracted text goes to the Tiny model to write your cards. Avoid importing anything private or confidential unless you are comfortable storing it locally."
           },
           "@type": "Question",
           "name": "What happens to the PDF, image or text I upload?"
@@ -1502,6 +1510,17 @@ footer.wmf .wmf-legal{margin-right:0}
 .btn-secondary.btn-ic{width:44px;min-height:44px;padding:0;border-radius:50%}
 .btn-secondary.btn-ic svg{width:19px;height:19px}
 #generateBtn.btn-primary{min-height:56px;padding:0 34px;font-size:16px;font-weight:700}
+
+/* Powered by Tiny */
+.tiny-powered{max-width:1100px;margin:0 auto;padding:56px 24px 8px}
+.tiny-powered-card{display:grid;grid-template-columns:220px 1fr;gap:28px;align-items:center;padding:28px 36px;border-radius:32px;background:var(--surface);box-shadow:8px 8px 20px var(--clay-dark),-8px -8px 20px var(--clay-light)}
+.tiny-powered-card img{width:100%;height:auto;display:block;transform-origin:50% 100%;animation:tinyWave 3.2s ease-in-out infinite}
+.tiny-powered-kicker{display:inline-block;margin-bottom:8px;padding:5px 14px;border-radius:9999px;background:var(--primary-soft);color:var(--primary);font-size:12px;font-weight:700;letter-spacing:.4px;text-transform:uppercase}
+.tiny-powered h2{margin:0 0 8px;font-size:clamp(22px,3vw,30px);line-height:1.2;color:var(--ink)}
+.tiny-powered p{margin:0 0 18px;font-size:15px;line-height:1.6;color:var(--body-c,var(--muted));max-width:560px}
+@keyframes tinyWave{0%,100%{transform:rotate(0)}50%{transform:rotate(2.5deg)}}
+@media(max-width:700px){.tiny-powered{padding:40px 16px 0}.tiny-powered-card{grid-template-columns:1fr;justify-items:center;text-align:center;padding:24px 20px}.tiny-powered-card img{max-width:170px}}
+@media(prefers-reduced-motion:reduce){.tiny-powered-card img{animation:none}}
 </style>
 </head>
 <body>
@@ -1608,8 +1627,12 @@ footer.wmf .wmf-legal{margin-right:0}
          <div class="faq-a">Partly. Pages and locally saved decks may open without a connection. Creating cards from online sources needs an internet connection.</div>
       </details>
       <details class="faq">
+        <summary>Which AI model makes the flashcards?</summary>
+        <div class="faq-a">Every AI deck is written by the Tiny model, the same Tiny you can meet on Tiny Create. Your topic or the text taken from your file is sent only to Tiny to write the cards and is not stored on any server.</div>
+      </details>
+      <details class="faq">
         <summary>What happens to the PDF, image or text I upload?</summary>
-         <div class="faq-a">Image text recognition and PDF text extraction run in your browser. Avoid importing anything private or confidential unless you are comfortable storing it locally.</div>
+         <div class="faq-a">Image text recognition and PDF text extraction run in your browser, and only the extracted text goes to the Tiny model to write your cards. Avoid importing anything private or confidential unless you are comfortable storing it locally.</div>
       </details>
       <details class="faq">
          <summary>Can I import an existing deck?</summary>
@@ -1627,6 +1650,20 @@ footer.wmf .wmf-legal{margin-right:0}
         <summary>How do I report a bug or request a feature?</summary>
         <div class="faq-a">Email contact@wondermayank.indevs.in or use the Contact button in the header, which opens the contact page.</div>
       </details>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="tiny-powered" style="padding:0;max-width:none">
+        <div class="tiny-powered-card">
+      <img src="/assets/tiny-wave.webp" alt="Tiny, the Wondermayank mascot, waving hello" width="480" height="560" loading="lazy" decoding="async">
+      <div>
+        <span class="tiny-powered-kicker">Powered by Tiny model</span>
+        <h2 id="tinyPoweredTitle">Your flashcards are made by Tiny</h2>
+        <p>Every AI deck on ThunderStudy AI is written by the Tiny model. Have a question Tiny should know about? Say hi on Tiny Create.</p>
+        <a class="primary-btn" href="https://tiny.wondermayank.in" rel="noopener" target="_blank" style="text-decoration:none">Visit Tiny Create <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></a>
+      </div>
+    </div>
       </div>
     </section>
 

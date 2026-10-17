@@ -783,6 +783,61 @@ footer.wmf .wmf-legal{margin-right:0}
 @media(max-width:520px){.tiny-card{flex-direction:column;text-align:center;padding:16px}.tiny-card img{width:100%;max-width:240px}.tiny-card.is-sleep img{max-width:200px}.tiny-bar{margin-left:auto;margin-right:auto}}
 @media(prefers-reduced-motion:reduce){.tiny-card img,.tiny-bar::after{animation:none}}
 </style>
+<style id="fc-fixes">
+/* ===== FAQ boxes: compact, same size and look as faq.html ===== */
+.faq-section{background:transparent;border-radius:0;padding:56px 0 24px;margin:40px 0 0}
+.faq-section h2{font-size:clamp(26px,3.4vw,34px);margin:0 0 24px;text-align:center;color:var(--ink)}
+.faq-inner{max-width:820px;margin:0 auto;display:grid;gap:16px}
+.faq-item{background:var(--surface);border:none;border-radius:var(--radius-sm);margin:0;padding:0;overflow:visible;box-shadow:8px 8px 20px var(--clay-dark),-8px -8px 20px var(--clay-light);transition:box-shadow .2s ease}
+[data-theme="dark"] .faq-item{box-shadow:8px 8px 20px var(--clay-dark),-8px -8px 20px var(--clay-light)}
+.faq-item summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 24px;font-size:16px;font-weight:700;line-height:1.4;color:var(--ink);user-select:none}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item summary::marker{content:""}
+.faq-item summary:focus-visible{outline:2px solid var(--primary);outline-offset:3px;border-radius:var(--radius-sm)}
+.faq-item h3{font-size:16px;font-weight:700;line-height:1.4;margin:0;color:var(--ink)}
+.faq-item summary::after{content:"+";flex:0 0 30px;width:30px;height:30px;border-radius:50%;background:var(--primary-soft);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:700;line-height:1}
+.faq-item[open] summary::after{content:"\2212";background:var(--primary-soft);color:var(--primary)}
+.faq-icon{display:none}
+.faq-answer{padding:0 24px 22px}
+.faq-answer p,.faq-item>p{margin:0;font-size:15.5px;line-height:1.7;color:var(--body-c)}
+.faq-item>p{padding:0 24px 22px;max-width:none}
+@media(max-width:640px){
+  .faq-section{padding:40px 0 16px}
+  .faq-item summary{padding:18px 20px;font-size:15.5px}
+  .faq-answer{padding:0 20px 20px}
+  .faq-item>p{padding:0 20px 20px;font-size:15px;line-height:1.7}
+}
+
+/* ===== Generate button: animated like design.html (fill sweep + shine pass) ===== */
+:root{--yellow:#FFF0A8;--yellow-ink:#7A5C00}
+[data-theme="dark"]{--yellow:#6B5A1A;--yellow-ink:#FFF2B8}
+#generateBtn.btn-primary,.hero2-generate{
+  --c:var(--primary);--k:var(--on-primary);
+  position:relative;overflow:hidden;isolation:isolate;
+  background:var(--c);color:var(--k);
+  transition:transform .25s cubic-bezier(.2,.8,.2,1),color .3s ease,background .3s ease,box-shadow .3s ease}
+#generateBtn.btn-primary:hover,.hero2-generate:hover{background:var(--c);transform:translateY(-2px)}
+#generateBtn.btn-primary:active,.hero2-generate:active{transform:scale(.95);background:var(--c)}
+#generateBtn.btn-primary::before,.hero2-generate::before{content:"";position:absolute;inset:0;z-index:-1;background:var(--k);transform:translateX(-101%);transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+#generateBtn.btn-primary:hover::before,#generateBtn.btn-primary:focus-visible::before,
+.hero2-generate:hover::before,.hero2-generate:focus-visible::before{transform:none}
+#generateBtn.btn-primary:hover,#generateBtn.btn-primary:focus-visible,
+.hero2-generate:hover,.hero2-generate:focus-visible{color:var(--c)}
+#generateBtn.btn-primary::after,.hero2-generate::after{content:"";position:absolute;top:0;bottom:0;width:40%;left:-60%;z-index:-1;background:linear-gradient(100deg,transparent,rgba(255,255,255,.7),transparent);transform:skewX(-20deg);pointer-events:none}
+#generateBtn.btn-primary:hover::after,.hero2-generate:hover::after{animation:fcGenShine .7s}
+@keyframes fcGenShine{to{left:130%}}
+/* 2-token decks: the Generate button turns yellow, like the 25-card chip */
+#generateBtn[data-cost="2"]{--c:var(--yellow);--k:var(--yellow-ink)}
+#generateBtn .spinner{border-color:color-mix(in srgb,var(--k) 35%,transparent);border-top-color:var(--k)}
+/* no sweep while working or disabled */
+#generateBtn.btn-primary.loading::before,#generateBtn.btn-primary:disabled::before,
+#generateBtn.btn-primary.loading::after,#generateBtn.btn-primary:disabled::after{display:none}
+#generateBtn.btn-primary.loading:hover,#generateBtn.btn-primary.loading:focus-visible{color:var(--k);transform:none}
+#generateBtn.btn-primary:disabled{background:var(--primary-disabled);color:var(--muted)}
+@media(prefers-reduced-motion:reduce){
+  #generateBtn.btn-primary,.hero2-generate,#generateBtn.btn-primary::before,.hero2-generate::before,#generateBtn.btn-primary::after,.hero2-generate::after{animation:none!important;transition:none!important}
+}
+</style>
 </head>
 <body data-page="url">
 <div class="blob-bg b1"></div><div class="blob-bg b2"></div>
@@ -2231,7 +2286,7 @@ function renderCard(){
   progressText.textContent = (currentIndex + 1) + " / " + order.length;
   document.getElementById("prevBtn").disabled = currentIndex === 0;
   document.getElementById("nextBtn").disabled = currentIndex === order.length - 1;
-  document.querySelectorAll(".dot").forEach((d, i) => d.classList.toggle("active", i === currentIndex));
+  document.querySelectorAll("#dots .dot").forEach((d, i) => d.classList.toggle("active", i === currentIndex));
 }
 
 function buildDots(){
@@ -2473,6 +2528,21 @@ document.querySelectorAll('.faq-item').forEach(function(d){
   var prevRender=window.renderUsageLimits;
   if(typeof prevRender==='function'){ window.renderUsageLimits=function(){ prevRender.apply(this,arguments); syncCharge(); }; }
   syncCharge();
+})();
+</script>
+<script>
+/* Generate button turns yellow when the selected deck size costs 2 tokens */
+(function(){
+  var b=document.getElementById('generateBtn'); if(!b) return;
+  function sync(){
+    var c=document.querySelector('.cc-chip.selected');
+    var n=c?(parseInt(c.getAttribute('data-tokens'),10)||1):1;
+    b.setAttribute('data-cost',String(n));
+  }
+  document.querySelectorAll('.cc-chip').forEach(function(c){
+    c.addEventListener('click',function(){ setTimeout(sync,0); });
+  });
+  sync();
 })();
 </script>
 </body>
