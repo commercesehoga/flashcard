@@ -1,7 +1,7 @@
-const CACHE = "thunderstudy-shell-2026-10-03";
+const CACHE = "thunderstudy-shell-2026-10-17";
 const SHELL = [
   "/", "/index.html", "/home.html", "/pdf.html", "/img.html", "/youtube.html", "/dack.html", "/save.html",
-  "/about.html", "/faq.html", "/new.html", "/offline.html", "/favicon.svg", "/manifest.json", "/og-image.png", "/icons/icon-192.png", "/icons/icon-512.png"
+  "/about.html", "/faq.html", "/new.html", "/offline.html", "/favicon.svg", "/assets/zzz.webp", "/assets/sleepcharge.webp", "/assets/tiny-wave.webp", "/manifest.json", "/og-image.png", "/icons/icon-192.png", "/icons/icon-512.png"
 ];
 
 self.addEventListener("install", function (event) {

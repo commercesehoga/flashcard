@@ -639,6 +639,150 @@ textarea:focus, input[type="text"]:focus{border:2px solid var(--primary); paddin
   .dock, .dock-indicator, .tab-btn.dock-btn, .tab-btn.dock-btn svg{animation:none!important; transition:none!important}
 }
 </style>
+<style id="hf-new">
+.nav{ position:sticky; top:0; z-index:50; background:var(--canvas); border-bottom:1px solid var(--hairline); backdrop-filter:blur(16px) saturate(160%); }
+.nav .wrap{ display:flex; align-items:center; justify-content:space-between; height:76px; }
+.brand{ display:flex; align-items:center; gap:10px; font-weight:700; font-size:16px; color:var(--ink); }
+.brand-text{ display:flex; flex-direction:column; line-height:1.15; }
+.brand-name{ color:var(--ink); font-size:17px; font-weight:700; letter-spacing:-.2px; }
+.brand-accent{ color:var(--primary); }
+.brand-by{ color:var(--muted); font-size:11.5px; font-weight:400; letter-spacing:.1px; }
+.brand-mark{ width:36px; height:36px; border-radius:12px; background:none; display:flex; align-items:center; justify-content:center; box-shadow:none; }
+.brand-mark img{ width:32px; height:32px; }
+.nav-right{ display:flex; align-items:center; gap:12px; }
+.theme-btn{ width:40px; height:40px; border-radius:14px; background:var(--surface); display:flex; align-items:center; justify-content:center; color:var(--ink); box-shadow: 4px 4px 10px var(--clay-dark), -4px -4px 10px var(--clay-light); transition:transform .2s ease; }
+.theme-btn:hover{ transform:translateY(-2px); }
+.theme-btn svg{ width:18px; height:18px; }
+.nav-cta{ display:inline-flex; align-items:center; justify-content:center; height:40px; padding:0 18px; border-radius:var(--radius-pill); background:var(--primary); color:var(--on-primary); font-size:14px; font-weight:600; box-shadow: 4px 4px 10px var(--clay-dark), -4px -4px 10px var(--clay-light); transition:transform .2s ease,background .2s ease; }
+.nav-cta:hover{ background:var(--primary-active); transform:translateY(-2px); }
+.nav-request{ display:inline-flex; align-items:center; justify-content:center; gap:8px; width:40px; height:40px; padding:0; border-radius:14px; background:var(--surface); color:var(--ink); font-size:14px; font-weight:600; white-space:nowrap; box-shadow: 4px 4px 10px var(--clay-dark), -4px -4px 10px var(--clay-light); transition:transform .2s ease,color .2s ease; }
+.nav-request:hover{ color:var(--primary); transform:translateY(-2px); }
+.nav-request svg{ width:17px; height:17px; flex-shrink:0; }
+/* header, small screens: Contact shows as an icon */
+@media(max-width:640px){.nav .wrap{height:68px}.nav-right{gap:8px}.nav-cta{display:none}.nav-request{width:40px;padding:0;border-radius:14px}.nav-request-text{display:none}}
+@media(max-width:400px){.nav .wrap{padding:0 14px}
+.nav-right{gap:6px}
+.theme-btn,.nav-request{width:36px;height:36px}
+}
+/* header page links + mobile menu (same tokens as the 404 header) */
+.nav-icons{display:flex;align-items:center;gap:inherit}
+.ham-btn{display:none;width:40px;height:40px;border-radius:14px;background:var(--surface);color:var(--ink);align-items:center;justify-content:center;box-shadow:4px 4px 10px var(--clay-dark),-4px -4px 10px var(--clay-light)}
+.mobile-menu{display:none;flex-direction:column;position:fixed;top:76px;left:0;right:0;z-index:49;background:var(--canvas);border-bottom:1px solid var(--hairline);padding:0 20px;max-height:0;overflow:hidden;transition:max-height .25s ease,padding .25s ease}
+.mobile-menu.open{max-height:80vh;overflow-y:auto;padding:8px 20px 20px}
+.mobile-menu a{font-size:15px;font-weight:600;color:var(--ink);padding:14px 4px;border-bottom:1px solid var(--hairline)}
+.mobile-menu a.active{color:var(--primary)}
+.mobile-menu a:last-child{border-bottom:none}
+/* header: Home, FAQ and New are icon buttons on the right at every width; the 3-line button holds everything else */
+.ham-btn{display:flex}
+.mobile-menu{display:flex}
+@media(min-width:1100px){.mobile-menu{left:auto;right:20px;width:260px;border:1px solid var(--hairline);border-radius:var(--radius-card);box-shadow:0 18px 40px rgba(0,0,0,.14)}
+.mobile-menu:not(.open){border-color:transparent;box-shadow:none}
+}
+@media(max-width:640px){.mobile-menu{top:68px}
+.brand-by{display:none}
+.nav-home{display:none}
+}
+@media(max-width:520px){.brand-text{display:none}
+}
+@media(max-width:400px){.ham-btn{width:36px;height:36px}
+.brand-name{font-size:15px}
+.brand-by{font-size:10.5px}
+
+}
+/* hamburger -> X */
+.ham-icon path{transform-box:fill-box;transform-origin:center;transition:transform .25s ease,opacity .2s ease}
+.ham-btn[aria-expanded="true"] .ham-top{transform:translateY(6px) rotate(45deg)}
+.ham-btn[aria-expanded="true"] .ham-mid{opacity:0;transform:scaleX(0)}
+.ham-btn[aria-expanded="true"] .ham-bot{transform:translateY(-6px) rotate(-45deg)}
+
+/* theme toggle: icons morph (rotate + scale + fade), page reveals in a circle from the button */
+.theme-btn{position:relative;overflow:hidden}
+.theme-btn svg{position:absolute;inset:0;margin:auto;transition:transform .55s cubic-bezier(.2,.8,.2,1),opacity .3s ease;display:block!important}
+.theme-btn svg:nth-of-type(1){opacity:1;transform:rotate(0) scale(1)}
+.theme-btn svg:nth-of-type(2){opacity:0;transform:rotate(-90deg) scale(.3)}
+[data-theme="dark"] .theme-btn svg:nth-of-type(1){opacity:0;transform:rotate(90deg) scale(.3)}
+[data-theme="dark"] .theme-btn svg:nth-of-type(2){opacity:1;transform:rotate(0) scale(1)}
+.theme-btn:active{transform:translateY(0) scale(.92)}
+::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
+::view-transition-old(root){z-index:1}
+::view-transition-new(root){z-index:2}
+html.theme-swap *{transition:none!important}
+@media(prefers-reduced-motion:reduce){.theme-btn svg{transition:none}}
+.nav-request[aria-current="page"]{color:var(--primary)}
+
+footer.wmf{--f-surface:#FAF8FE;--f-canvas:#F4F1FC;--f-ink:#2B2640;--f-body:#5C5575;--f-muted:#8B84A0;--f-hair:rgba(43,38,64,.08);--f-primary:#573AFC;display:block;position:relative;float:none;clear:both;width:auto;max-width:none;margin:0;padding:64px 0 0;text-align:left;background:var(--f-surface);border:0;border-top:1px solid var(--f-hair);border-radius:0;overflow:visible;color:var(--f-muted);font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;font-size:16px;font-weight:400;line-height:1.5;letter-spacing:normal;text-transform:none}
+[data-theme="dark"] footer.wmf{--f-surface:#221D3C;--f-canvas:#1A1730;--f-ink:#F1EEFB;--f-body:#C7C0E0;--f-muted:#8E86AC;--f-hair:rgba(255,255,255,.08);--f-primary:#9A7AFB}
+footer.wmf,footer.wmf *,footer.wmf *::before,footer.wmf *::after{box-sizing:border-box}
+footer.wmf .wmf-wrap{max-width:1240px;margin:0 auto;padding:0 32px}
+footer.wmf .wmf-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:40px 48px;padding:0 0 48px;margin:0}
+footer.wmf a{text-decoration:none;background:none;box-shadow:none}
+footer.wmf .wmf-brand{display:inline-flex;align-items:center;gap:12px;color:var(--f-ink)}
+footer.wmf .wmf-mark{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:none;box-shadow:none}
+footer.wmf .wmf-mark img{width:36px;height:36px;display:block;max-width:none}
+footer.wmf .wmf-brand-text{display:flex;flex-direction:column;line-height:1.2}
+footer.wmf .wmf-brand-name{color:var(--f-ink);font-size:20px;font-weight:700}
+footer.wmf .wmf-accent{color:var(--f-primary)}
+footer.wmf .wmf-brand-by{color:var(--f-muted);font-size:13px;font-weight:400}
+footer.wmf .wmf-desc{margin:16px 0 0;max-width:300px;color:var(--f-muted);font-size:14px;font-weight:300;line-height:1.55}
+footer.wmf .wmf-mascot{display:inline-flex;align-items:center;gap:12px;margin-top:20px;padding:8px 14px 8px 8px;border:1px solid var(--f-hair);border-radius:18px;background:var(--f-canvas);color:var(--f-ink);transition:transform .2s ease,border-color .2s ease}
+footer.wmf .wmf-mascot:hover,footer.wmf .wmf-mascot:focus-visible{border-color:var(--f-primary);transform:translateY(-2px)}
+footer.wmf .wmf-mascot img{width:72px;height:auto;aspect-ratio:16/9;border-radius:10px;display:block;object-fit:cover;max-width:none}
+footer.wmf .wmf-mascot span{display:flex;flex-direction:column;line-height:1.25}
+footer.wmf .wmf-mascot b{font-size:14px;font-weight:700;color:var(--f-ink)}
+footer.wmf .wmf-mascot small{font-size:12px;color:var(--f-muted)}
+footer.wmf .wmf-social{display:flex;flex-direction:column;gap:14px;margin-top:24px}
+footer.wmf .wmf-social-label{margin-bottom:6px;color:var(--f-muted);font-size:12px;line-height:1.3}
+footer.wmf .wmf-social-row{display:flex;flex-wrap:wrap;gap:8px}
+footer.wmf .wmf-social-btn{width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;border:1px solid var(--f-hair);background:var(--f-canvas);color:var(--f-ink);transition:transform .2s ease,color .2s ease,border-color .2s ease}
+footer.wmf .wmf-social-btn:hover,footer.wmf .wmf-social-btn:focus-visible{color:var(--f-primary);border-color:var(--f-primary);transform:translateY(-2px)}
+footer.wmf .wmf-social-btn:active{transform:scale(.95)}
+footer.wmf .wmf-social-btn svg{width:24px;height:24px;display:block}
+footer.wmf .wmf-title{margin:0 0 12px;padding:0;color:var(--f-ink);font-family:inherit;font-size:18px;font-weight:700;line-height:1.4;letter-spacing:normal;text-transform:none}
+footer.wmf .wmf-links{list-style:none;margin:0;padding:0}
+footer.wmf .wmf-links li{margin:0;padding:0;list-style:none}
+footer.wmf .wmf-links a,footer.wmf .wmf-legal a{display:inline-flex;align-items:center;min-height:44px;color:var(--f-body);font-size:15px;font-weight:400;line-height:1.4;transition:color .2s ease}
+footer.wmf .wmf-links a:hover,footer.wmf .wmf-links a:focus-visible,footer.wmf .wmf-legal a:hover,footer.wmf .wmf-legal a:focus-visible{color:var(--f-primary)}
+footer.wmf .wmf-bottom{border-top:1px solid var(--f-hair)}
+footer.wmf .wmf-bottom-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px 24px;padding-top:14px;padding-bottom:14px}
+footer.wmf .wmf-copy{color:var(--f-muted);font-size:14px;line-height:1.43;letter-spacing:-.1px}
+footer.wmf .wmf-legal{display:flex;flex-wrap:wrap;gap:0 28px;margin-right:64px}
+@media(max-width:900px){footer.wmf .wmf-grid{grid-template-columns:repeat(3,1fr)}
+footer.wmf .wmf-brand-col{grid-column:1 / -1}
+}
+@media(max-width:640px){footer.wmf{padding-top:48px}
+footer.wmf .wmf-wrap{padding:0 20px}
+footer.wmf .wmf-grid{grid-template-columns:1fr;gap:28px;padding-bottom:32px}
+footer.wmf .wmf-bottom-inner{flex-direction:column;align-items:flex-start}
+footer.wmf .wmf-legal{margin-right:0}
+}
+
+
+/* buttons: text size and height like the ThunderStudy UI kit */
+.btn-primary,.btn-secondary{height:auto;min-height:46px;padding:0 24px;border-radius:9999px;font-size:15px;font-weight:600;line-height:1.2;display:inline-flex;align-items:center;justify-content:center;gap:9px}
+.btn-primary svg,.btn-secondary svg{width:17px;height:17px;flex-shrink:0}
+.btn-secondary.btn-sm{min-height:40px;padding:0 18px;font-size:14px;gap:8px}
+.btn-secondary.btn-sm svg{width:16px;height:16px}
+.btn-secondary.btn-ic{width:44px;min-height:44px;padding:0;border-radius:50%}
+.btn-secondary.btn-ic svg{width:19px;height:19px}
+#generateBtn.btn-primary{min-height:56px;padding:0 34px;font-size:16px;font-weight:700}
+
+/* Tiny: sleeping on error, charging when the limit is used up */
+.error-msg.tiny-err{margin-top:14px}
+.tiny-card{display:flex;align-items:center;gap:18px;padding:14px 20px 14px 14px;border-radius:24px;background:var(--surface);color:var(--ink);box-shadow:6px 6px 14px var(--clay-dark),-6px -6px 14px var(--clay-light);text-align:left}
+.tiny-card img{width:190px;height:auto;flex-shrink:0;border-radius:18px;display:block}
+.tiny-card.is-sleep img{width:150px;border-radius:0;animation:tinyBreath 3.6s ease-in-out infinite}
+.tiny-card.is-charge img{animation:tinyGlow 2.4s ease-in-out infinite}
+.tiny-card b{display:block;font-size:16px;font-weight:700;line-height:1.3;color:var(--ink)}
+.tiny-card p{margin:4px 0 0;font-size:14px;line-height:1.5;color:var(--body-c,var(--muted))}
+.tiny-bar{display:block;position:relative;height:8px;margin-top:12px;border-radius:9999px;background:var(--primary-soft);overflow:hidden;max-width:260px}
+.tiny-bar::after{content:"";position:absolute;inset:0 auto 0 0;width:40%;border-radius:inherit;background:var(--primary);animation:tinyCharge 2s ease-in-out infinite}
+.tiny-charge-wrap{margin-top:16px}
+@keyframes tinyBreath{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-3px) scale(1.02)}}
+@keyframes tinyGlow{0%,100%{box-shadow:0 0 0 0 rgba(87,58,252,0)}50%{box-shadow:0 0 22px 4px rgba(87,58,252,.45)}}
+@keyframes tinyCharge{0%{width:12%}60%{width:100%}100%{width:100%;opacity:.4}}
+@media(max-width:520px){.tiny-card{flex-direction:column;text-align:center;padding:16px}.tiny-card img{width:100%;max-width:240px}.tiny-card.is-sleep img{max-width:200px}.tiny-bar{margin-left:auto;margin-right:auto}}
+@media(prefers-reduced-motion:reduce){.tiny-card img,.tiny-bar::after{animation:none}}
+</style>
 </head>
 <body data-page="url">
 <div class="blob-bg b1"></div><div class="blob-bg b2"></div>
@@ -672,42 +816,37 @@ textarea:focus, input[type="text"]:focus{border:2px solid var(--primary); paddin
 <span class="brand-by">by wondermayank</span>
 </span>
 </a>
-<nav aria-label="Main navigation" class="nav-links">
-<a href="index.html">Home</a>
-<a href="faq.html">FAQ</a>
-<a href="new.html">New</a>
-<a href="about.html">About</a>
-</nav>
 <div class="nav-right">
-
-<a aria-label="Contact" class="nav-request" href="https://wondermayank.in/contact" rel="noopener noreferrer" target="_blank"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path><path d="M12 12v6M9 15h6"></path></svg><span class="nav-request-text">Contact</span></a>
+<nav aria-label="Main navigation" class="nav-icons">
+<a aria-label="Home" class="nav-request nav-home" href="index.html" title="Home"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"></path><path d="M5 10v10h14V10"></path><path d="M10 20v-6h4v6"></path></svg></a>
+<a aria-label="FAQ" class="nav-request" href="faq.html" title="FAQ"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7M12 17h.01"></path></svg></a>
+<a aria-label="New" class="nav-request" href="new.html" title="New"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"></path><path d="M19 15.5v4M17 17.5h4"></path></svg></a>
+</nav>
+<a aria-label="Contact" class="nav-request" href="https://wondermayank.in/contact" title="Contact" rel="noopener noreferrer" target="_blank"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path><path d="M12 12v6M9 15h6"></path></svg></a>
 <button aria-label="Toggle dark mode" class="theme-btn" id="themeToggle">
-<svg fill="none" id="sunIcon" stroke="currentColor" stroke-linecap="round" stroke-width="1.8" viewbox="0 0 24 24">
+<svg fill="none" id="sunIcon" stroke="currentColor" stroke-linecap="round" stroke-width="1.8" viewBox="0 0 24 24">
 <circle cx="12" cy="12" r="4.2"></circle>
 <path d="M12 2.5v2.4M12 19.1v2.4"></path>
 <path d="M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7"></path>
 <path d="M2.5 12h2.4M19.1 12h2.4"></path>
 <path d="M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"></path>
 </svg>
-<svg fill="none" id="moonIcon" stroke="currentColor" stroke-linecap="round" stroke-width="1.8" style="display:none" viewbox="0 0 24 24">
+<svg fill="none" id="moonIcon" stroke="currentColor" stroke-linecap="round" stroke-width="1.8" viewBox="0 0 24 24">
 <path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"></path>
 </svg>
 </button>
-<button aria-expanded="false" aria-label="Menu" class="ham-btn" id="hamBtn">
-<svg aria-hidden="true" class="ham-icon" fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-width="2" viewbox="0 0 24 24" width="20"><path class="ham-top" d="M3 6h18"></path><path class="ham-mid" d="M3 12h18"></path><path class="ham-bot" d="M3 18h18"></path></svg>
+<button aria-controls="mobileMenu" aria-expanded="false" aria-label="Menu" class="ham-btn" id="hamBtn">
+<svg aria-hidden="true" class="ham-icon" fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-width="2" viewBox="0 0 24 24" width="20"><path class="ham-top" d="M3 6h18"></path><path class="ham-mid" d="M3 12h18"></path><path class="ham-bot" d="M3 18h18"></path></svg>
 </button>
 </div>
 </div>
-<span hidden aria-hidden="true" id="exportBtn"></span><span hidden aria-hidden="true" id="printBtn"></span><span hidden aria-hidden="true" id="saveBtn"></span></header>
-<!-- MOBILE MENU -->
+<span hidden aria-hidden="true" id="exportBtn"></span><span hidden aria-hidden="true" id="printBtn"></span><span hidden aria-hidden="true" id="saveBtn"></span>
+</header>
 <div class="mobile-menu" id="mobileMenu">
-<a href="index.html">Home</a>
-<a href="faq.html">FAQ</a>
-<a href="new.html">New</a>
+<a href="https://thundertest.indevs.in">Mock Test</a>
 <a href="about.html">About</a>
 </div>
-
-
+<!-- MOBILE MENU -->
 <main>
   <section class="page-heading"><h1>Webpage flashcard generator</h1><p>Use webpage text to create revision flashcards with ThunderStudy AI. Paste a supported article or webpage URL, fetch the readable content, generate a focused deck and review the questions and answers in your browser. Wondermayank maintains this free URL-to-flashcards tool for students.</p></section>
   <div class="input-card">
@@ -870,7 +1009,7 @@ textarea:focus, input[type="text"]:focus{border:2px solid var(--primary); paddin
 </main>
 
 <!-- FOOTER -->
-<footer>
+<footer class="wmf">
 <svg aria-hidden="true" focusable="false" height="0" style="position:absolute" width="0">
 <defs>
 <symbol id="i-instagram" viewBox="0 0 2500 2500"><defs><radialGradient id="ig-grad-a" cx="332.14" cy="2511.81" r="3263.54" gradientUnits="userSpaceOnUse"><stop offset=".09" stop-color="#fa8f21"/><stop offset=".78" stop-color="#d82d7e"/></radialGradient><radialGradient id="ig-grad-b" cx="1516.14" cy="2623.81" r="2572.12" gradientUnits="userSpaceOnUse"><stop offset=".64" stop-color="#8c3aaa" stop-opacity="0"/><stop offset="1" stop-color="#8c3aaa"/></radialGradient></defs><path d="M833.4,1250c0-230.11,186.49-416.7,416.6-416.7s416.7,186.59,416.7,416.7-186.59,416.7-416.7,416.7S833.4,1480.11,833.4,1250m-225.26,0c0,354.5,287.36,641.86,641.86,641.86S1891.86,1604.5,1891.86,1250,1604.5,608.14,1250,608.14,608.14,895.5,608.14,1250M1767.27,582.69a150,150,0,1,0,150.06-149.94h-0.06a150.07,150.07,0,0,0-150,149.94M745,2267.47c-121.87-5.55-188.11-25.85-232.13-43-58.36-22.72-100-49.78-143.78-93.5s-70.88-85.32-93.5-143.68c-17.16-44-37.46-110.26-43-232.13-6.06-131.76-7.27-171.34-7.27-505.15s1.31-373.28,7.27-505.15c5.55-121.87,26-188,43-232.13,22.72-58.36,49.78-100,93.5-143.78s85.32-70.88,143.78-93.5c44-17.16,110.26-37.46,232.13-43,131.76-6.06,171.34-7.27,505-7.27s373.28,1.31,505.15,7.27c121.87,5.55,188,26,232.13,43,58.36,22.62,100,49.78,143.78,93.5s70.78,85.42,93.5,143.78c17.16,44,37.46,110.26,43,232.13,6.06,131.87,7.27,171.34,7.27,505.15s-1.21,373.28-7.27,505.15c-5.55,121.87-25.95,188.11-43,232.13-22.72,58.36-49.78,100-93.5,143.68s-85.42,70.78-143.78,93.5c-44,17.16-110.26,37.46-232.13,43-131.76,6.06-171.34,7.27-505.15,7.27s-373.28-1.21-505-7.27M734.65,7.57c-133.07,6.06-224,27.16-303.41,58.06C349,97.54,279.38,140.35,209.81,209.81S97.54,349,65.63,431.24c-30.9,79.46-52,170.34-58.06,303.41C1.41,867.93,0,910.54,0,1250s1.41,382.07,7.57,515.35c6.06,133.08,27.16,223.95,58.06,303.41,31.91,82.19,74.62,152,144.18,221.43S349,2402.37,431.24,2434.37c79.56,30.9,170.34,52,303.41,58.06C868,2498.49,910.54,2500,1250,2500s382.07-1.41,515.35-7.57c133.08-6.06,223.95-27.16,303.41-58.06,82.19-32,151.86-74.72,221.43-144.18s112.18-139.24,144.18-221.43c30.9-79.46,52.1-170.34,58.06-303.41,6.06-133.38,7.47-175.89,7.47-515.35s-1.41-382.07-7.47-515.35c-6.06-133.08-27.16-224-58.06-303.41-32-82.19-74.72-151.86-144.18-221.43S2150.95,97.54,2068.86,65.63c-79.56-30.9-170.44-52.1-303.41-58.06C1632.17,1.51,1589.56,0,1250.1,0S868,1.41,734.65,7.57" fill="url(#ig-grad-a)"/><path d="M833.4,1250c0-230.11,186.49-416.7,416.6-416.7s416.7,186.59,416.7,416.7-186.59,416.7-416.7,416.7S833.4,1480.11,833.4,1250m-225.26,0c0,354.5,287.36,641.86,641.86,641.86S1891.86,1604.5,1891.86,1250,1604.5,608.14,1250,608.14,608.14,895.5,608.14,1250M1767.27,582.69a150,150,0,1,0,150.06-149.94h-0.06a150.07,150.07,0,0,0-150,149.94M745,2267.47c-121.87-5.55-188.11-25.85-232.13-43-58.36-22.72-100-49.78-143.78-93.5s-70.88-85.32-93.5-143.68c-17.16-44-37.46-110.26-43-232.13-6.06-131.76-7.27-171.34-7.27-505.15s1.31-373.28,7.27-505.15c5.55-121.87,26-188,43-232.13,22.72-58.36,49.78-100,93.5-143.78s85.32-70.88,143.78-93.5c44-17.16,110.26-37.46,232.13-43,131.76-6.06,171.34-7.27,505-7.27s373.28,1.31,505.15,7.27c121.87,5.55,188,26,232.13,43,58.36,22.62,100,49.78,143.78,93.5s70.78,85.42,93.5,143.78c17.16,44,37.46,110.26,43,232.13,6.06,131.87,7.27,171.34,7.27,505.15s-1.21,373.28-7.27,505.15c-5.55,121.87-25.95,188.11-43,232.13-22.72,58.36-49.78,100-93.5,143.68s-85.42,70.78-143.78,93.5c-44,17.16-110.26,37.46-232.13,43-131.76,6.06-171.34,7.27-505.15,7.27s-373.28-1.21-505-7.27M734.65,7.57c-133.07,6.06-224,27.16-303.41,58.06C349,97.54,279.38,140.35,209.81,209.81S97.54,349,65.63,431.24c-30.9,79.46-52,170.34-58.06,303.41C1.41,867.93,0,910.54,0,1250s1.41,382.07,7.57,515.35c6.06,133.08,27.16,223.95,58.06,303.41,31.91,82.19,74.62,152,144.18,221.43S349,2402.37,431.24,2434.37c79.56,30.9,170.34,52,303.41,58.06C868,2498.49,910.54,2500,1250,2500s382.07-1.41,515.35-7.57c133.08-6.06,223.95-27.16,303.41-58.06,82.19-32,151.86-74.72,221.43-144.18s112.18-139.24,144.18-221.43c30.9-79.46,52.1-170.34,58.06-303.41,6.06-133.38,7.47-175.89,7.47-515.35s-1.41-382.07-7.47-515.35c-6.06-133.08-27.16-224-58.06-303.41-32-82.19-74.72-151.86-144.18-221.43S2150.95,97.54,2068.86,65.63c-79.56-30.9-170.44-52.1-303.41-58.06C1632.17,1.51,1589.56,0,1250.1,0S868,1.41,734.65,7.57" fill="url(#ig-grad-b)"/></symbol>
@@ -880,78 +1019,87 @@ textarea:focus, input[type="text"]:focus{border:2px solid var(--primary); paddin
 <symbol id="i-telegram" viewBox="0 0 256 256"><defs><linearGradient id="tg-grad" x1="50%" x2="50%" y1="0%" y2="100%"><stop offset="0%" stop-color="#2aabee"/><stop offset="100%" stop-color="#229ed9"/></linearGradient></defs><path fill="url(#tg-grad)" d="M128 0C94.06 0 61.48 13.494 37.5 37.49A128.04 128.04 0 0 0 0 128c0 33.934 13.5 66.514 37.5 90.51C61.48 242.506 94.06 256 128 256s66.52-13.494 90.5-37.49c24-23.996 37.5-56.576 37.5-90.51s-13.5-66.514-37.5-90.51C194.52 13.494 161.94 0 128 0"/><path fill="#fff" d="M57.94 126.648q55.98-24.384 74.64-32.152c35.56-14.786 42.94-17.354 47.76-17.441c1.06-.017 3.42.245 4.96 1.49c1.28 1.05 1.64 2.47 1.82 3.467c.16.996.38 3.266.2 5.038c-1.92 20.24-10.26 69.356-14.5 92.026c-1.78 9.592-5.32 12.808-8.74 13.122c-7.44.684-13.08-4.912-20.28-9.63c-11.26-7.386-17.62-11.982-28.56-19.188c-12.64-8.328-4.44-12.906 2.76-20.386c1.88-1.958 34.64-31.748 35.26-34.45c.08-.338.16-1.598-.6-2.262c-.74-.666-1.84-.438-2.64-.258c-1.14.256-19.12 12.152-54 35.686c-5.1 3.508-9.72 5.218-13.88 5.128c-4.56-.098-13.36-2.584-19.9-4.708c-8-2.606-14.38-3.984-13.82-8.41c.28-2.304 3.46-4.662 9.52-7.072"/></symbol>
 </defs>
 </svg>
-<div class="wrap">
-<div class="footer-grid">
-<div class="footer-brand-col">
-<a aria-label="ThunderStudy AI by Wondermayank" class="footer-brand" href="index.html">
-<span class="brand-mark">
-<img alt="ThunderStudy AI logo" decoding="async" height="22" loading="lazy" src="/favicon.svg" width="22"/>
-</span>
-<span class="footer-brand-text">
-<span class="footer-brand-name">Thunder<span class="brand-accent">Study AI</span></span>
-<span class="footer-brand-by">by wondermayank</span>
+
+<div class="wmf-wrap">
+<div class="wmf-grid">
+<div class="wmf-brand-col">
+<a aria-label="ThunderStudy AI by Wondermayank" class="wmf-brand" href="index.html">
+<span class="wmf-mark"><img alt="ThunderStudy AI logo" decoding="async" height="36" loading="lazy" src="/favicon.svg" width="36"></span>
+<span class="wmf-brand-text">
+<span class="wmf-brand-name">Thunder<span class="wmf-accent">Study AI</span></span>
+<span class="wmf-brand-by">by wondermayank</span>
 </span>
 </a>
-<p class="footer-desc">Free project tools and exam-prep resources for Indian competitive exam students.</p>
-<div class="footer-social">
+<p class="wmf-desc">AI flashcards and exam-prep tools for Indian competitive exam students, free from ThunderStudy AI.</p>
+<a aria-label="Meet Tiny and Byte, the Wondermayank mascots" class="wmf-mascot" href="https://wondermayank.in/mascot/">
+<img alt="Tiny and Byte, the Wondermayank mascots" decoding="async" height="40" loading="lazy" src="https://wondermayank.in/mascot/img/duo-thumb.webp" width="72">
+<span><b>Meet Tiny &amp; Byte</b><small>Our mascots</small></span>
+</a>
+<div class="wmf-social">
 <div>
-<div class="footer-social-label">Wondermayank</div>
-<div class="footer-social-row">
-<a aria-label="Wondermayank on Instagram" class="social-btn" href="https://www.instagram.com/wondermayank" rel="noopener noreferrer" target="_blank" title="Instagram"><svg aria-hidden="true"><use href="#i-instagram"></use></svg></a>
-<a aria-label="Wondermayank on YouTube" class="social-btn" href="https://www.youtube.com/@wondermayank" rel="noopener noreferrer" target="_blank" title="YouTube"><svg aria-hidden="true"><use href="#i-youtube"></use></svg></a>
-<a aria-label="Wondermayank on X" class="social-btn" href="https://x.com/wondermayankx" rel="noopener noreferrer" target="_blank" title="X"><svg aria-hidden="true"><use href="#i-x"></use></svg></a>
-<a aria-label="Wondermayank on Reddit" class="social-btn" href="https://www.reddit.com/user/wondermayankx" rel="noopener noreferrer" target="_blank" title="Reddit"><svg aria-hidden="true"><use href="#i-reddit"></use></svg></a>
-<a aria-label="Wondermayank on Telegram" class="social-btn" href="https://t.me/wondermayank" rel="noopener noreferrer" target="_blank" title="Telegram"><svg aria-hidden="true"><use href="#i-telegram"></use></svg></a>
+<div class="wmf-social-label">Wondermayank</div>
+<div class="wmf-social-row">
+<a aria-label="Wondermayank on Instagram" class="wmf-social-btn" href="https://www.instagram.com/wondermayank" rel="noopener noreferrer" target="_blank" title="Instagram"><svg aria-hidden="true"><use href="#i-instagram"></use></svg></a>
+<a aria-label="Wondermayank on YouTube" class="wmf-social-btn" href="https://www.youtube.com/@wondermayank" rel="noopener noreferrer" target="_blank" title="YouTube"><svg aria-hidden="true"><use href="#i-youtube"></use></svg></a>
+<a aria-label="Wondermayank on X" class="wmf-social-btn" href="https://x.com/wondermayankx" rel="noopener noreferrer" target="_blank" title="X"><svg aria-hidden="true"><use href="#i-x"></use></svg></a>
+<a aria-label="Wondermayank on Reddit" class="wmf-social-btn" href="https://www.reddit.com/user/wondermayankx" rel="noopener noreferrer" target="_blank" title="Reddit"><svg aria-hidden="true"><use href="#i-reddit"></use></svg></a>
+<a aria-label="Wondermayank on Telegram" class="wmf-social-btn" href="https://t.me/wondermayank" rel="noopener noreferrer" target="_blank" title="Telegram"><svg aria-hidden="true"><use href="#i-telegram"></use></svg></a>
 </div>
 </div>
 <div>
-<div class="footer-social-label">ThunderStudy</div>
-<div class="footer-social-row">
-<a aria-label="ThunderStudy on Instagram" class="social-btn" href="https://www.instagram.com/thunderstudyx" rel="noopener noreferrer" target="_blank" title="Instagram"><svg aria-hidden="true"><use href="#i-instagram"></use></svg></a>
-<a aria-label="ThunderStudy on YouTube" class="social-btn" href="https://www.youtube.com/@thunderstudy_official" rel="noopener noreferrer" target="_blank" title="YouTube"><svg aria-hidden="true"><use href="#i-youtube"></use></svg></a>
-<a aria-label="ThunderStudy on X" class="social-btn" href="https://x.com/thunderstudyx" rel="noopener noreferrer" target="_blank" title="X"><svg aria-hidden="true"><use href="#i-x"></use></svg></a>
-<a aria-label="ThunderStudy on Reddit" class="social-btn" href="https://www.reddit.com/user/thunderstudyx" rel="noopener noreferrer" target="_blank" title="Reddit"><svg aria-hidden="true"><use href="#i-reddit"></use></svg></a>
-<a aria-label="ThunderStudy on Telegram" class="social-btn" href="https://t.me/thunderstudy" rel="noopener noreferrer" target="_blank" title="Telegram"><svg aria-hidden="true"><use href="#i-telegram"></use></svg></a>
+<div class="wmf-social-label">ThunderStudy</div>
+<div class="wmf-social-row">
+<a aria-label="ThunderStudy on Instagram" class="wmf-social-btn" href="https://www.instagram.com/thunderstudyx" rel="noopener noreferrer" target="_blank" title="Instagram"><svg aria-hidden="true"><use href="#i-instagram"></use></svg></a>
+<a aria-label="ThunderStudy on YouTube" class="wmf-social-btn" href="https://www.youtube.com/@thunderstudy_official" rel="noopener noreferrer" target="_blank" title="YouTube"><svg aria-hidden="true"><use href="#i-youtube"></use></svg></a>
+<a aria-label="ThunderStudy on X" class="wmf-social-btn" href="https://x.com/thunderstudyx" rel="noopener noreferrer" target="_blank" title="X"><svg aria-hidden="true"><use href="#i-x"></use></svg></a>
+<a aria-label="ThunderStudy on Reddit" class="wmf-social-btn" href="https://www.reddit.com/user/thunderstudyx" rel="noopener noreferrer" target="_blank" title="Reddit"><svg aria-hidden="true"><use href="#i-reddit"></use></svg></a>
+<a aria-label="ThunderStudy on Telegram" class="wmf-social-btn" href="https://t.me/thunderstudy" rel="noopener noreferrer" target="_blank" title="Telegram"><svg aria-hidden="true"><use href="#i-telegram"></use></svg></a>
 </div>
 </div>
 </div>
 </div>
 <nav aria-label="ThunderStudy">
-<h2 class="footer-title">ThunderStudy</h2>
-<ul class="footer-links">
-<li><a href="https://thunderstudy.indevs.in">ThunderStudy</a></li>
-<li><a href="https://thundertest.indevs.in">CBT Mock</a></li>
-<li><a aria-label="ThunderStudy blog" href="https://blog.thunderstudy.indevs.in">Blog</a></li>
-<li><a aria-label="ThunderStudy AI home" href="https://flashcard.thunderstudy.indevs.in/">Flashcards</a></li>
+<h2 class="wmf-title">ThunderStudy</h2>
+<ul class="wmf-links">
+<li><a href="https://thunderstudy.indevs.in/">ThunderStudy</a></li>
+<li><a href="https://thundertest.indevs.in/">CBT Mock</a></li>
+<li><a aria-label="ThunderStudy blog" href="https://blog.thunderstudy.indevs.in/">Blog</a></li>
+<li><a aria-label="ThunderStudy AI home" href="https://ai.thunderstudy.indevs.in/">AI</a></li>
 </ul>
 </nav>
 <nav aria-label="Support">
-<h2 class="footer-title">Support</h2>
-<ul class="footer-links">
-<li><a aria-label="Wondermayank FAQ" href="https://wondermayank.in/fqa">FAQ</a></li>
+<h2 class="wmf-title">Support</h2>
+<ul class="wmf-links">
+<li><a aria-label="Wondermayank FAQ" href="https://wondermayank.in/faq">FAQ</a></li>
 <li><a aria-label="Email Wondermayank" href="https://wondermayank.in/mail">Mail</a></li>
-<li><a href="https://wondermayank.in/contact">Contact</a></li><li><a href="about.html">About</a></li><li><a href="faq.html">FAQ</a></li><li><a href="new.html">Changelog</a></li><li><a href="card.html">My Cards</a></li>
+<li><a href="https://wondermayank.in/contact">Contact</a></li>
+<li><a href="https://wondermayank.in/copyright">Copyright</a></li>
+<li><a href="https://wondermayank.in/legal">Legal</a></li>
 </ul>
 </nav>
 <nav aria-label="wondermayank">
-<h2 class="footer-title">wondermayank</h2>
-<ul class="footer-links">
-<li><a href="https://make.wondermayank.in">Vibecoding</a></li>
-<li><a href="https://project.wondermayank.in">Useful Projects</a></li>
-<li><a href="https://wondermayank.in">Portfolio</a></li>
+<h2 class="wmf-title">wondermayank</h2>
+<ul class="wmf-links">
+<li><a href="https://make.wondermayank.in/">Vibecoding</a></li>
+<li><a href="https://project.wondermayank.in/">Useful Projects</a></li>
+<li><a href="https://wondermayank.in/">Portfolio</a></li>
+<li><a href="https://wondermayank.in/about">About</a></li>
+<li><a href="https://wondermayank.in/new">New</a></li>
+<li><a href="https://wondermayank.in/mascot/">Mascot</a></li>
 <li><a aria-label="Wondermayank blog" href="https://blog.wondermayank.indevs.in/">Blog</a></li>
 </ul>
 </nav>
 </div>
 </div>
-<div class="footer-bottom">
-<div class="wrap footer-bottom-inner">
-<div class="footer-copy">© 2026 ThunderStudy AI by <a href="about.html" title="About Wondermayank, the owner of ThunderStudy">wondermayank</a>. All rights reserved.</div>
-<nav aria-label="Legal" class="footer-legal">
+<div class="wmf-bottom">
+<div class="wmf-wrap wmf-bottom-inner">
+<div class="wmf-copy">&copy; 2026 ThunderStudy AI by wondermayank. All rights reserved.</div>
+<nav aria-label="Legal" class="wmf-legal">
+<a href="https://wondermayank.in/cookies">Cookies</a>
 <a href="https://wondermayank.in/terms">Terms</a>
 <a href="https://wondermayank.in/privacy">Privacy</a>
 <a href="https://wondermayank.in/disclaimer">Disclaimer</a>
-<a href="sitemap.xml">Sitemap</a>
+<a href="https://wondermayank.in/sitemap">Sitemap</a>
 </nav>
 </div>
 </div>
@@ -1760,7 +1908,7 @@ textarea:focus, input[type="text"]:focus{border:2px solid var(--primary); paddin
 </script>
 <script>
 // ---------- CONFIG ----------
-// The Groq API key lives only in Cloudflare Pages Environment Variables. It is read server-side
+// The Tiny model key lives only in Cloudflare Pages Environment Variables. It is read server-side
 // inside functions/api/generate.js and is never
 // present in this file or sent to the browser.
 
@@ -2263,5 +2411,69 @@ document.querySelectorAll('.faq-item').forEach(function(d){
 })();
 </script>
 <script>if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("/sw.js").catch(function(){});});}</script>
+<script id="hf-js">
+(function(){
+  /* header: theme toggle with circle reveal, and the menu */
+  var tb=document.querySelector('.theme-btn'), hb=document.querySelector('.ham-btn'), mm=document.querySelector('.mobile-menu');
+  if(tb){
+    var nb=tb.cloneNode(true); tb.parentNode.replaceChild(nb,tb); tb=nb;
+    Array.prototype.forEach.call(tb.querySelectorAll('svg'),function(s){s.removeAttribute('style');});
+    var sync=function(){tb.setAttribute('aria-pressed',document.documentElement.getAttribute('data-theme')==='dark'?'true':'false');}; sync();
+    tb.addEventListener('click',function(){
+      var de=document.documentElement,next=de.getAttribute('data-theme')==='dark'?'light':'dark';
+      function apply(){de.setAttribute('data-theme',next);try{localStorage.setItem('theme',next);localStorage.setItem('ts_theme',next);localStorage.setItem('thunder-ai-theme',next);}catch(e){} sync();}
+      var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if(!document.startViewTransition||reduce){apply();return;}
+      var r=tb.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2,rad=Math.hypot(Math.max(x,innerWidth-x),Math.max(y,innerHeight-y));
+      de.classList.add('theme-swap');
+      var t=document.startViewTransition(apply);
+      t.ready.then(function(){de.animate({clipPath:['circle(0px at '+x+'px '+y+'px)','circle('+rad+'px at '+x+'px '+y+'px)']},{duration:650,easing:'cubic-bezier(.4,0,.2,1)',pseudoElement:'::view-transition-new(root)'});});
+      t.finished.then(function(){de.classList.remove('theme-swap');},function(){de.classList.remove('theme-swap');});
+    });
+  }
+  if(hb&&mm){
+    var nh=hb.cloneNode(true); hb.parentNode.replaceChild(nh,hb); hb=nh;
+    hb.addEventListener('click',function(){var o=mm.classList.toggle('open');hb.setAttribute('aria-expanded',o?'true':'false');});
+    Array.prototype.forEach.call(mm.querySelectorAll('a'),function(a){a.addEventListener('click',function(){mm.classList.remove('open');hb.setAttribute('aria-expanded','false');});});
+  }
+
+  /* ---------- Tiny: sleeping on error, charging when the limit is used up ---------- */
+  var IMG_Z='/assets/zzz.webp', IMG_C='/assets/sleepcharge.webp';
+  function card(kind,title,text,bar){
+    var d=document.createElement('div'); d.className='tiny-card '+(kind==='charge'?'is-charge':'is-sleep');
+    var i=document.createElement('img'); i.src=kind==='charge'?IMG_C:IMG_Z; i.width=kind==='charge'?900:900; i.height=kind==='charge'?600:560; i.decoding='async';
+    i.alt=kind==='charge'?'Tiny is asleep on a bed, charging':'Tiny is sleeping';
+    var w=document.createElement('div'); var b=document.createElement('b'); b.textContent=title;
+    var p=document.createElement('p'); p.textContent=text; w.appendChild(b); w.appendChild(p);
+    if(bar){var s=document.createElement('span'); s.className='tiny-bar'; s.setAttribute('aria-hidden','true'); w.appendChild(s);}
+    d.appendChild(i); d.appendChild(w); return d;
+  }
+  var errEl=document.getElementById('errorMsg');
+  var prevShow=window.showError;
+  window.showError=function(msg){
+    if(typeof prevShow==='function') prevShow.apply(this,arguments);
+    if(!errEl) return;
+    var limit=/not enough (daily|weekly) tokens|limit|reached your/i.test(String(msg));
+    errEl.classList.add('tiny-err');
+    errEl.textContent='';
+    errEl.appendChild(limit?card('charge','Tiny is charging now',String(msg),true):card('sleep','Tiny fell asleep',String(msg),false));
+    errEl.style.display='block';
+  };
+  var usage=document.getElementById('usageLimits'), chargeBox=null;
+  function syncCharge(){
+    if(!usage||typeof getUsage!=='function'||typeof DAILY_LIMIT==='undefined'||typeof WEEKLY_LIMIT==='undefined') return;
+    var u=getUsage(), dFull=u.daily.count>=DAILY_LIMIT, wFull=u.weekly.count>=WEEKLY_LIMIT;
+    if(!chargeBox){chargeBox=document.createElement('div'); chargeBox.className='tiny-charge-wrap'; chargeBox.hidden=true; usage.parentNode.insertBefore(chargeBox,usage.nextSibling);}
+    chargeBox.textContent='';
+    if(dFull||wFull){
+      chargeBox.hidden=false;
+      chargeBox.appendChild(card('charge','Tiny is charging now',wFull?'Weekly limit used up. Tiny is back on Monday.':'Daily limit used up. Tiny is back at midnight.',true));
+    } else chargeBox.hidden=true;
+  }
+  var prevRender=window.renderUsageLimits;
+  if(typeof prevRender==='function'){ window.renderUsageLimits=function(){ prevRender.apply(this,arguments); syncCharge(); }; }
+  syncCharge();
+})();
+</script>
 </body>
 </html>

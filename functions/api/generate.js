@@ -65,7 +65,7 @@ export async function onRequest(context) {
   if (context.request.method === "OPTIONS") return json({}, 200);
   if (context.request.method !== "POST") return json({ error: "Method not allowed" }, 405);
   const key = context.env.GROQ_API_KEY;
-  if (!key) return json({ error: "Server is missing GROQ_API_KEY. Add it to Cloudflare Pages → Settings → Environment variables, then redeploy." }, 500);
+  if (!key) return json({ error: "Tiny is offline right now. Please try again in a little while.", code: "missing_key" }, 500);
   const ip = context.request.headers.get("CF-Connecting-IP") || context.request.headers.get("x-forwarded-for") || "unknown";
   const item = record(ip);
   if (item.day.count >= DAILY_LIMIT) return json({ error: `You have reached your daily limit (${DAILY_LIMIT} generations). Try again tomorrow.`, limitExceeded: true, reason: "daily" }, 429);
@@ -94,8 +94,8 @@ export async function onRequest(context) {
     if (!response.ok) {
       const text = await response.text(); refund(ip);
       let message = "Generation failed. Please try again.";
-      if (response.status === 401 || response.status === 403) message = "API key is invalid or expired. Check GROQ_API_KEY in Cloudflare Pages settings.";
-      else if (response.status === 429) message = "AI service is busy right now. Please wait a moment and try again.";
+      if (response.status === 401 || response.status === 403) message = "Tiny is offline right now. Please try again in a little while.";
+      else if (response.status === 429) message = "Tiny is busy right now. Please wait a moment and try again.";
       else if (response.status === 413) message = "Your content is too long for the current AI rate limit. Try a shorter source or fewer cards.";
       else if (response.status === 400) { try { const detail = JSON.parse(text)?.error?.message; if (detail) message = `Generation failed: ${detail}`; } catch (e) {} }
       return json({ error: message, refunded: true }, response.status);
